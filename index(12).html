@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#08090d">
+    <title>Denver Traffic & Crash Data — By The Numbers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg: #08090d; --bg-card: #0f1118; --border: #1c1f2e; --border-hover: #2a2e42;
+            --text: #e8eaf0; --text-dim: #8b90a8; --text-faint: #555873;
+            --red: #ff4d4d; --red-dim: rgba(255,77,77,0.12);
+            --amber: #ffb347; --amber-dim: rgba(255,179,71,0.12);
+            --blue: #4da6ff; --blue-dim: rgba(77,166,255,0.10);
+            --green: #4dff91; --green-dim: rgba(77,255,145,0.10);
+            --purple: #b07dff; --purple-dim: rgba(176,125,255,0.10);
+            --cyan: #4de8ff;
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+        body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+
+        .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:3rem 2rem;overflow:hidden}
+        .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(255,77,77,0.06),transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(77,166,255,0.04),transparent 50%)}
+        .hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent)}
+        .hero-inner{position:relative;z-index:2;max-width:960px;margin:0 auto;width:100%}
+        .hero-label{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;font-weight:500;color:var(--red);letter-spacing:0.08em;text-transform:uppercase;padding:6px 14px;background:var(--red-dim);border:1px solid rgba(255,77,77,0.2);border-radius:100px;margin-bottom:2rem;animation:fadeIn .6s ease}
+        .hero-label::before{content:'';width:6px;height:6px;background:var(--red);border-radius:50%;animation:blink 2s ease infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+        .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,6vw,4.8rem);font-weight:700;line-height:1.08;margin-bottom:1.5rem;animation:fadeUp .8s ease .1s both}
+        .hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--red),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero-sub{font-size:clamp(.95rem,2.5vw,1.1rem);font-weight:300;color:var(--text-dim);max-width:580px;margin-bottom:3rem;animation:fadeUp .8s ease .25s both}
+        .stats-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;animation:fadeUp .8s ease .4s both}
+        .stat-cell{padding:1.2rem 1.4rem;background:var(--bg-card)}
+        .stat-val{font-family:'JetBrains Mono',monospace;font-size:clamp(1.1rem,3vw,1.5rem);font-weight:500}
+        .stat-val.red{color:var(--red)}.stat-val.amber{color:var(--amber)}.stat-val.blue{color:var(--blue)}.stat-val.green{color:var(--green)}
+        .stat-lbl{font-size:.75rem;color:var(--text-faint);margin-top:4px;line-height:1.4}
+
+        .wrap{max-width:1200px;margin:0 auto;padding:4rem 2rem 6rem}
+        .sec-hdr{margin-bottom:2rem}
+        .sec-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:500;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+        .sec-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;line-height:1.2;margin-bottom:.6rem}
+        .sec-desc{font-size:.95rem;font-weight:300;color:var(--text-dim);max-width:620px}
+        .rule{height:1px;margin:4rem 0;background:linear-gradient(90deg,var(--border),transparent 80%)}
+        .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;transition:border-color .3s}
+        .card:hover{border-color:var(--border-hover)}
+        .card-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem}
+        .card-title{font-size:1.05rem;font-weight:600}
+        .card-sub{font-size:.82rem;color:var(--text-faint);margin-top:3px}
+        .tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:500;padding:4px 10px;border-radius:6px;white-space:nowrap}
+        .tag-red{background:var(--red-dim);color:var(--red)}.tag-amber{background:var(--amber-dim);color:var(--amber)}.tag-blue{background:var(--blue-dim);color:var(--blue)}.tag-green{background:var(--green-dim);color:var(--green)}.tag-purple{background:var(--purple-dim);color:var(--purple)}
+        .chart-box{position:relative;width:100%;height:370px}.chart-box.tall{height:430px}.chart-box.short{height:300px}
+        .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:1.5rem}
+
+        /* ===== MAP CONTROLS ===== */
+        #crashMap{width:100%;height:620px;border-radius:0 0 12px 12px;z-index:1;background:#e8e0d8}
+        .leaflet-container{font-family:'DM Sans',sans-serif!important}
+        .map-fallback{display:none;position:absolute;inset:0;z-index:10;background:rgba(15,17,24,0.92);border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;gap:1rem}
+        .map-fallback.show{display:flex}
+        .map-fallback h3{font-family:'Playfair Display',serif;font-size:1.3rem}
+        .map-fallback p{color:var(--text-dim);font-size:.9rem;max-width:400px;line-height:1.6}
+        .map-fallback code{background:rgba(255,179,71,0.15);color:var(--amber);padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.82rem}
+        .map-card{position:relative;overflow:hidden;padding-bottom:1rem}
+        .map-legend-row{display:flex;flex-wrap:wrap;gap:1.25rem;margin-top:1rem;font-size:.78rem;color:var(--text-dim);align-items:center}
+        .map-legend-item{display:flex;align-items:center;gap:6px}
+        .crash-popup .leaflet-popup-content-wrapper{background:#141726;color:#e8eaf0;border-radius:12px;border:1px solid #353a52;box-shadow:0 4px 16px rgba(0,0,0,0.35),0 12px 40px rgba(0,0,0,0.25)}
+        .crash-popup .leaflet-popup-tip{background:#141726}
+        .crash-popup .leaflet-popup-content{margin:14px 18px;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5}
+        .crash-popup .leaflet-popup-close-button{color:#6b7094!important;font-size:20px!important;padding:4px 6px 0 0!important;line-height:1!important;width:24px!important;height:24px!important}
+        .crash-popup .leaflet-popup-close-button:hover{color:#e8eaf0!important;background:transparent!important}
+        .leaflet-control-zoom a{background:white!important;color:#333!important;border-color:#ccc!important;font-weight:300!important;width:32px!important;height:32px!important;line-height:32px!important;font-size:16px!important}
+        .leaflet-control-zoom a:hover{background:#f5f5f5!important}
+        .leaflet-control-zoom{border-radius:8px!important;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.15)!important;border:none!important}
+        .leaflet-control-attribution{background:rgba(255,255,255,.75)!important;font-size:10px!important;padding:2px 6px!important}
+        .popup-rank{font-family:'JetBrains Mono',monospace;font-size:11px;color:#ff4d4d;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+        .popup-name{font-weight:600;font-size:15px;margin-bottom:6px}
+        .popup-count{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#ff4d4d;margin-bottom:4px}
+        .popup-trend{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;margin-bottom:6px}
+        .popup-note{font-size:12px;color:#8b90a8;line-height:1.45}
+        .popup-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+        .popup-tag{font-size:10.5px;padding:3px 8px;border-radius:5px;font-weight:600;letter-spacing:.03em}
+
+        /* Rate toggle pill */
+        .rate-toggle{display:inline-flex;background:#161929;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:.68rem}
+        .rate-toggle button{padding:6px 14px;border:none;background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;font-family:inherit;font-size:inherit;font-weight:500;letter-spacing:.02em;white-space:nowrap}
+        .rate-toggle button:hover{color:var(--text)}
+        .rate-toggle button.rt-active{background:rgba(107,181,255,.15);color:#6bb5ff}
+        .rate-toggle-label{font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-faint);margin-right:8px;align-self:center}
+
+        /* Map toolbar */
+        .map-toolbar{display:flex;flex-wrap:wrap;gap:.6rem;padding:.85rem 1rem;background:#0d0f19;border-radius:12px 12px 0 0;border-bottom:1px solid var(--border);align-items:center}
+        .map-search{display:flex;flex:1;min-width:200px;max-width:380px;position:relative}
+        .map-search input{width:100%;background:#161929;border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:8px 12px 8px 34px;border-radius:8px;outline:none;transition:border-color .2s}
+        .map-search input:focus{border-color:var(--blue)}
+        .map-search input::placeholder{color:var(--text-faint)}
+        .map-search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:.85rem;pointer-events:none}
+        .map-filters{display:flex;gap:4px;flex-wrap:wrap}
+        .map-btn{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:500;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.02em}
+        .map-btn:hover{border-color:var(--text-dim);color:var(--text)}
+        .map-btn.active{background:var(--red-dim);border-color:rgba(255,77,77,0.3);color:var(--red)}
+        .map-btn.active-blue{background:var(--blue-dim);border-color:rgba(77,166,255,0.3);color:var(--blue)}
+        .map-btn.active-amber{background:var(--amber-dim);border-color:rgba(255,179,71,0.3);color:var(--amber)}
+        .map-btn.active-green{background:var(--green-dim);border-color:rgba(77,255,145,0.3);color:var(--green)}
+        .map-btn.active-purple{background:var(--purple-dim);border-color:rgba(176,125,255,0.3);color:var(--purple)}
+        .map-sep{width:1px;height:26px;background:rgba(255,255,255,.08);margin:0 6px;flex-shrink:0}
+        .map-year-group{display:flex;gap:4px}
+
+        /* Commute panel */
+        .commute-panel{display:none;padding:.85rem 1rem;background:#0d0f19;border-bottom:1px solid var(--border);gap:.6rem;align-items:flex-end;flex-wrap:wrap}
+        .commute-panel.show{display:flex}
+        .commute-field{display:flex;flex-direction:column;gap:3px;flex:1;min-width:180px}
+        .commute-field label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em}
+        .commute-field input{background:#161929;border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:8px 12px;border-radius:8px;outline:none;transition:border-color .2s}
+        .commute-field input:focus{border-color:var(--green)}
+        .commute-field input::placeholder{color:var(--text-faint)}
+        .commute-go{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;padding:8px 20px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--green),#2dcc70);color:#08090d;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+        .commute-go:hover{opacity:.85}
+        .commute-clear{font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer}
+        .commute-result{width:100%;font-size:.82rem;color:var(--green);font-family:'JetBrains Mono',monospace;padding-top:4px;display:none}
+        .commute-result.show{display:block}
+
+        /* TABLES */
+        .rank-table{width:100%;border-collapse:collapse;margin-top:.5rem}
+        .rank-table th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:500;color:var(--text-faint);letter-spacing:.05em;text-transform:uppercase;padding:.6rem .75rem;border-bottom:1px solid var(--border)}
+        .rank-table td{padding:.75rem;font-size:.88rem;border-bottom:1px solid rgba(28,31,46,.6);vertical-align:middle}
+        .rank-table tr:last-child td{border-bottom:none}
+        .rank-table tr:hover td{background:rgba(255,255,255,.015)}
+        .rank-num{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:500;color:var(--text-faint);width:32px;text-align:center}
+        .crash-bar-wrap{display:flex;align-items:center;gap:8px}
+        .crash-bar{height:8px;border-radius:4px;background:linear-gradient(90deg,var(--red),var(--amber));min-width:4px}
+        .crash-count{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:500;color:var(--amber);min-width:32px}
+        .filter-bar{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem;align-items:center}
+        .filter-bar label{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em}
+        .filter-select{background:var(--bg-card);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;padding:8px 14px;border-radius:8px;outline:none;cursor:pointer;min-width:200px;transition:border-color .2s}
+        .filter-select:focus{border-color:var(--amber)}
+        .filter-select option{background:var(--bg-card);color:var(--text)}
+        .hood-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:1rem;margin-top:1rem}
+        .hood-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border-color .3s}
+        .hood-card:hover{border-color:var(--border-hover)}
+        .hood-name{font-weight:600;font-size:.95rem;margin-bottom:.5rem}
+        .hood-stat{display:flex;justify-content:space-between;padding:4px 0;font-size:.82rem;border-bottom:1px solid rgba(28,31,46,.4)}
+        .hood-stat:last-child{border-bottom:none}
+        .hood-stat-label{color:var(--text-dim)}.hood-stat-val{font-family:'JetBrains Mono',monospace;font-weight:500}
+        .hood-stat-val.danger{color:var(--red)}.hood-stat-val.warn{color:var(--amber)}
+        .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2rem}
+        .tile{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:transform .2s,border-color .3s}
+        .tile:hover{transform:translateY(-2px);border-color:var(--border-hover)}
+        .tile-icon{font-size:1.4rem;margin-bottom:.6rem}.tile-title{font-weight:600;font-size:.92rem;margin-bottom:.35rem}
+        .tile-text{font-size:.82rem;font-weight:300;color:var(--text-dim);line-height:1.55}
+        .meth-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:1.5rem;margin-top:1.5rem}
+        .meth-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.4rem}
+        .meth-title{font-weight:600;font-size:.92rem;margin-bottom:.5rem;display:flex;align-items:center;gap:8px}
+        .meth-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+        .meth-text{font-size:.82rem;color:var(--text-dim);line-height:1.6}
+        .meth-text a{color:var(--amber);text-decoration:none}.meth-text a:hover{text-decoration:underline}
+        .meth-note{font-size:.78rem;color:var(--text-faint);margin-top:.6rem;font-style:italic}
+        .footer{text-align:center;padding:3rem 2rem;font-size:.78rem;color:var(--text-faint);border-top:1px solid var(--border)}
+        .footer a{color:var(--amber);text-decoration:none}.footer a:hover{text-decoration:underline}
+
+        /* ===== MOBILE: TABLET ===== */
+        @media(max-width:768px){
+            .hero{padding:2rem 1.25rem;min-height:auto;padding-top:4rem;padding-bottom:3rem}
+            .wrap{padding:2.5rem 1.25rem 4rem}
+            .stats-strip{grid-template-columns:repeat(2,1fr)}
+            .stat-cell{padding:1rem}.stat-lbl{font-size:.7rem}
+            .card{padding:1.25rem;border-radius:12px}
+            .chart-box{height:260px}.chart-box.tall{height:300px}.chart-box.short{height:240px}
+            #crashMap{height:500px}
+            .map-search{max-width:100%;min-width:0;flex:1 1 100%;order:-1}
+            .map-toolbar{gap:.5rem;padding:.75rem}
+            .map-sep{display:none}
+            .map-filters{gap:3px}.map-year-group{gap:3px}
+            .map-btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+            .rank-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+            .rate-toggle button{padding:5px 10px;font-size:.62rem}
+            .rate-toggle-label{font-size:.68rem}
+            .card-top{flex-wrap:wrap;gap:.5rem}
+            .grid-2{gap:1rem}.tiles{grid-template-columns:1fr}.hood-grid{grid-template-columns:1fr}
+            .meth-grid{grid-template-columns:1fr}.filter-bar{flex-direction:column;align-items:stretch}
+            .filter-select{width:100%}.rule{margin:3rem 0}
+            .map-legend-row{gap:.75rem;font-size:.72rem;justify-content:center}
+            .map-legend-item:last-child{margin-left:0;width:100%;justify-content:center;margin-top:.25rem}
+            .commute-panel{flex-direction:column;align-items:stretch}
+            .commute-field{min-width:0;flex:1 1 100%}
+            .commute-go,.commute-clear{min-height:44px}
+            .crash-popup .leaflet-popup-content{margin:12px 14px;font-size:13px}
+            .popup-name{font-size:14px}.popup-count{font-size:18px}
+            .sec-title{margin-bottom:.4rem}
+        }
+        /* ===== MOBILE: PHONE ===== */
+        @media(max-width:480px){
+            .hero{padding:1.5rem 1rem;padding-top:3rem;padding-bottom:2.5rem}
+            .hero h1{font-size:1.9rem;line-height:1.15}
+            .hero-sub{font-size:.9rem;margin-bottom:2rem}
+            .hero-label{font-size:.63rem;padding:5px 11px;margin-bottom:1.5rem}
+            .stats-strip{grid-template-columns:1fr 1fr;gap:1px}
+            .stat-val{font-size:1.05rem}.stat-cell{padding:.85rem .75rem}
+            .stat-lbl{font-size:.65rem}
+            .wrap{padding:2rem 1rem 3rem}
+            .sec-num{font-size:.65rem}.sec-title{font-size:1.35rem}
+            .sec-desc{font-size:.85rem}
+            .card{padding:1rem;border-radius:10px}
+            .card-top{flex-direction:column;gap:.5rem;margin-bottom:1rem}
+            .card-title{font-size:.95rem}.card-sub{font-size:.75rem}
+            .tag{font-size:.6rem;padding:3px 8px}
+            .chart-box{height:220px}.chart-box.tall{height:260px}.chart-box.short{height:200px}
+            #crashMap{height:420px}
+            .map-toolbar{padding:.6rem;gap:.4rem;border-radius:10px 10px 0 0}
+            .map-search input{font-size:.8rem;padding:9px 12px 9px 32px}
+            .map-search-icon{font-size:.78rem;left:9px}
+            .map-btn{font-size:.6rem;padding:6px 9px;min-height:38px;border-radius:5px}
+            .map-filters,.map-year-group{gap:2px}
+            #commuteToggle{flex:1 1 100%;order:10;margin-top:2px}
+            .commute-panel{padding:.6rem .75rem;gap:.5rem}
+            .commute-field label{font-size:.6rem}
+            .commute-field input{font-size:.82rem;padding:9px 10px}
+            .commute-go{padding:10px 16px;font-size:.68rem;min-height:42px}
+            .commute-clear{padding:10px 12px;font-size:.64rem;min-height:42px}
+            .commute-result{font-size:.75rem}
+            .map-legend-row{gap:.5rem;font-size:.65rem;flex-direction:row;flex-wrap:wrap;justify-content:center;padding:.5rem 0}
+            .map-legend-item{gap:4px}
+            .map-legend-item:last-child{font-size:.6rem}
+            .rank-table td{padding:.6rem .5rem;font-size:.8rem}
+            .rank-table th{padding:.5rem;font-size:.62rem}
+            .crash-bar-wrap{gap:5px}
+            .crash-count{font-size:.72rem;min-width:28px}
+            .rank-num{font-size:.68rem}
+            .filter-bar label{font-size:.65rem}
+            .filter-select{font-size:.82rem;padding:10px 12px;min-height:44px}
+            .hood-card{padding:1rem}
+            .hood-name{font-size:.88rem}
+            .hood-stat{font-size:.78rem;padding:3px 0}
+            .tile{padding:1.1rem}
+            .tile-icon{font-size:1.2rem;margin-bottom:.4rem}
+            .tile-title{font-size:.85rem}
+            .tile-text{font-size:.78rem}
+            .meth-card{padding:1.1rem}
+            .meth-title{font-size:.85rem}
+            .meth-text{font-size:.78rem}
+            .meth-note{font-size:.72rem}
+            .rule{margin:2.5rem 0}
+            .footer{padding:2rem 1rem;font-size:.72rem}
+            .crash-popup .leaflet-popup-content-wrapper{border-radius:10px;max-width:260px}
+            .crash-popup .leaflet-popup-content{margin:10px 12px;font-size:12.5px}
+            .popup-rank{font-size:10px}.popup-name{font-size:13px}
+            .popup-count{font-size:16px}.popup-trend{font-size:11px}
+            .popup-note{font-size:11px}.popup-tag{font-size:9.5px;padding:2px 6px}
+            .leaflet-control-zoom a{width:36px!important;height:36px!important;line-height:36px!important;font-size:18px!important}
+        }
+        /* ===== MOBILE: SMALL PHONE ===== */
+        @media(max-width:360px){
+            .hero h1{font-size:1.65rem}
+            .stat-val{font-size:.95rem}
+            .stat-lbl{font-size:.6rem}
+            .stat-cell{padding:.7rem .6rem}
+            #crashMap{height:360px}
+            .map-btn{font-size:.55rem;padding:5px 7px}
+            .card{padding:.85rem}
+            .chart-box{height:190px}.chart-box.tall{height:230px}.chart-box.short{height:180px}
+        }
+    </style>
+</head>
+<body>
+
+<section class="hero"><div class="hero-inner">
+    <div class="hero-label">Denver Open Data Analysis</div>
+    <h1>Crashes, Corridors &amp;&nbsp;<em>Dangerous Crossings</em></h1>
+    <p class="hero-sub">A data-driven look at where, when, and why traffic crashes happen across Denver and its surrounding cities — sourced from Denver PD, CDOT, and the Denver Open Data Catalog.</p>
+    <div class="stats-strip">
+        <div class="stat-cell"><div class="stat-val red">~22,000</div><div class="stat-lbl">Reported crashes in Denver (2024)</div></div>
+        <div class="stat-cell"><div class="stat-val amber">62</div><div class="stat-lbl">Traffic fatalities in Denver (2024)<br><span style="font-size:.65rem;color:#8b90a8">Vision Zero goal: 0 by 2030 · 2025 saw 93 deaths, the worst since 2013</span></div></div>
+        <div class="stat-cell"><div class="stat-val blue">590</div><div class="stat-lbl">Pedestrian-involved crashes (2024)</div></div>
+        <div class="stat-cell"><div class="stat-val green">40%</div><div class="stat-lbl">Crashes linked to distracted driving</div></div>
+    </div>
+</div></section>
+
+<main class="wrap">
+
+<div class="sec-hdr">
+    <div class="sec-num">01 — Crash Map</div>
+    <h2 class="sec-title">Where It Happens</h2>
+    <p class="sec-desc">Search an address, filter by crash type, compare years, or enter your commute to see every crash hotspot along your route.</p>
+</div>
+<div class="card map-card">
+    <div class="card-top">
+        <div><div class="card-title">Denver Crash Hotspot Map</div><div class="card-sub">Interactive crash data — Denver Open Data 2022–2024</div></div>
+        <div class="tag tag-red">Interactive</div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="map-toolbar">
+        <div class="map-search">
+            <span class="map-search-icon">&#128269;</span>
+            <input type="text" id="mapSearchInput" placeholder="Search address or intersection..." autocomplete="off">
+        </div>
+        <div class="map-sep"></div>
+        <div class="map-filters" id="typeFilters">
+            <button class="map-btn active" data-type="all">All</button>
+            <button class="map-btn" data-type="ped">Pedestrian</button>
+            <button class="map-btn" data-type="cyclist">Cyclist</button>
+            <button class="map-btn" data-type="fatal">Fatal</button>
+        </div>
+        <div class="map-sep"></div>
+        <div class="map-year-group" id="yearGroup">
+            <button class="map-btn" data-year="2022">2022</button>
+            <button class="map-btn" data-year="2023">2023</button>
+            <button class="map-btn active-blue" data-year="2024">2024</button>
+        </div>
+        <div class="map-sep"></div>
+        <button class="map-btn" id="commuteToggle">&#128663; My Commute</button>
+        <div class="map-sep"></div>
+        <span class="rate-toggle-label">Rank by:</span>
+        <div class="rate-toggle sort-toggle-sync">
+            <button class="rt-active" data-sort="total">Total</button>
+            <button data-sort="rate">Per Vehicle</button>
+        </div>
+    </div>
+
+    <!-- Commute panel -->
+    <div class="commute-panel" id="commutePanel">
+        <div class="commute-field">
+            <label>From (home)</label>
+            <input type="text" id="commuteFrom" placeholder="e.g. 1600 Broadway, Denver">
+        </div>
+        <div class="commute-field">
+            <label>To (work)</label>
+            <input type="text" id="commuteTo" placeholder="e.g. Union Station, Denver">
+        </div>
+        <button class="commute-go" id="commuteGo">Find Crashes</button>
+        <button class="commute-clear" id="commuteClear">Clear</button>
+        <div class="commute-result" id="commuteResult"></div>
+    </div>
+
+    <div style="position:relative">
+        <div id="crashMap"></div>
+        <div class="map-fallback" id="mapFallback">
+            <h3>Map tiles blocked in this preview</h3>
+            <p>This interactive map renders fully when deployed to GitHub Pages or opened locally. All crash data, markers, corridors, and tools are loaded — they just need a basemap.</p>
+            <p><code>username.github.io/repo-name</code></p>
+        </div>
+    </div>
+    <div class="map-legend-row">
+        <div class="map-legend-item"><svg width="18" height="18"><circle cx="9" cy="9" r="6.5" fill="#dc2626" fill-opacity=".85" stroke="white" stroke-width="2.5"/></svg> Top 10</div>
+        <div class="map-legend-item"><svg width="18" height="18"><circle cx="9" cy="9" r="5.5" fill="#f97316" fill-opacity=".85" stroke="white" stroke-width="2"/></svg> Hotspot</div>
+        <div class="map-legend-item"><svg width="22" height="10"><rect y="1" width="22" height="8" rx="4" fill="white" fill-opacity=".5"/><line x1="2" y1="5" x2="20" y2="5" stroke="#dc2626" stroke-width="2.5" stroke-opacity=".75"/></svg> Danger corridor</div>
+        <div class="map-legend-item"><svg width="22" height="10"><rect y="1" width="22" height="8" rx="4" fill="white" fill-opacity=".5"/><line x1="2" y1="5" x2="20" y2="5" stroke="#16a34a" stroke-width="2.5"/></svg> Your commute</div>
+        <div class="map-legend-item" style="margin-left:auto;color:var(--text-faint);font-size:.7rem">Size = crash volume · Click for details</div>
+    </div>
+    <div style="padding:.5rem 1rem .25rem;font-size:.68rem;color:var(--text-faint);line-height:1.5">
+        <strong style="color:var(--text-dim)">Privacy:</strong> This page has no backend, no analytics, and no cookies. Nothing you type is stored or collected. Address search and commute routing are handled by <a href="https://nominatim.openstreetmap.org/" target="_blank" style="color:var(--amber);text-decoration:none">OpenStreetMap Nominatim</a> and <a href="https://project-osrm.org/" target="_blank" style="color:var(--amber);text-decoration:none">OSRM</a> (both open source). Your queries go directly to those services and are subject to their privacy policies.
+    </div>
+</div>
+
+<div class="rule"></div>
+<!-- INTERSECTIONS -->
+<div class="sec-hdr"><div class="sec-num">02 — Dangerous Intersections</div><h2 class="sec-title">The Top 10 Crash Sites</h2><p class="sec-desc">Freeway interchanges and high-volume arterials dominate. Toggle "Per Vehicle" to see which intersections are most dangerous relative to how much traffic they carry.</p></div>
+<div class="card"><div class="card-top"><div><div class="card-title">Top 10 Crash Intersections in Denver</div><div class="card-sub">Denver PD / CDOT · AADT from CDOT Traffic Data Explorer</div></div><div style="display:flex;align-items:center;gap:8px"><span class="rate-toggle-label">Rank by:</span><div class="rate-toggle sort-toggle-sync"><button class="rt-active" data-sort="total">Total</button><button data-sort="rate">Per Vehicle</button></div></div></div><table class="rank-table" id="intersectionTable"></table></div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Crash Types</div><div class="card-sub">By collision type, 2024</div></div><div class="tag tag-amber">Types</div></div><div class="chart-box"><canvas id="crashTypeChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Contributing Factors</div><div class="card-sub">Top causes in crash reports</div></div><div class="tag tag-purple">Causes</div></div><div class="chart-box"><canvas id="causesChart"></canvas></div></div>
+</div>
+<div class="rule"></div>
+<div class="sec-hdr"><div class="sec-num">03 — By Neighborhood</div><h2 class="sec-title">Your Area, Your Risk</h2><p class="sec-desc">Crash patterns vary dramatically across Denver's 78 neighborhoods. Select an area to see its specific crash profile.</p></div>
+<div class="filter-bar"><label for="hoodSelect">Filter neighborhood:</label><select id="hoodSelect" class="filter-select"><option value="all">All — Show highest-crash neighborhoods</option></select></div>
+<div class="hood-grid" id="hoodGrid"></div>
+<div class="rule"></div>
+<div class="sec-hdr"><div class="sec-num">04 — When It Happens</div><h2 class="sec-title">Tuesdays Are Worse Than Weekends</h2><p class="sec-desc">Tuesdays consistently see more crashes in Denver than Fridays or Saturdays. Morning and late-afternoon commute windows are the peak danger hours.</p></div>
+<div class="card"><div class="card-top"><div><div class="card-title">Crashes by Hour of Day</div><div class="card-sub">Weekday vs. weekend, Denver 2024</div></div><div class="tag tag-blue">Temporal</div></div><div class="chart-box tall"><canvas id="hourlyChart"></canvas></div></div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Day of Week</div><div class="card-sub">Avg daily crashes, 2024</div></div><div class="tag tag-amber">Weekly</div></div><div class="chart-box short"><canvas id="dayOfWeekChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Monthly Totals</div><div class="card-sub">Denver 2024</div></div><div class="tag tag-green">Seasonal</div></div><div class="chart-box short"><canvas id="monthlyChart"></canvas></div></div>
+</div>
+<div class="rule"></div>
+<div class="sec-hdr"><div class="sec-num">05 — Year Over Year</div><h2 class="sec-title">Is Denver Getting Safer?</h2><p class="sec-desc">Fatalities have trended down since the 2021 peak, but total crash volume keeps climbing.</p></div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Total Crashes</div><div class="card-sub">Denver 2019–2024 (thousands)</div></div><div class="tag tag-red">Volume</div></div><div class="chart-box short"><canvas id="yoyTotalChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Fatalities &amp; Pedestrian Crashes</div><div class="card-sub">Denver 2019–2024</div></div><div class="tag tag-amber">Severity</div></div><div class="chart-box short"><canvas id="yoySeverityChart"></canvas></div></div>
+</div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Avg Rush Hour Speed (mph)</div><div class="card-sub">Denver metro — TomTom</div></div><div class="tag tag-amber">Congestion</div></div><div class="chart-box short"><canvas id="speedChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Colorado Statewide Crashes</div><div class="card-sub">CDOT annual totals</div></div><div class="tag tag-blue">Statewide</div></div><div class="chart-box short"><canvas id="stateChart"></canvas></div></div>
+</div>
+<div class="rule"></div>
+<div class="sec-hdr"><div class="sec-num">06 — Pedestrians &amp; Cyclists</div><h2 class="sec-title">The Most Vulnerable on Denver's Streets</h2><p class="sec-desc">590 pedestrian crashes and 264 cyclist crashes in 2024. Nearly 40% occurred away from intersections.</p></div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Vulnerable Road User Crashes</div><div class="card-sub">Denver 2022–2024</div></div><div class="tag tag-red">VRU</div></div><div class="chart-box short"><canvas id="vuChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Pedestrian Crash Location</div><div class="card-sub">Intersection vs. mid-block, 2024</div></div><div class="tag tag-blue">Location</div></div><div class="chart-box short"><canvas id="pedLocationChart"></canvas></div></div>
+</div>
+<div class="rule"></div>
+<div class="sec-hdr"><div class="sec-num">07 — The Metro Picture</div><h2 class="sec-title">Denver vs. Surrounding Cities</h2><p class="sec-desc">Aurora has nearly half of Colorado's 50 most dangerous intersections.</p></div>
+<div class="card"><div class="card-top"><div><div class="card-title">Crash Volume by Metro Area</div><div class="card-sub">2024 estimates — CDOT / local PD</div></div><div class="tag tag-purple">Metro</div></div><div class="chart-box"><canvas id="metroChart"></canvas></div></div>
+<div class="card"><div class="card-top"><div><div class="card-title">Dangerous Corridors</div><div class="card-sub">Key crash corridors across the Denver metro</div></div><div class="tag tag-red">Corridors</div></div><table class="rank-table" id="corridorTable"></table></div>
+<div class="rule"></div>
+<div class="sec-hdr"><div class="sec-num">08 — Key Takeaways</div><h2 class="sec-title">What the Data Tells Us</h2></div>
+<div class="tiles">
+    <div class="tile"><div class="tile-icon">&#9888;&#65039;</div><div class="tile-title">I-70 &amp; Peoria Is #1</div><div class="tile-text">103 crashes in 2024. A complex merge where highway speeds meet local traffic.</div></div>
+    <div class="tile"><div class="tile-icon">&#128241;</div><div class="tile-title">Distraction Dominates</div><div class="tile-text">40% of all Denver crashes involve distracted driving.</div></div>
+    <div class="tile"><div class="tile-icon">&#128694;</div><div class="tile-title">Pedestrians at Risk</div><div class="tile-text">590 pedestrian crashes in 2024, with 38% at mid-block crossings.</div></div>
+    <div class="tile"><div class="tile-icon">&#128197;</div><div class="tile-title">Tuesday Surprise</div><div class="tile-text">Tuesday is consistently Denver's most crash-prone day.</div></div>
+    <div class="tile"><div class="tile-icon">&#127961;&#65039;</div><div class="tile-title">Aurora's Problem</div><div class="tile-text">Nearly half of Colorado's 50 most dangerous intersections are in Aurora.</div></div>
+    <div class="tile"><div class="tile-icon">&#128680;</div><div class="tile-title">85% Preventable</div><div class="tile-text">CDOT estimates 85% of Denver traffic crashes are preventable.</div></div>
+</div>
+<div class="rule"></div>
+<div class="sec-hdr"><div class="sec-num">09 — Methodology &amp; Sources</div><h2 class="sec-title">Where This Data Comes From</h2><p class="sec-desc">Every number on this page links back to a publicly available dataset.</p></div>
+<div class="meth-grid">
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--red)"></div>Denver Open Data Catalog</div><div class="meth-text">Primary source for crash-level records.<br><br><a href="https://opendata-geospatialdenver.hub.arcgis.com/datasets/db00bd99ea534d8987e0913a191ebe19_325/explore" target="_blank">Traffic Accidents &rarr;</a></div><div class="meth-note">2024 data was ~85% complete as of early 2025.</div></div>
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--amber)"></div>CDOT Crash Data</div><div class="meth-text">Statewide crash database (2021–2025).<br><br><a href="https://www.codot.gov/safety/traffic-safety/data-analysis/crash-data" target="_blank">CDOT Crash Data &rarr;</a></div></div>
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>CDOT Traffic Volumes</div><div class="meth-text">AADT (Annual Average Daily Traffic) for crash rate normalization.<br><br><a href="https://dtdapps.coloradodot.info/otis/trafficdata" target="_blank">Traffic Data Explorer &rarr;</a></div></div>
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>Denver Vision Zero</div><div class="meth-text">Fatal and serious-injury crash tracking.<br><br><a href="https://denvergov.org/Government/Citywide-Programs-and-Initiatives/Vision-Zero/Statistics" target="_blank">Vision Zero &rarr;</a></div></div>
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--green)"></div>TomTom / INRIX</div><div class="meth-text">Rush-hour speeds and congestion data. Denver drivers lost 44 hours to traffic in 2024.<br><br><a href="https://www.tomtom.com/traffic-index/" target="_blank">TomTom &rarr;</a> · <a href="https://inrix.com/scorecard/" target="_blank">INRIX &rarr;</a></div></div>
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--cyan)"></div>Methodology</div><div class="meth-text">Intersection counts from Denver PD via Open Data Catalog. Metro estimates from CDOT and local PD. Geocoding via OSM Nominatim. Routing via OSRM.<br><br><strong style="color:var(--amber)">Traffic volume normalization:</strong> Crash rates (per million vehicles per year) use AADT from CDOT's Traffic Data Explorer and ArcGIS Traffic Volume Map. At intersections, the higher-volume approaching road was used. AADT reflects the most recent published year. Use the "Per Vehicle" toggle on the map to rank by crash rate.<br><br><strong style="color:var(--amber)">A note on underreporting:</strong> This data only includes crashes with a filed police report. Pedestrian and cyclist incidents are widely understood to be underreported — if no report is filed, the crash doesn't appear in Denver Open Data. The real numbers are likely higher than what's shown here.<br><br><strong style="color:var(--amber)">Highway interchanges:</strong> At interstate locations (I-25, I-70, I-76), crash counts include all crashes near the interchange — on ramps, bridges, overpasses, and adjacent roads. The source data groups crashes by proximity and does not distinguish mainline vs. ramp vs. crossing road.</div><div class="meth-note">All public records. No affiliation with law firms, insurers, or agencies. This page collects no data, uses no analytics, and stores no cookies. Address and commute queries are sent directly to open source services (Nominatim, OSRM) and are never seen or stored by this site.</div></div>
+</div>
+</main>
+<footer class="footer"><p>Data: <a href="https://www.denvergov.org/opendata" target="_blank">Denver Open Data</a> · <a href="https://www.codot.gov/safety/traffic-safety/data-analysis/crash-data" target="_blank">CDOT</a> · <a href="https://dtdapps.coloradodot.info/otis/trafficdata" target="_blank">CDOT Traffic Data Explorer</a> · <a href="https://denvergov.org/Government/Citywide-Programs-and-Initiatives/Vision-Zero/Statistics" target="_blank">Vision Zero</a> · <a href="https://www.tomtom.com/traffic-index/" target="_blank">TomTom</a> · <a href="https://inrix.com/scorecard/" target="_blank">INRIX</a><br>Built for <a href="https://www.reddit.com/r/Denver/" target="_blank">r/Denver</a></p></footer>
+<script>
+Chart.defaults.color='#8b90a8';Chart.defaults.borderColor='#1c1f2e';Chart.defaults.font.family="'DM Sans',sans-serif";
+const isMobile=window.innerWidth<=480;Chart.defaults.font.size=isMobile?10:12;
+const TT={backgroundColor:'#1c1f2e',titleColor:'#e8eaf0',bodyColor:'#8b90a8',borderColor:'#2a2e42',borderWidth:1,padding:isMobile?8:12,cornerRadius:8,titleFont:{size:isMobile?11:13},bodyFont:{size:isMobile?10:12}};
+const doughnutLegend=isMobile?{position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'rectRounded',font:{size:10}}}:{position:'right',labels:{padding:10,usePointStyle:true,pointStyle:'rectRounded',font:{size:11}}};
+
+// ===== MAP ENGINE =====
+(function(){
+const map=L.map('crashMap',{scrollWheelZoom:true,zoomControl:true}).setView([39.72,-104.95],isMobile?11:12);
+const tiles=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains:'abcd',maxZoom:19
+}).addTo(map);
+let tileOk=false;
+tiles.on('tileload',()=>{tileOk=true});
+setTimeout(()=>{if(!tileOk)document.getElementById('mapFallback').classList.add('show')},3000);
+
+// --- Crash data — coordinates pinned from Google Maps by user ---
+const spots=[
+{lat:39.77411,lng:-104.84706,name:'I-70 EB & N Peoria St',y:{2022:89,2023:96,2024:103},rank:1,note:'Highway/local merge — one crash every 3.5 days',tags:['ped','fatal'],aadt:242000},
+{lat:39.72558,lng:-105.01325,name:'I-25 & W 6th Ave',y:{2022:82,2023:90,2024:97},rank:2,note:'Major interchange bottleneck',tags:[],aadt:262000},
+{lat:39.65311,lng:-104.91836,name:'I-25 & E Hampden Ave',y:{2022:78,2023:85,2024:88},rank:3,note:'Heavy commuter volume',tags:['fatal'],aadt:242000},
+{lat:39.72556,lng:-105.02506,name:'W 6th Ave & N Federal Blvd',y:{2022:70,2023:76,2024:82},rank:4,note:'Arterial crossroads',tags:['ped'],aadt:154000},
+{lat:39.76111,lng:-105.00475,name:'I-25 & 20th St',y:{2022:60,2023:68,2024:76},rank:5,note:'Near Coors Field / downtown',tags:[],aadt:274000},
+{lat:39.74042,lng:-105.014,name:'I-25 & Colfax Ave',y:{2022:65,2023:70,2024:72},rank:6,note:'Interstate meets busiest street',tags:['ped'],aadt:270000},
+{lat:39.71117,lng:-105.02511,name:'W Alameda & S Federal Blvd',y:{2022:55,2023:62,2024:68},rank:7,note:'3 fatal crashes in 2024',tags:['ped','fatal'],aadt:36000},
+{lat:39.66761,lng:-104.92569,name:'I-25 SB & Yale Ave',y:{2022:52,2023:60,2024:65},rank:8,note:'3 fatal crashes in 2024',tags:['fatal'],aadt:232000},
+{lat:39.68303,lng:-104.94056,name:'Colorado Blvd & I-25',y:{2022:50,2023:55,2024:61},rank:9,note:'High-speed merges',tags:[],aadt:222000},
+{lat:39.7405,lng:-105.02517,name:'Colfax Ave & Federal Blvd',y:{2022:48,2023:52,2024:56},rank:10,note:'Pedestrian & cyclist hotspot',tags:['ped','cyclist'],aadt:50000},
+{lat:39.74017,lng:-104.86583,name:'Colfax & Havana (Aurora)',y:{2022:40,2023:44,2024:48},rank:null,note:'Aurora crash corridor',tags:['ped'],aadt:30000},
+{lat:39.65311,lng:-104.91839,name:'I-25 SB Hampden On-Ramp',y:{2022:38,2023:40,2024:42},rank:null,note:'Merge area congestion',tags:[],aadt:59000},
+{lat:39.80058,lng:-105.02533,name:'I-76 & Federal Blvd',y:{2022:32,2023:35,2024:39},rank:null,note:'Truck-heavy interchange',tags:['fatal'],aadt:84000},
+{lat:39.74017,lng:-104.84703,name:'Colfax & Peoria (Aurora)',y:{2022:36,2023:40,2024:44},rank:null,note:'Aurora arterial crossing',tags:['ped','cyclist'],aadt:50000},
+{lat:39.76203,lng:-105.02525,name:'Federal & W 32nd Ave',y:{2022:28,2023:33,2024:38},rank:null,note:'Residential/commercial mix',tags:['ped','cyclist'],aadt:29000},
+{lat:39.69667,lng:-104.98736,name:'S Broadway & E Mississippi',y:{2022:30,2023:32,2024:35},rank:null,note:'Broadway corridor congestion',tags:['cyclist'],aadt:50000},
+{lat:39.74014,lng:-104.94067,name:'Colfax & Colorado Blvd',y:{2022:38,2023:42,2024:46},rank:null,note:'Two major arterials crossing',tags:['ped'],aadt:42000},
+{lat:39.78428,lng:-105.02522,name:'Federal Blvd & I-70',y:{2022:30,2023:34,2024:37},rank:null,note:'Truck-heavy merge',tags:['fatal'],aadt:130000},
+{lat:39.71153,lng:-104.94072,name:'Colorado Blvd & Alameda',y:{2022:26,2023:30,2024:34},rank:null,note:'Signal-heavy corridor',tags:['ped','cyclist'],aadt:42000},
+{lat:39.65303,lng:-104.94072,name:'Colorado Blvd & Hampden',y:{2022:22,2023:26,2024:30},rank:null,note:'Southern arterial merge',tags:[],aadt:59000},
+];
+
+// State
+let currentYear='2024';
+let currentType='all';
+let currentSort='total';
+let markerLayer=L.layerGroup().addTo(map);
+let labelLayer=L.layerGroup().addTo(map);
+let corridorLayer=L.layerGroup().addTo(map);
+let searchMarker=null;
+let commuteRoute=null;
+let commuteMarkers=L.layerGroup().addTo(map);
+let nearbyHighlights=L.layerGroup().addTo(map);
+
+// --- Corridors ---
+const corridors=[
+    {name:'Federal Blvd',color:'#dc2626',coords:[[39.82,-105.0253],[39.80058,-105.02533],[39.78428,-105.02522],[39.76203,-105.02525],[39.74050,-105.02517],[39.72556,-105.02506],[39.71117,-105.02511],[39.68,-105.0251],[39.66,-105.0251]]},
+    {name:'Colfax Ave',color:'#f97316',coords:[[39.7405,-105.06],[39.74050,-105.02517],[39.74042,-105.01400],[39.74014,-104.94067],[39.74017,-104.90],[39.74017,-104.86583],[39.74017,-104.84703]]},
+    {name:'I-25',color:'#dc2626',coords:[[39.82,-105.005],[39.80,-105.004],[39.78,-105.000],[39.76111,-105.00475],[39.74042,-105.01400],[39.72558,-105.01325],[39.71,-104.99],[39.68303,-104.94056],[39.66761,-104.92569],[39.65311,-104.91836],[39.63,-104.915]]},
+    {name:'Colorado Blvd',color:'#f97316',coords:[[39.82,-104.9407],[39.80,-104.9407],[39.78,-104.9407],[39.76,-104.9407],[39.74014,-104.94067],[39.71153,-104.94072],[39.69667,-104.9407],[39.68303,-104.94056],[39.65303,-104.94072]]},
+    {name:'I-70',color:'#dc2626',coords:[[39.779,-105.06],[39.78428,-105.02522],[39.779,-105.000],[39.779,-104.9407],[39.779,-104.900],[39.779,-104.866],[39.77411,-104.84706]]},
+    {name:'Alameda Ave',color:'#f97316',coords:[[39.7112,-105.06],[39.71117,-105.02511],[39.7112,-104.987],[39.71153,-104.94072],[39.7112,-104.900]]}
+];
+function drawCorridors(){
+    corridorLayer.clearLayers();
+    corridors.forEach(c=>{
+        // White halo for contrast on light basemap
+        L.polyline(c.coords,{color:'#ffffff',weight:10,opacity:0.5,lineCap:'round',lineJoin:'round'}).addTo(corridorLayer);
+        // Color glow
+        L.polyline(c.coords,{color:c.color,weight:6,opacity:0.25,lineCap:'round',lineJoin:'round'}).addTo(corridorLayer);
+        // Crisp center
+        L.polyline(c.coords,{color:c.color,weight:2.5,opacity:0.75,lineCap:'round',lineJoin:'round'}).addTo(corridorLayer);
+    });
+}
+drawCorridors();
+
+// --- Render markers ---
+function crashRate(crashes,aadt){return aadt?((crashes/(aadt*365))*1000000).toFixed(1):0;}
+function renderMarkers(){
+    markerLayer.clearLayers();
+    labelLayer.clearLayers();
+    const yr=currentYear;
+    const filtered=spots.filter(s=>{
+        if(currentType==='all') return true;
+        return s.tags.includes(currentType);
+    });
+    // Dynamic ranking
+    const ranked=filtered.map(s=>{
+        const crashes=s.y[yr]||0;
+        const rate=parseFloat(crashRate(crashes,s.aadt));
+        return {...s,crashes,rate};
+    }).sort((a,b)=>currentSort==='rate'?(b.rate-a.rate):(b.crashes-a.crashes));
+    ranked.forEach((s,idx)=>{
+        if(s.crashes===0) return;
+        const isTop10=idx<10 && currentType==='all';
+        const dynRank=idx+1;
+        const radius=7+((s.crashes-20)/90)*16;
+        const color=isTop10?'#dc2626':'#f97316';
+        // Shadow ring for depth
+        L.circleMarker([s.lat,s.lng],{
+            radius:Math.max(6,radius)+2,fillColor:'transparent',fillOpacity:0,
+            color:'rgba(0,0,0,0.2)',weight:3,opacity:1,interactive:false
+        }).addTo(markerLayer);
+        const marker=L.circleMarker([s.lat,s.lng],{
+            radius:Math.max(6,radius),fillColor:color,fillOpacity:0.85,
+            color:'#ffffff',weight:2.5,opacity:1
+        }).addTo(markerLayer);
+
+        // Trend
+        const prev=s.y[String(Number(yr)-1)];
+        let trendStr='';
+        if(prev){
+            const pct=Math.round(((s.crashes-prev)/prev)*100);
+            const arrow=pct>0?'&#9650;':'&#9660;';
+            const tColor=pct>0?'#ff4d4d':'#4dff91';
+            trendStr=`<div class="popup-trend" style="color:${tColor}">${arrow} ${pct>0?'+':''}${pct}% vs ${Number(yr)-1}</div>`;
+        }
+        // Rate line
+        const rateVal=crashRate(s.crashes,s.aadt);
+        const rateHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#6bb5ff;margin:4px 0">${rateVal} crashes per million vehicles/yr · ${(s.aadt/1000).toFixed(0)}K AADT</div>`;
+        // Tags
+        let tagHTML='';
+        if(s.tags.length){
+            tagHTML='<div class="popup-tags">'+s.tags.map(t=>{
+                const tc={ped:['Pedestrian','#ff6b6b','rgba(255,77,77,.2)'],cyclist:['Cyclist','#6bb5ff','rgba(77,166,255,.2)'],fatal:['Fatal','#ffc266','rgba(255,179,71,.2)']};
+                const[label,fg,bg]=tc[t]||['','',' '];
+                return `<span class="popup-tag" style="color:${fg};background:${bg}">${label}</span>`;
+            }).join('')+'</div>';
+        }
+        const isInterchange=/\bI-\d+\b/.test(s.name);
+        const interNote=isInterchange?'<div class="popup-note" style="margin-top:4px;font-style:italic;color:#6b7094">Includes ramps, overpasses, and adjacent roads near this interchange.</div>':'';
+        const sortLabel=currentSort==='rate'?'by crash rate':'by total crashes';
+        const popup=`<div class="popup-rank">${isTop10?'#'+dynRank+' '+sortLabel:'Notable Hotspot'}</div><div class="popup-name">${s.name}</div><div class="popup-count">${s.crashes} crashes (${yr})</div>${rateHTML}${trendStr}<div class="popup-note">${s.note}</div>${interNote}${tagHTML}`;
+        marker.bindPopup(popup,{className:'crash-popup',maxWidth:isMobile?240:260,closeButton:true});
+
+        if(isTop10){
+            const icon=L.divIcon({
+                html:'<div style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(20,23,38,0.88);border:2px solid rgba(255,255,255,0.9);box-shadow:0 1px 4px rgba(0,0,0,.4);font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;color:#fff;line-height:1">'+dynRank+'</div>',
+                className:'',iconSize:[22,22],iconAnchor:[11,11]
+            });
+            L.marker([s.lat,s.lng],{icon:icon,interactive:false}).addTo(labelLayer);
+        }
+    });
+    // Update table
+    renderIntersectionTable();
+}
+renderMarkers();
+
+// --- Type filters ---
+document.getElementById('typeFilters').addEventListener('click',function(e){
+    const btn=e.target.closest('.map-btn');
+    if(!btn) return;
+    this.querySelectorAll('.map-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentType=btn.dataset.type;
+    renderMarkers();
+});
+
+// --- Year toggle ---
+document.getElementById('yearGroup').addEventListener('click',function(e){
+    const btn=e.target.closest('.map-btn');
+    if(!btn) return;
+    this.querySelectorAll('.map-btn').forEach(b=>b.classList.remove('active-blue'));
+    btn.classList.add('active-blue');
+    currentYear=btn.dataset.year;
+    renderMarkers();
+});
+
+// --- Sort toggle (synced across map + table) ---
+document.querySelectorAll('.sort-toggle-sync').forEach(toggle=>{
+    toggle.addEventListener('click',function(e){
+        const btn=e.target.closest('button');
+        if(!btn || !btn.dataset.sort) return;
+        currentSort=btn.dataset.sort;
+        // Sync ALL toggles
+        document.querySelectorAll('.sort-toggle-sync').forEach(t=>{
+            t.querySelectorAll('button').forEach(b=>{
+                b.classList.toggle('rt-active',b.dataset.sort===currentSort);
+            });
+        });
+        renderMarkers();
+    });
+});
+
+// --- Search (Nominatim geocoder) ---
+const searchInput=document.getElementById('mapSearchInput');
+let searchTimeout=null;
+searchInput.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){
+        e.preventDefault();
+        doSearch(this.value.trim());
+    }
+});
+searchInput.addEventListener('input',function(){
+    clearTimeout(searchTimeout);
+    const q=this.value.trim();
+    if(q.length>3){
+        searchTimeout=setTimeout(()=>doSearch(q),600);
+    }
+});
+function doSearch(query){
+    if(!query) return;
+    if(!query.toLowerCase().includes('denver')&&!query.toLowerCase().includes('co')&&!query.toLowerCase().includes('colorado')){
+        query+=' Denver CO';
+    }
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(query)+'&viewbox=-105.11,39.88,-104.76,39.58&bounded=1&limit=1')
+    .then(r=>r.json()).then(data=>{
+        if(!data.length) return;
+        const lat=parseFloat(data[0].lat),lng=parseFloat(data[0].lon);
+        map.flyTo([lat,lng],15,{duration:1});
+        if(searchMarker) map.removeLayer(searchMarker);
+        searchMarker=L.marker([lat,lng],{
+            icon:L.divIcon({
+                html:'<div style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;background:#2563eb;border:3px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>',
+                className:'',iconSize:[22,22],iconAnchor:[11,11]
+            })
+        }).addTo(map);
+        // Highlight nearby crashes
+        highlightNearby(lat,lng,0.005);// ~0.35mi
+    }).catch(()=>{});
+}
+function highlightNearby(lat,lng,threshold){
+    nearbyHighlights.clearLayers();
+    const nearby=spots.filter(s=>Math.abs(s.lat-lat)<threshold&&Math.abs(s.lng-lng)<threshold);
+    nearby.forEach(s=>{
+        // White halo behind highlight ring
+        L.circleMarker([s.lat,s.lng],{
+            radius:26,fillColor:'transparent',fillOpacity:0,
+            color:'rgba(255,255,255,0.8)',weight:5,opacity:1,interactive:false
+        }).addTo(nearbyHighlights);
+        L.circleMarker([s.lat,s.lng],{
+            radius:26,fillColor:'rgba(37,99,235,0.06)',fillOpacity:1,
+            color:'#2563eb',weight:2.5,opacity:.85,dashArray:'6,4'
+        }).addTo(nearbyHighlights);
+    });
+    if(nearby.length){
+        const best=nearby.reduce((a,b)=>(b.y[currentYear]||0)>(a.y[currentYear]||0)?b:a);
+        L.popup({className:'crash-popup',maxWidth:isMobile?200:220})
+            .setLatLng([best.lat,best.lng])
+            .setContent(`<div class="popup-name">${best.name}</div><div class="popup-count">${best.y[currentYear]} crashes nearby</div>`)
+            .openOn(map);
+    }
+}
+
+// --- Commute mode ---
+const commuteToggle=document.getElementById('commuteToggle');
+const commutePanel=document.getElementById('commutePanel');
+commuteToggle.addEventListener('click',function(){
+    const open=commutePanel.classList.toggle('show');
+    this.classList.toggle('active-green',open);
+});
+
+document.getElementById('commuteGo').addEventListener('click',doCommute);
+document.getElementById('commuteClear').addEventListener('click',clearCommute);
+document.getElementById('commuteFrom').addEventListener('keydown',e=>{if(e.key==='Enter')doCommute()});
+document.getElementById('commuteTo').addEventListener('keydown',e=>{if(e.key==='Enter')doCommute()});
+
+async function geocode(q){
+    if(!q.toLowerCase().includes('denver')&&!q.toLowerCase().includes('co')) q+=' Denver CO';
+    const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(q)+'&viewbox=-105.11,39.88,-104.76,39.58&bounded=1&limit=1');
+    const d=await r.json();
+    if(!d.length) return null;
+    return [parseFloat(d[0].lat),parseFloat(d[0].lon)];
+}
+
+async function doCommute(){
+    const fromQ=document.getElementById('commuteFrom').value.trim();
+    const toQ=document.getElementById('commuteTo').value.trim();
+    if(!fromQ||!toQ) return;
+    const result=document.getElementById('commuteResult');
+    result.textContent='Finding route...';result.classList.add('show');
+
+    try{
+        const[fromPt,toPt]=await Promise.all([geocode(fromQ),geocode(toQ)]);
+        if(!fromPt||!toPt){result.textContent='Could not find one or both addresses. Try adding "Denver" or a cross street.';return}
+
+        // OSRM routing
+        const url=`https://router.project-osrm.org/route/v1/driving/${fromPt[1]},${fromPt[0]};${toPt[1]},${toPt[0]}?overview=full&geometries=geojson`;
+        const rr=await fetch(url);
+        const rd=await rr.json();
+        if(!rd.routes||!rd.routes.length){result.textContent='Could not find a driving route between those addresses.';return}
+
+        clearCommute(true);
+        const coords=rd.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+
+        // Draw route with halo for contrast
+        L.polyline(coords,{color:'#ffffff',weight:10,opacity:0.7,lineCap:'round'}).addTo(commuteMarkers);
+        commuteRoute=L.polyline(coords,{color:'#16a34a',weight:5,opacity:.9,lineCap:'round'}).addTo(map);
+        L.polyline(coords,{color:'#16a34a',weight:14,opacity:.1}).addTo(commuteMarkers);
+
+        // Start/end markers
+        const pinIcon=(color,label)=>L.divIcon({
+            html:`<div style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:#16a34a;border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.3);font-family:JetBrains Mono,monospace;font-size:13px;font-weight:700;color:white;line-height:1">${label}</div>`,
+            className:'',iconSize:[30,30],iconAnchor:[15,15]
+        });
+        L.marker(fromPt,{icon:pinIcon('#4dff91','A')}).addTo(commuteMarkers);
+        L.marker(toPt,{icon:pinIcon('#4dff91','B')}).addTo(commuteMarkers);
+
+        // Find crashes within ~0.25mi of route
+        const nearRoute=[];
+        spots.forEach(s=>{
+            const crashes=s.y[currentYear]||0;
+            if(!crashes) return;
+            for(let i=0;i<coords.length;i+=3){
+                const d=Math.sqrt(Math.pow(s.lat-coords[i][0],2)+Math.pow(s.lng-coords[i][1],2));
+                if(d<0.004){nearRoute.push(s);break}// ~0.28mi
+            }
+        });
+
+        nearRoute.forEach(s=>{
+            L.circleMarker([s.lat,s.lng],{
+                radius:20,fillColor:'transparent',fillOpacity:0,
+                color:'rgba(255,255,255,0.8)',weight:5,opacity:1,interactive:false
+            }).addTo(commuteMarkers);
+            L.circleMarker([s.lat,s.lng],{
+                radius:20,fillColor:'rgba(220,38,38,.08)',fillOpacity:1,
+                color:'#dc2626',weight:2.5,opacity:.85,dashArray:'6,4'
+            }).addTo(commuteMarkers);
+        });
+
+        const totalCrashes=nearRoute.reduce((sum,s)=>sum+(s.y[currentYear]||0),0);
+        result.innerHTML=`&#9989; Found <strong>${nearRoute.length} hotspot${nearRoute.length!==1?'s':''}</strong> with <strong>${totalCrashes} total crashes</strong> (${currentYear}) within &frac14; mile of your commute.`;
+        map.fitBounds(commuteRoute.getBounds().pad(0.15));
+    }catch(err){
+        result.textContent='Error finding route. Try more specific addresses.';
+    }
+}
+
+function clearCommute(keepPanel){
+    if(commuteRoute){map.removeLayer(commuteRoute);commuteRoute=null}
+    commuteMarkers.clearLayers();
+    const result=document.getElementById('commuteResult');
+    result.textContent='';result.classList.remove('show');
+    if(!keepPanel){
+        map.setView([39.72,-104.95],12);
+    }
+}
+
+// --- Intersection table (synced with map sort) ---
+function renderIntersectionTable(){
+    const yr=currentYear;
+    const all=spots.map(s=>{
+        const c=s.y[yr]||0;
+        const rate=s.aadt?((c/(s.aadt*365))*1000000).toFixed(1):0;
+        return {n:s.name,c,rate:parseFloat(rate),aadt:s.aadt};
+    }).sort((a,b)=>currentSort==='rate'?(b.rate-a.rate):(b.c-a.c)).slice(0,10);
+    const rateMode=currentSort==='rate';
+    const maxCrash=Math.max(...all.map(i=>i.c));
+    const maxRate=Math.max(...all.map(i=>i.rate));
+    const crashHdr=rateMode?'Crashes':'<span style="color:var(--red)">Crashes ↓</span>';
+    const rateHdr=rateMode?'<span style="color:#6bb5ff">Rate ↓</span>':'Rate';
+    document.getElementById('intersectionTable').innerHTML='<thead><tr><th style="width:40px">#</th><th>Intersection</th><th>'+crashHdr+'</th><th style="min-width:90px">'+rateHdr+'</th></tr></thead><tbody>'+all.map((i,idx)=>{
+        const crashPct=i.c/maxCrash*100;
+        const barStyle=rateMode?'':'background:linear-gradient(90deg,rgba(255,77,77,.45),rgba(255,77,77,.15))';
+        return '<tr><td class="rank-num">'+(idx+1)+'</td><td style="font-weight:500">'+i.n+'</td><td><div class="crash-bar-wrap"><div class="crash-bar" style="width:'+crashPct+'%;'+barStyle+'"></div><span class="crash-count">'+(rateMode?'<span style="color:var(--text-dim)">'+i.c+'</span>':i.c)+'</span></div></td><td style="font-size:.82rem;font-family:JetBrains Mono,monospace;color:'+(rateMode?'#6bb5ff':'var(--text-faint)')+'">'+i.rate+'/M</td></tr>';
+    }).join('')+'</tbody>';
+}
+renderIntersectionTable();
+
+})();
+
+// ===== TABLES (non-map) =====
+const cors=[{n:'I-25 (metro stretch)',r:'Rear-end, lane-change',d:'Highest crash volume corridor'},{n:'Federal Blvd',r:'Pedestrian, broadside',d:'Priority safety corridor — new CDOT signals (2025–26)'},{n:'Colfax Ave',r:'Ped/cyclist, distracted',d:'Longest commercial street in the US'},{n:'I-70 (east metro)',r:'Merge, high-speed',d:'Peoria interchange is #1 crash intersection'},{n:'Colorado Blvd',r:'Broadside, failure to yield',d:'High signal density; red-light violations'},{n:'I-76 / E-470',r:'Truck-related',d:'35% of crashes involve commercial vehicles'}];
+document.getElementById('corridorTable').innerHTML='<thead><tr><th>Corridor</th><th>Risk Type</th><th>Context</th></tr></thead><tbody>'+cors.map(c=>'<tr><td style="font-weight:500">'+c.n+'</td><td><span class="tag tag-red" style="font-size:.62rem">'+c.r+'</span></td><td style="color:var(--text-dim);font-size:.82rem">'+c.d+'</td></tr>').join('')+'</tbody>';
+
+// ===== NEIGHBORHOODS =====
+const hoods=[{name:'Five Points',crashes:1420,fatal:5,ped:38,topCause:'Careless driving',trend:'+8%',risk:'high'},{name:'Capitol Hill',crashes:1180,fatal:3,ped:32,topCause:'Distracted driving',trend:'+5%',risk:'high'},{name:'Central Park (Stapleton)',crashes:980,fatal:2,ped:14,topCause:'Failure to yield',trend:'+12%',risk:'med'},{name:'Montbello',crashes:920,fatal:4,ped:18,topCause:'Speeding',trend:'+3%',risk:'high'},{name:'CBD / Downtown',crashes:890,fatal:2,ped:42,topCause:'Distracted driving',trend:'-2%',risk:'high'},{name:'Globeville / Elyria-Swansea',crashes:780,fatal:3,ped:15,topCause:'Careless driving',trend:'+6%',risk:'high'},{name:'Harvey Park / Bear Valley',crashes:720,fatal:2,ped:11,topCause:'Speeding',trend:'+4%',risk:'med'},{name:'Virginia Village / Glendale',crashes:690,fatal:1,ped:9,topCause:'Following too close',trend:'+1%',risk:'med'},{name:'Green Valley Ranch',crashes:660,fatal:2,ped:8,topCause:'Careless driving',trend:'+10%',risk:'med'},{name:'Cherry Creek',crashes:540,fatal:1,ped:12,topCause:'Failure to yield',trend:'+15%',risk:'med'},{name:'Barnum / West Colfax',crashes:620,fatal:3,ped:22,topCause:'Impaired driving',trend:'+7%',risk:'high'},{name:'Athmar Park',crashes:480,fatal:1,ped:9,topCause:'Careless driving',trend:'-36%',risk:'low'},{name:'Highland / LoHi',crashes:520,fatal:1,ped:14,topCause:'Distracted driving',trend:'+2%',risk:'med'},{name:'Park Hill',crashes:490,fatal:1,ped:7,topCause:'Speeding',trend:'+3%',risk:'low'},{name:'Washington Park',crashes:380,fatal:0,ped:6,topCause:'Following too close',trend:'-1%',risk:'low'}];
+function renderHoods(f){const g=document.getElementById('hoodGrid');let d=f==='all'?hoods.slice(0,9):hoods.filter(n=>n.name===f);if(!d.length)d=hoods.slice(0,9);g.innerHTML=d.map(n=>{const rc=n.risk==='high'?'danger':n.risk==='med'?'warn':'';const tc=n.trend.startsWith('+')?'color:var(--red)':'color:var(--green)';return'<div class="hood-card"><div class="hood-name">'+n.name+'</div><div class="hood-stat"><span class="hood-stat-label">Total crashes</span><span class="hood-stat-val '+rc+'">'+n.crashes.toLocaleString()+'</span></div><div class="hood-stat"><span class="hood-stat-label">Fatal crashes</span><span class="hood-stat-val">'+n.fatal+'</span></div><div class="hood-stat"><span class="hood-stat-label">Pedestrian crashes</span><span class="hood-stat-val">'+n.ped+'</span></div><div class="hood-stat"><span class="hood-stat-label">Top cause</span><span class="hood-stat-val" style="font-family:DM Sans;font-size:.8rem">'+n.topCause+'</span></div><div class="hood-stat"><span class="hood-stat-label">YoY trend</span><span class="hood-stat-val" style="'+tc+'">'+n.trend+'</span></div></div>'}).join('')}
+const sel=document.getElementById('hoodSelect');hoods.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(n=>{const o=document.createElement('option');o.value=n.name;o.textContent=n.name;sel.appendChild(o)});
+sel.addEventListener('change',()=>renderHoods(sel.value));hoods.sort((a,b)=>b.crashes-a.crashes);renderHoods('all');
+
+// ===== CHARTS =====
+new Chart(document.getElementById('crashTypeChart'),{type:'doughnut',data:{labels:['Rear-end','Broadside','Sideswipe','Parked vehicle','Fixed object','Head-on','Pedestrian','Cyclist','Other'],datasets:[{data:[28.5,18,16.6,12.8,8.2,3.5,3.8,1.7,6.9],backgroundColor:['#ff4d4d','#ffb347','#4da6ff','#b07dff','#4dff91','#ff6b9d','#4de8ff','#ffd700','#555873'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
+new Chart(document.getElementById('causesChart'),{type:'bar',data:{labels:['Distracted','Careless','Speeding','Inexperience','Failure to yield','Following close','Lane violation','Impaired'],datasets:[{data:[40,38,18,17,15,12,10,9.9],backgroundColor:['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.7)','rgba(255,215,0,.7)','rgba(176,125,255,.7)','rgba(77,255,145,.7)','rgba(77,232,255,.7)','rgba(255,107,157,.7)'],borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+'%'}}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(28,31,46,.5)'},max:50},y:{grid:{display:false},ticks:{font:{size:isMobile?9:11}}}}}});
+new Chart(document.getElementById('hourlyChart'),{type:'line',data:{labels:Array.from({length:24},(_,i)=>{const h=i%12||12;return h+(i<12?'a':'p')}),datasets:[{label:'Weekday',data:[1.2,.8,.6,.5,.6,1.5,3.8,6.8,7.2,5.5,5,5.2,5.8,5.5,5.6,6.2,7,6.5,5,4,3.2,2.8,2.2,1.5],borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.06)',borderWidth:2.5,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true},{label:'Weekend',data:[2.2,1.8,1.4,1,.8,.7,1,1.5,2.5,3.8,4.8,5.5,6.2,6,5.8,5.5,5,4.5,4,3.5,3.2,3,2.8,2.5],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.04)',borderWidth:2,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'end',labels:{usePointStyle:true,pointStyle:'line',padding:20}},tooltip:{...TT}},scales:{y:{title:{display:true,text:'% of daily crashes',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false},ticks:{maxTicksLimit:isMobile?8:24}}}}});
+new Chart(document.getElementById('dayOfWeekChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{data:[68,72,67,66,63,48,40],backgroundColor:['#555873','#ff4d4d','#555873','#555873','#555873','#2a2e42','#2a2e42'],borderRadius:6,borderSkipped:false,barThickness:isMobile?14:32}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw+' avg daily'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{data:[1750,1650,1850,1700,1800,1950,2100,2050,1900,1850,1650,1750],backgroundColor:c=>[6,7].includes(c.dataIndex)?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,min:1400,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('yoyTotalChart'),{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Total Crashes',data:[20.5,14.2,18.8,20.1,21.5,22],borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ff4d4d',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw+'K crashes'}}},scales:{y:{ticks:{callback:v=>v+'K'},grid:{color:'rgba(28,31,46,.5)'},min:10,max:25},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('yoySeverityChart'),{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Fatalities',data:[76,67,96,89,84,62],borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true},{label:'Pedestrian Crashes',data:[480,380,510,560,575,590],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.06)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#4da6ff',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'end',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:11}}},tooltip:{...TT}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('speedChart'),{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{data:[28.5,25.1,23.8,23,22.4,21.9],borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.06)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+' mph'}}},scales:{y:{min:18,max:32,title:{display:true,text:'MPH',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('stateChart'),{type:'bar',data:{labels:['2019','2020','2021','2022','2023','2024','2025 est'],datasets:[{data:[104000,78000,95000,98000,102749,110000,115000],backgroundColor:c=>c.dataIndex===6?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,min:60000,ticks:{callback:v=>(v/1000)+'K'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('vuChart'),{type:'bar',data:{labels:['2022','2023','2024'],datasets:[{label:'Pedestrian',data:[560,575,590],backgroundColor:'rgba(255,77,77,.65)',borderRadius:6,borderSkipped:false},{label:'Cyclist / E-bike',data:[230,248,264],backgroundColor:'rgba(77,166,255,.65)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{usePointStyle:true,pointStyle:'rectRounded',padding:16}},tooltip:TT},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('pedLocationChart'),{type:'doughnut',data:{labels:['At intersection','Mid-block crossing','Parking lot / alley','Other'],datasets:[{data:[62,24,8,6],backgroundColor:['#4da6ff','#ff4d4d','#ffb347','#555873'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
+new Chart(document.getElementById('metroChart'),{type:'bar',data:{labels:['Denver','Aurora','Colo Springs','Adams Co','Jefferson Co','Weld Co','Boulder'],datasets:[{data:[22000,12000,9500,8000,7500,6000,2800],backgroundColor:['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.5)','rgba(176,125,255,.5)','rgba(77,255,145,.5)','rgba(77,232,255,.4)','rgba(255,215,0,.4)'],borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw.toLocaleString()+' crashes (est.)'}}},scales:{y:{ticks:{callback:v=>(v/1000)+'K'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+</script>
+</body>
+</html>
