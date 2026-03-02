@@ -87,20 +87,17 @@
         .popup-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
         .popup-tag{font-size:10.5px;padding:3px 8px;border-radius:5px;font-weight:600;letter-spacing:.03em}
 
-        /* Rate toggle pill */
-        .rate-toggle{display:inline-flex;background:#161929;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:.68rem}
-        .rate-toggle button{padding:6px 14px;border:none;background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;font-family:inherit;font-size:inherit;font-weight:500;letter-spacing:.02em;white-space:nowrap}
-        .rate-toggle button:hover{color:var(--text)}
-        .rate-toggle button.rt-active{background:rgba(107,181,255,.15);color:#6bb5ff}
-        .rate-toggle-label{font-family:'DM Sans',sans-serif;font-size:.75rem;color:var(--text-faint);margin-right:8px;align-self:center}
-
         /* Map toolbar */
-        .map-toolbar{display:flex;flex-wrap:wrap;gap:.6rem;padding:.85rem 1rem;background:#0d0f19;border-radius:12px 12px 0 0;border-bottom:1px solid var(--border);align-items:center}
-        .map-search{display:flex;flex:1;min-width:200px;max-width:380px;position:relative}
+        .map-toolbar{display:flex;flex-direction:column;gap:0;background:#0d0f19;border-radius:12px 12px 0 0;border-bottom:1px solid var(--border)}
+        .map-toolbar-row{display:flex;flex-wrap:wrap;gap:.6rem;padding:.7rem 1rem;align-items:center}
+        .map-toolbar-row+.map-toolbar-row{border-top:1px solid rgba(255,255,255,.04);padding-top:.65rem}
+        .map-search{display:flex;flex:1;min-width:200px;position:relative}
         .map-search input{width:100%;background:#161929;border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:8px 12px 8px 34px;border-radius:8px;outline:none;transition:border-color .2s}
         .map-search input:focus{border-color:var(--blue)}
         .map-search input::placeholder{color:var(--text-faint)}
         .map-search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:.85rem;pointer-events:none}
+        .map-filter-group{display:flex;align-items:center;gap:6px}
+        .map-filter-group-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:500;color:var(--text-faint);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
         .map-filters{display:flex;gap:4px;flex-wrap:wrap}
         .map-btn{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:500;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.02em}
         .map-btn:hover{border-color:var(--text-dim);color:var(--text)}
@@ -109,7 +106,7 @@
         .map-btn.active-amber{background:var(--amber-dim);border-color:rgba(255,179,71,0.3);color:var(--amber)}
         .map-btn.active-green{background:var(--green-dim);border-color:rgba(77,255,145,0.3);color:var(--green)}
         .map-btn.active-purple{background:var(--purple-dim);border-color:rgba(176,125,255,0.3);color:var(--purple)}
-        .map-sep{width:1px;height:26px;background:rgba(255,255,255,.08);margin:0 6px;flex-shrink:0}
+        .map-group-sep{width:1px;height:22px;background:rgba(255,255,255,.06);margin:0 8px;flex-shrink:0}
         .map-year-group{display:flex;gap:4px}
 
         /* Commute panel */
@@ -173,14 +170,13 @@
             .card{padding:1.25rem;border-radius:12px}
             .chart-box{height:260px}.chart-box.tall{height:300px}.chart-box.short{height:240px}
             #crashMap{height:500px}
-            .map-search{max-width:100%;min-width:0;flex:1 1 100%;order:-1}
-            .map-toolbar{gap:.5rem;padding:.75rem}
-            .map-sep{display:none}
-            .map-filters{gap:3px}.map-year-group{gap:3px}
+            .map-toolbar-row{gap:.5rem;padding:.6rem .75rem}
+            .map-search{flex:1 1 100%;min-width:0}
+            .map-group-sep{display:none}
+            .map-filter-group{gap:4px}
+            .map-filters{gap:3px}
             .map-btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
             .rank-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
-            .rate-toggle button{padding:5px 10px;font-size:.62rem}
-            .rate-toggle-label{font-size:.68rem}
             .card-top{flex-wrap:wrap;gap:.5rem}
             .grid-2{gap:1rem}.tiles{grid-template-columns:1fr}.hood-grid{grid-template-columns:1fr}
             .meth-grid{grid-template-columns:1fr}.filter-bar{flex-direction:column;align-items:stretch}
@@ -296,30 +292,40 @@
 
     <!-- Toolbar -->
     <div class="map-toolbar">
-        <div class="map-search">
-            <span class="map-search-icon">&#128269;</span>
-            <input type="text" id="mapSearchInput" placeholder="Search address or intersection..." autocomplete="off">
+        <div class="map-toolbar-row">
+            <div class="map-search">
+                <span class="map-search-icon">&#128269;</span>
+                <input type="text" id="mapSearchInput" placeholder="Search address or intersection..." autocomplete="off">
+            </div>
+            <button class="map-btn" id="commuteToggle">&#128663; My Commute</button>
         </div>
-        <div class="map-sep"></div>
-        <div class="map-filters" id="typeFilters">
-            <button class="map-btn active" data-type="all">All</button>
-            <button class="map-btn" data-type="ped">Pedestrian</button>
-            <button class="map-btn" data-type="cyclist">Cyclist</button>
-            <button class="map-btn" data-type="fatal">Fatal</button>
-        </div>
-        <div class="map-sep"></div>
-        <div class="map-year-group" id="yearGroup">
-            <button class="map-btn" data-year="2022">2022</button>
-            <button class="map-btn" data-year="2023">2023</button>
-            <button class="map-btn active-blue" data-year="2024">2024</button>
-        </div>
-        <div class="map-sep"></div>
-        <button class="map-btn" id="commuteToggle">&#128663; My Commute</button>
-        <div class="map-sep"></div>
-        <span class="rate-toggle-label">Rank by:</span>
-        <div class="rate-toggle sort-toggle-sync">
-            <button class="rt-active" data-sort="total">Total</button>
-            <button data-sort="rate">Per Vehicle</button>
+        <div class="map-toolbar-row">
+            <div class="map-filter-group">
+                <span class="map-filter-group-label">Show</span>
+                <div class="map-filters" id="typeFilters">
+                    <button class="map-btn active" data-type="all">All</button>
+                    <button class="map-btn" data-type="ped">Pedestrian</button>
+                    <button class="map-btn" data-type="cyclist">Cyclist</button>
+                    <button class="map-btn" data-type="fatal">Fatal</button>
+                </div>
+            </div>
+            <div class="map-group-sep"></div>
+            <div class="map-filter-group">
+                <span class="map-filter-group-label">Year</span>
+                <div class="map-filters" id="yearGroup">
+                    <button class="map-btn" data-year="2022">2022</button>
+                    <button class="map-btn" data-year="2023">2023</button>
+                    <button class="map-btn active-blue" data-year="2024">2024</button>
+                </div>
+            </div>
+            <div class="map-group-sep"></div>
+            <div class="map-filter-group">
+                <span class="map-filter-group-label">Rank by</span>
+                <div class="map-filters sort-toggle-sync">
+                    <button class="map-btn active-blue" data-sort="total">Total</button>
+                    <button class="map-btn" data-sort="rate">Per Vehicle</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -361,7 +367,7 @@
 <div class="rule"></div>
 <!-- INTERSECTIONS -->
 <div class="sec-hdr"><div class="sec-num">02 — Dangerous Intersections</div><h2 class="sec-title">The Top 10 Crash Sites</h2><p class="sec-desc">Freeway interchanges and high-volume arterials dominate. Toggle "Per Vehicle" to see which intersections are most dangerous relative to how much traffic they carry.</p></div>
-<div class="card"><div class="card-top"><div><div class="card-title">Top 10 Crash Intersections in Denver</div><div class="card-sub">Denver PD / CDOT · AADT from CDOT Traffic Data Explorer</div></div><div style="display:flex;align-items:center;gap:8px"><span class="rate-toggle-label">Rank by:</span><div class="rate-toggle sort-toggle-sync"><button class="rt-active" data-sort="total">Total</button><button data-sort="rate">Per Vehicle</button></div></div></div><table class="rank-table" id="intersectionTable"></table></div>
+<div class="card"><div class="card-top"><div><div class="card-title">Top 10 Crash Intersections in Denver</div><div class="card-sub">Denver PD / CDOT · AADT from CDOT Traffic Data Explorer</div></div><div class="map-filter-group"><span class="map-filter-group-label">Rank by</span><div class="map-filters sort-toggle-sync"><button class="map-btn active-blue" data-sort="total">Total</button><button class="map-btn" data-sort="rate">Per Vehicle</button></div></div></div><table class="rank-table" id="intersectionTable"></table></div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Crash Types</div><div class="card-sub">By collision type, 2024</div></div><div class="tag tag-amber">Types</div></div><div class="chart-box"><canvas id="crashTypeChart"></canvas></div></div>
     <div class="card"><div class="card-top"><div><div class="card-title">Contributing Factors</div><div class="card-sub">Top causes in crash reports</div></div><div class="tag tag-purple">Causes</div></div><div class="chart-box"><canvas id="causesChart"></canvas></div></div>
@@ -595,7 +601,7 @@ document.querySelectorAll('.sort-toggle-sync').forEach(toggle=>{
         // Sync ALL toggles
         document.querySelectorAll('.sort-toggle-sync').forEach(t=>{
             t.querySelectorAll('button').forEach(b=>{
-                b.classList.toggle('rt-active',b.dataset.sort===currentSort);
+                b.classList.toggle('active-blue',b.dataset.sort===currentSort);
             });
         });
         renderMarkers();
