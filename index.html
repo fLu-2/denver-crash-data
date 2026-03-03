@@ -158,6 +158,8 @@
         .meth-text{font-size:.82rem;color:var(--text-dim);line-height:1.6}
         .meth-text a{color:var(--amber);text-decoration:none}.meth-text a:hover{text-decoration:underline}
         .meth-note{font-size:.78rem;color:var(--text-faint);margin-top:.6rem;font-style:italic}
+         .meth-full{margin-top:1.5rem}
+         .meth-notes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1rem;margin-top:.6rem}
         .footer{text-align:center;padding:3rem 2rem;font-size:.78rem;color:var(--text-faint);border-top:1px solid var(--border)}
         .footer a{color:var(--amber);text-decoration:none}.footer a:hover{text-decoration:underline}
 
@@ -179,7 +181,7 @@
             .rank-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
             .card-top{flex-wrap:wrap;gap:.5rem}
             .grid-2{gap:1rem}.tiles{grid-template-columns:1fr}.hood-grid{grid-template-columns:1fr}
-            .meth-grid{grid-template-columns:1fr}.filter-bar{flex-direction:column;align-items:stretch}
+            .meth-grid{grid-template-columns:1fr}.meth-notes-grid{grid-template-columns:1fr}.filter-bar{flex-direction:column;align-items:stretch}
             .filter-select{width:100%}.rule{margin:3rem 0}
             .map-legend-row{gap:.75rem;font-size:.72rem;justify-content:center}
             .map-legend-item:last-child{margin-left:0;width:100%;justify-content:center;margin-top:.25rem}
@@ -421,7 +423,18 @@
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>CDOT Traffic Volumes</div><div class="meth-text">AADT (Annual Average Daily Traffic) for crash rate normalization.<br><br><a href="https://dtdapps.coloradodot.info/otis/trafficdata" target="_blank">Traffic Data Explorer &rarr;</a></div></div>
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>Denver Vision Zero</div><div class="meth-text">Fatal and serious-injury crash tracking.<br><br><a href="https://denvergov.org/Government/Citywide-Programs-and-Initiatives/Vision-Zero/Statistics" target="_blank">Vision Zero &rarr;</a></div></div>
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--green)"></div>TomTom / INRIX</div><div class="meth-text">Rush-hour speeds and congestion data. Denver drivers lost 44 hours to traffic in 2024.<br><br><a href="https://www.tomtom.com/traffic-index/" target="_blank">TomTom &rarr;</a> · <a href="https://inrix.com/scorecard/" target="_blank">INRIX &rarr;</a></div></div>
-    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--cyan)"></div>Methodology</div><div class="meth-text">Intersection counts from Denver PD via Open Data Catalog. Metro estimates from CDOT and local PD. Geocoding via OSM Nominatim. Routing via OSRM.<br><br><strong style="color:var(--amber)">Traffic volume normalization:</strong> Crash rates (per million vehicles per year) use AADT from CDOT's Traffic Data Explorer and ArcGIS Traffic Volume Map. At intersections, the higher-volume approaching road was used. AADT reflects the most recent published year. Use the "Per Vehicle" toggle on the map to rank by crash rate.<br><br><strong style="color:var(--amber)">A note on underreporting:</strong> This data only includes crashes with a filed police report. Pedestrian and cyclist incidents are widely understood to be underreported — if no report is filed, the crash doesn't appear in Denver Open Data. The real numbers are likely higher than what's shown here.<br><br><strong style="color:var(--amber)">Highway interchanges:</strong> At interstate locations (I-25, I-70, I-76), crash counts include all crashes near the interchange — on ramps, bridges, overpasses, and adjacent roads. The source data groups crashes by proximity and does not distinguish mainline vs. ramp vs. crossing road.</div><div class="meth-note">All public records. No affiliation with law firms, insurers, or agencies. This page collects no data, uses no analytics, and stores no cookies. Address and commute queries are sent directly to open source services (Nominatim, OSRM) and are never seen or stored by this site.</div></div>
+</div>
+<div class="meth-full">
+    <div class="meth-card">
+        <div class="meth-title"><div class="dot" style="background:var(--cyan)"></div>Methodology</div>
+        <div class="meth-notes-grid">
+            <div class="meth-text">Intersection counts from Denver PD via Open Data Catalog. Metro estimates from CDOT and local PD. Geocoding via OSM Nominatim. Routing via OSRM.</div>
+            <div class="meth-text"><strong style="color:var(--amber)">Traffic volume normalization:</strong> Crash rates (per million vehicles per year) use AADT from CDOT’s Traffic Data Explorer and ArcGIS Traffic Volume Map. At intersections, the higher-volume approaching road was used. AADT reflects the most recent published year. Use the “Per Vehicle” toggle on the map to rank by crash rate.</div>
+            <div class="meth-text"><strong style="color:var(--amber)">A note on underreporting:</strong> This data only includes crashes with a filed police report. Pedestrian and cyclist incidents are widely understood to be underreported — if no report is filed, the crash doesn’t appear in Denver Open Data. The real numbers are likely higher than what’s shown here.</div>
+            <div class="meth-text"><strong style="color:var(--amber)">Highway interchanges:</strong> At interstate locations (I-25, I-70, I-76), crash counts include all crashes near the interchange — on ramps, bridges, overpasses, and adjacent roads. The source data groups crashes by proximity and does not distinguish mainline vs. ramp vs. crossing road.</div>
+        </div>
+        <div class="meth-note">All public records. No affiliation with law firms, insurers, or agencies. This page collects no data, uses no analytics, and stores no cookies. Address and commute queries are sent directly to open source services (Nominatim, OSRM) and are never seen or stored by this site.</div>
+    </div>
 </div>
 </main>
 <footer class="footer"><p>Data: <a href="https://www.denvergov.org/opendata" target="_blank">Denver Open Data</a> · <a href="https://www.codot.gov/safety/traffic-safety/data-analysis/crash-data" target="_blank">CDOT</a> · <a href="https://dtdapps.coloradodot.info/otis/trafficdata" target="_blank">CDOT Traffic Data Explorer</a> · <a href="https://denvergov.org/Government/Citywide-Programs-and-Initiatives/Vision-Zero/Statistics" target="_blank">Vision Zero</a> · <a href="https://www.tomtom.com/traffic-index/" target="_blank">TomTom</a> · <a href="https://inrix.com/scorecard/" target="_blank">INRIX</a><br>Built for <a href="https://www.reddit.com/r/Denver/" target="_blank">r/Denver</a></p></footer>
