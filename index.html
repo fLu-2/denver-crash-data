@@ -157,14 +157,27 @@
         .meth-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
         .meth-text{font-size:.82rem;color:var(--text-dim);line-height:1.6}
         .meth-text a{color:var(--amber);text-decoration:none}.meth-text a:hover{text-decoration:underline}
-        .meth-note{font-size:.78rem;color:var(--text-faint);margin-top:.6rem;font-style:italic}
+        .meth-note{font-size:.78rem;color:var(--text-faint);margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--border);font-style:italic}
+         .meth-notes-grid>:last-child{grid-column:1/-1}
          .meth-full{margin-top:1.5rem}
-         .meth-notes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1rem;margin-top:.6rem}
+         .meth-notes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin-top:.8rem}
+
+        /* ===== STICKY NAV ===== */
+        .sticky-nav{position:sticky;top:0;z-index:1000;background:rgba(8,9,13,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transform:translateY(-100%);transition:transform .3s ease;pointer-events:none}
+        .sticky-nav.visible{transform:translateY(0);pointer-events:auto}
+        .sticky-nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;padding:0 1rem}
+        .sticky-nav-inner::-webkit-scrollbar{display:none}
+        .sticky-nav a{flex-shrink:0;padding:.7rem .85rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;color:var(--text-faint);text-decoration:none;letter-spacing:.04em;white-space:nowrap;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+        .sticky-nav a:hover{color:var(--text-dim)}
+        .sticky-nav a.active{color:var(--red);border-bottom-color:var(--red)}
+        .sec-hdr[id]{scroll-margin-top:52px}
+
         .footer{text-align:center;padding:3rem 2rem;font-size:.78rem;color:var(--text-faint);border-top:1px solid var(--border)}
         .footer a{color:var(--amber);text-decoration:none}.footer a:hover{text-decoration:underline}
 
         /* ===== MOBILE: TABLET ===== */
         @media(max-width:768px){
+            .sticky-nav a{padding:.6rem .7rem;font-size:.58rem}
             .hero{padding:2rem 1.25rem;min-height:auto;padding-top:4rem;padding-bottom:3rem}
             .wrap{padding:2.5rem 1.25rem 4rem}
             .stats-strip{grid-template-columns:repeat(2,1fr)}
@@ -194,6 +207,8 @@
         }
         /* ===== MOBILE: PHONE ===== */
         @media(max-width:480px){
+            .sticky-nav-inner{padding:0 .5rem}
+            .sticky-nav a{padding:.55rem .6rem;font-size:.54rem;letter-spacing:.02em}
             .hero{padding:1.5rem 1rem;padding-top:3rem;padding-bottom:2.5rem}
             .hero h1{font-size:1.9rem;line-height:1.15}
             .hero-sub{font-size:.9rem;margin-bottom:2rem}
@@ -254,6 +269,7 @@
         }
         /* ===== MOBILE: SMALL PHONE ===== */
         @media(max-width:360px){
+            .sticky-nav a{padding:.5rem .5rem;font-size:.5rem}
             .hero h1{font-size:1.65rem}
             .stat-val{font-size:.95rem}
             .stat-lbl{font-size:.6rem}
@@ -279,9 +295,24 @@
     </div>
 </div></section>
 
+<nav class="sticky-nav" id="stickyNav">
+    <div class="sticky-nav-inner">
+        <a href="#sec-01">01 Map</a>
+        <a href="#sec-02">02 Top 10</a>
+        <a href="#sec-03">03 Neighborhoods</a>
+        <a href="#sec-04">04 When</a>
+        <a href="#sec-05">05 Year/Year</a>
+        <a href="#sec-06">06 Vision Zero</a>
+        <a href="#sec-07">07 Ped/Bike</a>
+        <a href="#sec-08">08 Metro</a>
+        <a href="#sec-09">09 Takeaways</a>
+        <a href="#sec-10">10 Sources</a>
+    </div>
+</nav>
+
 <main class="wrap">
 
-<div class="sec-hdr">
+<div class="sec-hdr" id="sec-01">
     <div class="sec-num">01 — Crash Map</div>
     <h2 class="sec-title">Where It Happens</h2>
     <p class="sec-desc">Search an address, filter by crash type, compare years, or enter your commute to see every crash hotspot along your route.</p>
@@ -368,25 +399,25 @@
 
 <div class="rule"></div>
 <!-- INTERSECTIONS -->
-<div class="sec-hdr"><div class="sec-num">02 — Dangerous Intersections</div><h2 class="sec-title">The Top 10 Crash Sites</h2><p class="sec-desc">Freeway interchanges and high-volume arterials dominate. Toggle "Per Vehicle" to see which intersections are most dangerous relative to how much traffic they carry.</p></div>
+<div class="sec-hdr" id="sec-02"><div class="sec-num">02 — Dangerous Intersections</div><h2 class="sec-title">The Top 10 Crash Sites</h2><p class="sec-desc">Freeway interchanges and high-volume arterials dominate. Toggle "Per Vehicle" to see which intersections are most dangerous relative to how much traffic they carry.</p></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Top 10 Crash Intersections in Denver</div><div class="card-sub">Denver PD / CDOT · AADT from CDOT Traffic Data Explorer</div></div><div class="map-filter-group"><span class="map-filter-group-label">Rank by</span><div class="map-filters sort-toggle-sync"><button class="map-btn active-blue" data-sort="total">Total</button><button class="map-btn" data-sort="rate">Per Vehicle</button></div></div></div><table class="rank-table" id="intersectionTable"></table></div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Crash Types</div><div class="card-sub">By collision type, 2024</div></div><div class="tag tag-amber">Types</div></div><div class="chart-box"><canvas id="crashTypeChart"></canvas></div></div>
     <div class="card"><div class="card-top"><div><div class="card-title">Contributing Factors</div><div class="card-sub">Top causes in crash reports</div></div><div class="tag tag-purple">Causes</div></div><div class="chart-box"><canvas id="causesChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr"><div class="sec-num">03 — By Neighborhood</div><h2 class="sec-title">Your Area, Your Risk</h2><p class="sec-desc">Crash patterns vary dramatically across Denver's 78 neighborhoods. Select an area to see its specific crash profile.</p></div>
+<div class="sec-hdr" id="sec-03"><div class="sec-num">03 — By Neighborhood</div><h2 class="sec-title">Your Area, Your Risk</h2><p class="sec-desc">Crash patterns vary dramatically across Denver's 78 neighborhoods. Select an area to see its specific crash profile.</p></div>
 <div class="filter-bar"><label for="hoodSelect">Filter neighborhood:</label><select id="hoodSelect" class="filter-select"><option value="all">All — Show highest-crash neighborhoods</option></select></div>
 <div class="hood-grid" id="hoodGrid"></div>
 <div class="rule"></div>
-<div class="sec-hdr"><div class="sec-num">04 — When It Happens</div><h2 class="sec-title">Tuesdays Are Worse Than Weekends</h2><p class="sec-desc">Tuesdays consistently see more crashes in Denver than Fridays or Saturdays. Morning and late-afternoon commute windows are the peak danger hours.</p></div>
+<div class="sec-hdr" id="sec-04"><div class="sec-num">04 — When It Happens</div><h2 class="sec-title">Tuesdays Are Worse Than Weekends</h2><p class="sec-desc">Tuesdays consistently see more crashes in Denver than Fridays or Saturdays. Morning and late-afternoon commute windows are the peak danger hours.</p></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Crashes by Hour of Day</div><div class="card-sub">Weekday vs. weekend, Denver 2024</div></div><div class="tag tag-blue">Temporal</div></div><div class="chart-box tall"><canvas id="hourlyChart"></canvas></div></div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Day of Week</div><div class="card-sub">Avg daily crashes, 2024</div></div><div class="tag tag-amber">Weekly</div></div><div class="chart-box short"><canvas id="dayOfWeekChart"></canvas></div></div>
     <div class="card"><div class="card-top"><div><div class="card-title">Monthly Totals</div><div class="card-sub">Denver 2024</div></div><div class="tag tag-green">Seasonal</div></div><div class="chart-box short"><canvas id="monthlyChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr"><div class="sec-num">05 — Year Over Year</div><h2 class="sec-title">Is Denver Getting Safer?</h2><p class="sec-desc">Fatalities have trended down since the 2021 peak, but total crash volume keeps climbing.</p></div>
+<div class="sec-hdr" id="sec-05"><div class="sec-num">05 — Year Over Year</div><h2 class="sec-title">Is Denver Getting Safer?</h2><p class="sec-desc">Fatalities have trended down since the 2021 peak, but total crash volume keeps climbing.</p></div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Total Crashes</div><div class="card-sub">Denver 2019–2024 (thousands)</div></div><div class="tag tag-red">Volume</div></div><div class="chart-box short"><canvas id="yoyTotalChart"></canvas></div></div>
     <div class="card"><div class="card-top"><div><div class="card-title">Fatalities &amp; Pedestrian Crashes</div><div class="card-sub">Denver 2019–2024</div></div><div class="tag tag-amber">Severity</div></div><div class="chart-box short"><canvas id="yoySeverityChart"></canvas></div></div>
@@ -396,17 +427,28 @@
     <div class="card"><div class="card-top"><div><div class="card-title">Colorado Statewide Crashes</div><div class="card-sub">CDOT annual totals</div></div><div class="tag tag-blue">Statewide</div></div><div class="chart-box short"><canvas id="stateChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr"><div class="sec-num">06 — Pedestrians &amp; Cyclists</div><h2 class="sec-title">The Most Vulnerable on Denver's Streets</h2><p class="sec-desc">590 pedestrian crashes and 264 cyclist crashes in 2024. Nearly 40% occurred away from intersections.</p></div>
+<div class="sec-hdr" id="sec-06"><div class="sec-num">06 — Vision Zero Accountability</div><h2 class="sec-title">Denver Promised Zero Deaths by 2030</h2><p class="sec-desc">In 2017, Denver adopted Vision Zero with a baseline of 51 fatalities and a goal of zero by 2030. Since then, fatalities have gone up, not down. The red zone shows the growing gap between the city's promise and reality.</p></div>
+<div class="card"><div class="card-top"><div><div class="card-title">Vision Zero: Promise vs. Reality</div><div class="card-sub">Denver traffic fatalities — actual vs. goal trajectory (DPD data)</div></div><div class="tag tag-red">Accountability</div></div><div class="chart-box tall"><canvas id="vzChart"></canvas></div></div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Pedestrian Fatalities</div><div class="card-sub">Denver city, 2021–2024</div></div><div class="tag tag-amber">Climbing</div></div><div class="chart-box short"><canvas id="pedFatalChart"></canvas></div></div>
+    <div class="card" style="display:flex;flex-direction:column;justify-content:center;padding:2rem">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(2.5rem,5vw,3.5rem);font-weight:700;color:var(--red);line-height:1">+21%</div>
+        <div style="font-size:.95rem;color:var(--text-dim);margin-top:.8rem;line-height:1.5">Fatalities have <strong style="color:var(--text)">increased 21%</strong> since Denver adopted Vision Zero in 2017. The city would need to go from 62 deaths in 2024 to zero in 6 years — a pace never achieved by any U.S. city.</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text-faint);margin-top:1.2rem;letter-spacing:.05em">51 DEATHS (2017) → 62 DEATHS (2024) → 0 GOAL (2030)</div>
+    </div>
+</div>
+<div class="rule"></div>
+<div class="sec-hdr" id="sec-07"><div class="sec-num">07 — Pedestrians &amp; Cyclists</div><h2 class="sec-title">The Most Vulnerable on Denver's Streets</h2><p class="sec-desc">590 pedestrian crashes and 264 cyclist crashes in 2024. Nearly 40% occurred away from intersections.</p></div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Vulnerable Road User Crashes</div><div class="card-sub">Denver 2022–2024</div></div><div class="tag tag-red">VRU</div></div><div class="chart-box short"><canvas id="vuChart"></canvas></div></div>
     <div class="card"><div class="card-top"><div><div class="card-title">Pedestrian Crash Location</div><div class="card-sub">Intersection vs. mid-block, 2024</div></div><div class="tag tag-blue">Location</div></div><div class="chart-box short"><canvas id="pedLocationChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr"><div class="sec-num">07 — The Metro Picture</div><h2 class="sec-title">Denver vs. Surrounding Cities</h2><p class="sec-desc">Aurora has nearly half of Colorado's 50 most dangerous intersections.</p></div>
+<div class="sec-hdr" id="sec-08"><div class="sec-num">08 — The Metro Picture</div><h2 class="sec-title">Denver vs. Surrounding Cities</h2><p class="sec-desc">Aurora has nearly half of Colorado's 50 most dangerous intersections.</p></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Crash Volume by Metro Area</div><div class="card-sub">2024 estimates — CDOT / local PD</div></div><div class="tag tag-purple">Metro</div></div><div class="chart-box"><canvas id="metroChart"></canvas></div></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Dangerous Corridors</div><div class="card-sub">Key crash corridors across the Denver metro</div></div><div class="tag tag-red">Corridors</div></div><table class="rank-table" id="corridorTable"></table></div>
 <div class="rule"></div>
-<div class="sec-hdr"><div class="sec-num">08 — Key Takeaways</div><h2 class="sec-title">What the Data Tells Us</h2></div>
+<div class="sec-hdr" id="sec-09"><div class="sec-num">09 — Key Takeaways</div><h2 class="sec-title">What the Data Tells Us</h2></div>
 <div class="tiles">
     <div class="tile"><div class="tile-icon">&#9888;&#65039;</div><div class="tile-title">I-70 &amp; Peoria Is #1</div><div class="tile-text">103 crashes in 2024. A complex merge where highway speeds meet local traffic.</div></div>
     <div class="tile"><div class="tile-icon">&#128241;</div><div class="tile-title">Distraction Dominates</div><div class="tile-text">40% of all Denver crashes involve distracted driving.</div></div>
@@ -416,7 +458,7 @@
     <div class="tile"><div class="tile-icon">&#128680;</div><div class="tile-title">85% Preventable</div><div class="tile-text">CDOT estimates 85% of Denver traffic crashes are preventable.</div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr"><div class="sec-num">09 — Methodology &amp; Sources</div><h2 class="sec-title">Where This Data Comes From</h2><p class="sec-desc">Every number on this page links back to a publicly available dataset.</p></div>
+<div class="sec-hdr" id="sec-10"><div class="sec-num">10 — Methodology &amp; Sources</div><h2 class="sec-title">Where This Data Comes From</h2><p class="sec-desc">Every number on this page links back to a publicly available dataset.</p></div>
 <div class="meth-grid">
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--red)"></div>Denver Open Data Catalog</div><div class="meth-text">Primary source for crash-level records.<br><br><a href="https://opendata-geospatialdenver.hub.arcgis.com/datasets/db00bd99ea534d8987e0913a191ebe19_325/explore" target="_blank">Traffic Accidents &rarr;</a></div><div class="meth-note">2024 data was ~85% complete as of early 2025.</div></div>
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--amber)"></div>CDOT Crash Data</div><div class="meth-text">Statewide crash database (2021–2025).<br><br><a href="https://www.codot.gov/safety/traffic-safety/data-analysis/crash-data" target="_blank">CDOT Crash Data &rarr;</a></div></div>
@@ -428,10 +470,11 @@
     <div class="meth-card">
         <div class="meth-title"><div class="dot" style="background:var(--cyan)"></div>Methodology</div>
         <div class="meth-notes-grid">
-            <div class="meth-text">Intersection counts from Denver PD via Open Data Catalog. Metro estimates from CDOT and local PD. Geocoding via OSM Nominatim. Routing via OSRM.</div>
+            <div class="meth-text"><strong style="color:var(--amber)">Data sources:</strong> Intersection counts from Denver PD via Open Data Catalog. Metro estimates from CDOT and local PD. Geocoding via OSM Nominatim. Routing via OSRM.</div>
             <div class="meth-text"><strong style="color:var(--amber)">Traffic volume normalization:</strong> Crash rates (per million vehicles per year) use AADT from CDOT’s Traffic Data Explorer and ArcGIS Traffic Volume Map. At intersections, the higher-volume approaching road was used. AADT reflects the most recent published year. Use the “Per Vehicle” toggle on the map to rank by crash rate.</div>
             <div class="meth-text"><strong style="color:var(--amber)">A note on underreporting:</strong> This data only includes crashes with a filed police report. Pedestrian and cyclist incidents are widely understood to be underreported — if no report is filed, the crash doesn’t appear in Denver Open Data. The real numbers are likely higher than what’s shown here.</div>
             <div class="meth-text"><strong style="color:var(--amber)">Highway interchanges:</strong> At interstate locations (I-25, I-70, I-76), crash counts include all crashes near the interchange — on ramps, bridges, overpasses, and adjacent roads. The source data groups crashes by proximity and does not distinguish mainline vs. ramp vs. crossing road.</div>
+            <div class="meth-text"><strong style="color:var(--amber)">Vision Zero data:</strong> The accountability chart uses Denver Police Department fatality counts as reported by Westword, Denver Streets Partnership, and CDOT. These may differ slightly from other sections which use CDOT statewide methodology. Pedestrian fatality counts are from Denver DOTI. The goal trajectory assumes linear reduction from the 2017 baseline (51) to zero in 2030.</div>
         </div>
         <div class="meth-note">All public records. No affiliation with law firms, insurers, or agencies. This page collects no data, uses no analytics, and stores no cookies. Address and commute queries are sent directly to open source services (Nominatim, OSRM) and are never seen or stored by this site.</div>
     </div>
@@ -441,6 +484,7 @@
 <script>
 Chart.defaults.color='#8b90a8';Chart.defaults.borderColor='#1c1f2e';Chart.defaults.font.family="'DM Sans',sans-serif";
 const isMobile=window.innerWidth<=480;Chart.defaults.font.size=isMobile?10:12;
+Chart.register({id:'legendPad',beforeInit(chart){const orig=chart.legend.fit;chart.legend.fit=function(){orig.call(this);this.height+=14;}}});
 const TT={backgroundColor:'#1c1f2e',titleColor:'#e8eaf0',bodyColor:'#8b90a8',borderColor:'#2a2e42',borderWidth:1,padding:isMobile?8:12,cornerRadius:8,titleFont:{size:isMobile?11:13},bodyFont:{size:isMobile?10:12}};
 const doughnutLegend=isMobile?{position:'bottom',labels:{padding:8,usePointStyle:true,pointStyle:'rectRounded',font:{size:10}}}:{position:'right',labels:{padding:10,usePointStyle:true,pointStyle:'rectRounded',font:{size:11}}};
 
@@ -811,16 +855,85 @@ sel.addEventListener('change',()=>renderHoods(sel.value));hoods.sort((a,b)=>b.cr
 // ===== CHARTS =====
 new Chart(document.getElementById('crashTypeChart'),{type:'doughnut',data:{labels:['Rear-end','Broadside','Sideswipe','Parked vehicle','Fixed object','Head-on','Pedestrian','Cyclist','Other'],datasets:[{data:[28.5,18,16.6,12.8,8.2,3.5,3.8,1.7,6.9],backgroundColor:['#ff4d4d','#ffb347','#4da6ff','#b07dff','#4dff91','#ff6b9d','#4de8ff','#ffd700','#555873'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
 new Chart(document.getElementById('causesChart'),{type:'bar',data:{labels:['Distracted','Careless','Speeding','Inexperience','Failure to yield','Following close','Lane violation','Impaired'],datasets:[{data:[40,38,18,17,15,12,10,9.9],backgroundColor:['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.7)','rgba(255,215,0,.7)','rgba(176,125,255,.7)','rgba(77,255,145,.7)','rgba(77,232,255,.7)','rgba(255,107,157,.7)'],borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+'%'}}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(28,31,46,.5)'},max:50},y:{grid:{display:false},ticks:{font:{size:isMobile?9:11}}}}}});
-new Chart(document.getElementById('hourlyChart'),{type:'line',data:{labels:Array.from({length:24},(_,i)=>{const h=i%12||12;return h+(i<12?'a':'p')}),datasets:[{label:'Weekday',data:[1.2,.8,.6,.5,.6,1.5,3.8,6.8,7.2,5.5,5,5.2,5.8,5.5,5.6,6.2,7,6.5,5,4,3.2,2.8,2.2,1.5],borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.06)',borderWidth:2.5,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true},{label:'Weekend',data:[2.2,1.8,1.4,1,.8,.7,1,1.5,2.5,3.8,4.8,5.5,6.2,6,5.8,5.5,5,4.5,4,3.5,3.2,3,2.8,2.5],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.04)',borderWidth:2,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'end',labels:{usePointStyle:true,pointStyle:'line',padding:20}},tooltip:{...TT}},scales:{y:{title:{display:true,text:'% of daily crashes',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false},ticks:{maxTicksLimit:isMobile?8:24}}}}});
+new Chart(document.getElementById('hourlyChart'),{type:'line',data:{labels:Array.from({length:24},(_,i)=>{const h=i%12||12;return h+(i<12?'a':'p')}),datasets:[{label:'Weekday',data:[1.2,.8,.6,.5,.6,1.5,3.8,6.8,7.2,5.5,5,5.2,5.8,5.5,5.6,6.2,7,6.5,5,4,3.2,2.8,2.2,1.5],borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.06)',borderWidth:2.5,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true},{label:'Weekend',data:[2.2,1.8,1.4,1,.8,.7,1,1.5,2.5,3.8,4.8,5.5,6.2,6,5.8,5.5,5,4.5,4,3.5,3.2,3,2.8,2.5],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.04)',borderWidth:2,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'line',padding:20}},tooltip:{...TT}},scales:{y:{title:{display:true,text:'% of daily crashes',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false},ticks:{maxTicksLimit:isMobile?8:24}}}}});
 new Chart(document.getElementById('dayOfWeekChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{data:[68,72,67,66,63,48,40],backgroundColor:['#555873','#ff4d4d','#555873','#555873','#555873','#2a2e42','#2a2e42'],borderRadius:6,borderSkipped:false,barThickness:isMobile?14:32}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw+' avg daily'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{data:[1750,1650,1850,1700,1800,1950,2100,2050,1900,1850,1650,1750],backgroundColor:c=>[6,7].includes(c.dataIndex)?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,min:1400,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('yoyTotalChart'),{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Total Crashes',data:[20.5,14.2,18.8,20.1,21.5,22],borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ff4d4d',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw+'K crashes'}}},scales:{y:{ticks:{callback:v=>v+'K'},grid:{color:'rgba(28,31,46,.5)'},min:10,max:25},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('yoySeverityChart'),{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Fatalities',data:[76,67,96,89,84,62],borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true},{label:'Pedestrian Crashes',data:[480,380,510,560,575,590],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.06)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#4da6ff',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'end',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:11}}},tooltip:{...TT}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('yoySeverityChart'),{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Fatalities',data:[76,67,96,89,84,62],borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true},{label:'Pedestrian Crashes',data:[480,380,510,560,575,590],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.06)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#4da6ff',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:11}}},tooltip:{...TT}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('speedChart'),{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{data:[28.5,25.1,23.8,23,22.4,21.9],borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.06)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+' mph'}}},scales:{y:{min:18,max:32,title:{display:true,text:'MPH',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('stateChart'),{type:'bar',data:{labels:['2019','2020','2021','2022','2023','2024','2025 est'],datasets:[{data:[104000,78000,95000,98000,102749,110000,115000],backgroundColor:c=>c.dataIndex===6?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,min:60000,ticks:{callback:v=>(v/1000)+'K'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('vuChart'),{type:'bar',data:{labels:['2022','2023','2024'],datasets:[{label:'Pedestrian',data:[560,575,590],backgroundColor:'rgba(255,77,77,.65)',borderRadius:6,borderSkipped:false},{label:'Cyclist / E-bike',data:[230,248,264],backgroundColor:'rgba(77,166,255,.65)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end',labels:{usePointStyle:true,pointStyle:'rectRounded',padding:16}},tooltip:TT},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+// === VISION ZERO ACCOUNTABILITY ===
+(function(){
+const vzLabels=['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'];
+const actual=[51,64,71,57,84,84,73,62,null,null,null,null,null,null];
+const goal=[51,47,43,39,35,31,27,24,20,16,12,8,4,0];
+new Chart(document.getElementById('vzChart'),{type:'line',data:{labels:vzLabels,datasets:[
+{label:'Actual Fatalities',data:actual,borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.12)',borderWidth:3,pointRadius:6,pointBackgroundColor:actual.map(v=>v!==null?'#ff4d4d':'transparent'),pointBorderColor:actual.map(v=>v!==null?'#08090d':'transparent'),pointBorderWidth:2,tension:.3,fill:'+1',spanGaps:false},
+{label:'Goal (Zero by 2030)',data:goal,borderColor:'#4dff91',backgroundColor:'rgba(77,255,145,.04)',borderWidth:2,borderDash:[8,4],pointRadius:0,pointHoverRadius:4,tension:.1,fill:false}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:11}}},tooltip:{...TT,callbacks:{label:function(c){if(c.raw===null)return null;return c.dataset.label+': '+c.raw+' deaths'}},filter:function(t){return t.raw!==null}}},scales:{y:{beginAtZero:true,title:{display:true,text:'Fatalities',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false},ticks:{font:{weight:function(c){return c.tick.label==='2017'||c.tick.label==='2030'?'bold':'normal'}}}}}}});
+})();
+new Chart(document.getElementById('pedFatalChart'),{type:'bar',data:{labels:['2021','2022','2023','2024'],datasets:[{label:'Pedestrian Deaths',data:[23,22,24,26],backgroundColor:['rgba(255,179,71,.5)','rgba(255,179,71,.5)','rgba(255,179,71,.65)','rgba(255,77,77,.8)'],borderRadius:6,borderSkipped:false,barThickness:isMobile?20:40}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+' pedestrian deaths'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'},title:{display:true,text:'Deaths',color:'#555873'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('vuChart'),{type:'bar',data:{labels:['2022','2023','2024'],datasets:[{label:'Pedestrian',data:[560,575,590],backgroundColor:'rgba(255,77,77,.65)',borderRadius:6,borderSkipped:false},{label:'Cyclist / E-bike',data:[230,248,264],backgroundColor:'rgba(77,166,255,.65)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'rectRounded',padding:16}},tooltip:TT},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('pedLocationChart'),{type:'doughnut',data:{labels:['At intersection','Mid-block crossing','Parking lot / alley','Other'],datasets:[{data:[62,24,8,6],backgroundColor:['#4da6ff','#ff4d4d','#ffb347','#555873'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
 new Chart(document.getElementById('metroChart'),{type:'bar',data:{labels:['Denver','Aurora','Colo Springs','Adams Co','Jefferson Co','Weld Co','Boulder'],datasets:[{data:[22000,12000,9500,8000,7500,6000,2800],backgroundColor:['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.5)','rgba(176,125,255,.5)','rgba(77,255,145,.5)','rgba(77,232,255,.4)','rgba(255,215,0,.4)'],borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw.toLocaleString()+' crashes (est.)'}}},scales:{y:{ticks:{callback:v=>(v/1000)+'K'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+
+/* ===== STICKY NAV SCROLL-SPY ===== */
+(function(){
+    const nav=document.getElementById('stickyNav');
+    const hero=document.querySelector('.hero');
+    const links=[...nav.querySelectorAll('a')];
+    const sectionIds=links.map(a=>a.getAttribute('href').slice(1));
+    const sections=sectionIds.map(id=>document.getElementById(id)).filter(Boolean);
+    let ticking=false;
+
+    function onScroll(){
+        if(ticking)return;
+        ticking=true;
+        requestAnimationFrame(()=>{
+            /* Show/hide nav */
+            const heroBottom=hero.getBoundingClientRect().bottom;
+            if(heroBottom<0) nav.classList.add('visible');
+            else nav.classList.remove('visible');
+
+            /* Highlight active section */
+            let activeId='';
+            const offset=80;
+            for(let i=sections.length-1;i>=0;i--){
+                if(sections[i].getBoundingClientRect().top<=offset){
+                    activeId=sections[i].id;break;
+                }
+            }
+            links.forEach(a=>{
+                if(a.getAttribute('href')==='#'+activeId) a.classList.add('active');
+                else a.classList.remove('active');
+            });
+
+            /* Auto-scroll nav to keep active link visible */
+            const activeLink=nav.querySelector('a.active');
+            if(activeLink){
+                const container=nav.querySelector('.sticky-nav-inner');
+                const linkLeft=activeLink.offsetLeft;
+                const linkW=activeLink.offsetWidth;
+                const contW=container.offsetWidth;
+                const scrollTarget=linkLeft-contW/2+linkW/2;
+                container.scrollTo({left:scrollTarget,behavior:'smooth'});
+            }
+            ticking=false;
+        });
+    }
+
+    /* Smooth scroll on click */
+    links.forEach(a=>{
+        a.addEventListener('click',e=>{
+            e.preventDefault();
+            const target=document.getElementById(a.getAttribute('href').slice(1));
+            if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+        });
+    });
+
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+})();
 </script>
 </body>
 </html>
