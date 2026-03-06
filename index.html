@@ -320,11 +320,13 @@
         <a href="#sec-02">02 Top 10</a>
         <a href="#sec-03">03 When</a>
         <a href="#sec-04">04 Year/Year</a>
-        <a href="#sec-05">05 Vision Zero</a>
-        <a href="#sec-06">06 Ped/Bike</a>
-        <a href="#sec-07">07 Metro</a>
-        <a href="#sec-08">08 Takeaways</a>
-        <a href="#sec-09">09 Sources</a>
+        <a href="#sec-05">05 Impaired</a>
+        <a href="#sec-06">06 Speed</a>
+        <a href="#sec-07">07 Vision Zero</a>
+        <a href="#sec-08">08 Ped/Bike</a>
+        <a href="#sec-09">09 Metro</a>
+        <a href="#sec-10">10 Sources</a>
+        <a href="#sec-11">11 Methodology</a>
     </div>
 </nav>
 
@@ -435,8 +437,8 @@
 <div class="sec-hdr" id="sec-02"><div class="sec-num">02 — Dangerous Intersections</div><h2 class="sec-title">The Top 10 Crash Sites</h2><p class="sec-desc">Freeway interchanges and high-volume arterials dominate. Use the Metro dropdown on the map to switch between cities. Toggle "Per Vehicle" to see which intersections are most dangerous relative to how much traffic they carry.</p></div>
 <div class="card"><div class="card-top"><div><div class="card-title" id="tableTitle">Top 10 Crash Intersections — All Metro</div><div class="card-sub">Denver PD / CDOT · AADT from CDOT Highways in Colorado dataset</div></div><div class="map-filter-group"><span class="map-filter-group-label">Rank by</span><div class="map-filters sort-toggle-sync"><button class="map-btn active-blue" data-sort="total">Total</button><button class="map-btn" data-sort="rate">Per Vehicle</button></div></div></div><table class="rank-table" id="intersectionTable"></table></div>
 <div class="grid-2">
-    <div class="card"><div class="card-top"><div><div class="card-title">Crash Types</div><div class="card-sub" id="crashTypeSub">By collision type · Denver · CDOT 2024</div></div><select class="chart-metro" id="metroType"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box"><canvas id="crashTypeChart"></canvas></div></div>
-    <div class="card"><div class="card-top"><div><div class="card-title">Contributing Factors</div><div class="card-sub" id="causesSub">Top causes · Denver · CDOT 2024</div></div><select class="chart-metro" id="metroCauses"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box"><canvas id="causesChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Crash Types</div><div class="card-sub" id="crashTypeSub">By collision type · Denver · CDOT 2024</div></div><select class="chart-metro" id="metroType"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option></select></div><div class="chart-box"><canvas id="crashTypeChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Contributing Factors</div><div class="card-sub" id="causesSub">Top causes · Denver · CDOT 2024</div></div><select class="chart-metro" id="metroCauses"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option></select></div><div class="chart-box"><canvas id="causesChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
 <div class="rule"></div>
@@ -457,7 +459,22 @@
     <div class="card"><div class="card-top"><div><div class="card-title">Colorado Statewide Crashes</div><div class="card-sub">CDOT annual totals · 2022–2024 exact from crash listings</div></div><div class="tag tag-blue">Statewide</div></div><div class="chart-box short"><canvas id="stateChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-05"><div class="sec-num">05 — Vision Zero Accountability</div><h2 class="sec-title">Denver Promised Zero Deaths by 2030</h2><p class="sec-desc">In 2017, Denver adopted Vision Zero with a baseline of 51 fatalities and a goal of zero by 2030. Since then, fatalities have gone up, not down. The red zone shows the growing gap between the city's promise and reality.</p></div>
+<div class="sec-hdr" id="sec-05"><div class="sec-num">05 — Impaired Driving</div><h2 class="sec-title">One in Four Fatal Crashes Involves Impairment</h2><p class="sec-desc">Alcohol, marijuana, and other drugs were factors in 1,830 crashes across the five metro cities in 2024. While impairment accounts for about 6% of all crashes, it drives 26% of fatalities. Late-night hours are the most dangerous: between midnight and 3am, over 20% of all crashes involve a suspected impaired driver.</p></div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Impairment Rate by Hour</div><div class="card-sub" id="impHourSub">% of crashes involving impairment · All Metro · CDOT 2024</div></div><select class="chart-metro" id="metroImpHour"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option></select></div><div class="chart-box"><canvas id="impHourChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Substance Breakdown</div><div class="card-sub" id="impSubSub">Alcohol vs. marijuana vs. other drugs · All Metro · CDOT 2024</div></div><select class="chart-metro" id="metroImpSub"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option></select></div><div class="chart-box"><canvas id="impSubChart"></canvas></div></div>
+</div>
+<div class="card"><div class="card-top"><div><div class="card-title">Impaired Driving's Share of Fatalities</div><div class="card-sub">By city · CDOT 2024</div></div><div class="tag tag-red">Fatal</div></div><div class="chart-box short"><canvas id="impFatalChart"></canvas></div></div>
+
+<div class="rule"></div>
+<div class="sec-hdr" id="sec-06"><div class="sec-num">06 — Speed</div><h2 class="sec-title">Speed Kills Disproportionately</h2><p class="sec-desc">Speed was a factor in 1,517 crashes across the metro in 2024, just 5% of the total, but it accounted for 30% of all fatalities. After dark, speed-related crashes spike sharply, mirroring the impaired driving curve. Aurora stands out: 42% of its traffic deaths involved speeding.</p></div>
+<div class="grid-2">
+    <div class="card"><div class="card-top"><div><div class="card-title">Speed-Related Crash Rate by Hour</div><div class="card-sub" id="speedHourSub">% of crashes involving speed · All Metro · CDOT 2024</div></div><select class="chart-metro" id="metroSpeedHour"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option></select></div><div class="chart-box"><canvas id="speedHourChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Speed Crashes by Speed Limit Zone</div><div class="card-sub" id="speedZoneSub">Where speeding crashes happen · All Metro · CDOT 2024</div></div><select class="chart-metro" id="metroSpeedZone"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option></select></div><div class="chart-box"><canvas id="speedZoneChart"></canvas></div></div>
+</div>
+<div class="card"><div class="card-top"><div><div class="card-title">Speed's Share of Fatalities</div><div class="card-sub">By city · CDOT 2024</div></div><div class="tag tag-red">Fatal</div></div><div class="chart-box short"><canvas id="speedFatalChart"></canvas></div></div>
+<div class="rule"></div>
+<div class="sec-hdr" id="sec-07"><div class="sec-num">07 — Vision Zero Accountability</div><h2 class="sec-title">Denver Promised Zero Deaths by 2030</h2><p class="sec-desc">In 2017, Denver adopted Vision Zero with a baseline of 51 fatalities and a goal of zero by 2030. Since then, fatalities have gone up, not down. The red zone shows the growing gap between the city's promise and reality.</p></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Vision Zero: Promise vs. Reality</div><div class="card-sub">Denver traffic fatalities — actual vs. goal trajectory (DPD data)</div></div><div class="tag tag-red">Accountability</div></div><div class="chart-box tall"><canvas id="vzChart"></canvas></div></div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Fatalities</div><div class="card-sub" id="pedFatalSub">Traffic deaths 2022–2024 · All Metro · CDOT</div></div><select class="chart-metro" id="metroFatal"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="pedFatalChart"></canvas></div></div>
@@ -468,27 +485,17 @@
     </div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-06"><div class="sec-num">06 — Pedestrians &amp; Cyclists</div><h2 class="sec-title">The Most Vulnerable on Our Streets</h2><p class="sec-desc">1,248 pedestrian crashes and 810 cyclist crashes across the metro in 2024. Over half of all crashes occurred away from intersections.</p></div>
+<div class="sec-hdr" id="sec-08"><div class="sec-num">08 — Pedestrians &amp; Cyclists</div><h2 class="sec-title">The Most Vulnerable on Metro Streets</h2><p class="sec-desc">1,248 pedestrian crashes and 810 cyclist crashes across the metro in 2024. Over half of all crashes occurred away from intersections.</p></div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Vulnerable Road User Crashes</div><div class="card-sub" id="vuSub">Pedestrian &amp; cyclist crashes · All Metro · CDOT</div></div><select class="chart-metro" id="metroVu"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="vuChart"></canvas></div></div>
     <div class="card"><div class="card-top"><div><div class="card-title">Pedestrian Crash Location</div><div class="card-sub" id="pedLocSub">Intersection vs. mid-block, 2024</div></div><select class="chart-metro" id="metroPedLoc"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="pedLocationChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-07"><div class="sec-num">07 — The Metro Picture</div><h2 class="sec-title">Crash Rates Across the Metro</h2><p class="sec-desc">65 crash intersections mapped across Denver, Aurora, Lakewood, Arvada, Westminster, Thornton, and unincorporated Adams/Arapahoe/Jefferson County. Use the Metro dropdown on the map to explore each city.</p></div>
+<div class="sec-hdr" id="sec-09"><div class="sec-num">09 — The Metro Picture</div><h2 class="sec-title">Crash Rates Across the Metro</h2><p class="sec-desc">65 crash intersections mapped across Denver, Aurora, Lakewood, Arvada, Westminster, Thornton, and unincorporated Adams/Arapahoe/Jefferson County. Use the Metro dropdown on the map to explore each city.</p></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Crash Rate by Metro Area</div><div class="card-sub">Crashes per 1,000 residents · CDOT 2024 · 2024 ACS population</div></div><div class="tag tag-purple">Per Capita</div></div><div class="chart-box"><canvas id="metroChart"></canvas></div></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Dangerous Corridors</div><div class="card-sub">Key crash corridors across the Denver metro</div></div><div class="tag tag-red">Corridors</div></div><table class="rank-table" id="corridorTable"></table></div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-08"><div class="sec-num">08 — Key Takeaways</div><h2 class="sec-title">What the Data Tells Us</h2></div>
-<div class="tiles">
-    <div class="tile"><div class="tile-icon">&#9888;&#65039;</div><div class="tile-title">I-70 &amp; Peoria Is #1</div><div class="tile-text">103 crashes in 2024. A complex merge where highway speeds meet local traffic.</div></div>
-    <div class="tile"><div class="tile-icon">&#128241;</div><div class="tile-title">Careless &amp; Distracted</div><div class="tile-text">Careless and distracted driving account for 37% of all reported contributing factors in Denver.</div></div>
-    <div class="tile"><div class="tile-icon">&#128694;</div><div class="tile-title">Pedestrians at Risk</div><div class="tile-text">1,248 pedestrian crashes across the metro in 2024. Over half occurred outside intersections.</div></div>
-    <div class="tile"><div class="tile-icon">&#128197;</div><div class="tile-title">Midweek Peak</div><div class="tile-text">Tuesday through Thursday are consistently the most crash-prone days across the metro.</div></div>
-    <div class="tile"><div class="tile-icon">&#127961;&#65039;</div><div class="tile-title">Aurora's Problem</div><div class="tile-text">Nearly half of Colorado's 50 most dangerous intersections are in Aurora.</div></div>
-    <div class="tile"><div class="tile-icon">&#128680;</div><div class="tile-title">85% Preventable</div><div class="tile-text">CDOT estimates 85% of Denver traffic crashes are preventable.</div></div>
-</div>
-<div class="rule"></div>
-<div class="sec-hdr" id="sec-09"><div class="sec-num">09 — Methodology &amp; Sources</div><h2 class="sec-title">Where This Data Comes From</h2><p class="sec-desc">Every number on this page links back to a publicly available dataset.</p></div>
+<div class="sec-hdr" id="sec-10"><div class="sec-num">10 — Sources</div><h2 class="sec-title">Where This Data Comes From</h2><p class="sec-desc">Every number on this page links back to a publicly available dataset.</p></div>
 <div class="meth-grid">
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--red)"></div>Denver Open Data Catalog</div><div class="meth-text">Primary source for crash-level records.<br><br><a href="https://opendata-geospatialdenver.hub.arcgis.com/datasets/db00bd99ea534d8987e0913a191ebe19_325/explore" target="_blank">Traffic Accidents &rarr;</a></div><div class="meth-note">2024 data was ~85% complete as of early 2025.</div></div>
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--amber)"></div>CDOT Crash Data</div><div class="meth-text">Statewide crash listings (2022–2024, ~100K records each). Used for all charts and metro data. 2025 partial-year listing used for map intersection coordinate matching.<br><br><a href="https://www.codot.gov/safety/traffic-safety/data-analysis/crash-data" target="_blank">CDOT Crash Data &rarr;</a></div></div>
@@ -496,9 +503,10 @@
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>Denver Vision Zero</div><div class="meth-text">Fatal and serious-injury crash tracking.<br><br><a href="https://denvergov.org/Government/Citywide-Programs-and-Initiatives/Vision-Zero/Statistics" target="_blank">Vision Zero &rarr;</a></div></div>
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--green)"></div>TomTom / INRIX</div><div class="meth-text">Rush-hour speeds and congestion data. Denver drivers lost 44 hours to traffic in 2024.<br><br><a href="https://www.tomtom.com/traffic-index/" target="_blank">TomTom &rarr;</a> · <a href="https://inrix.com/scorecard/" target="_blank">INRIX &rarr;</a></div></div>
 </div>
+<div class="rule"></div>
+<div class="sec-hdr" id="sec-11"><div class="sec-num">11 — Methodology</div><h2 class="sec-title">How I Built This</h2></div>
 <div class="meth-full">
     <div class="meth-card">
-        <div class="meth-title"><div class="dot" style="background:var(--cyan)"></div>Methodology</div>
         <div class="meth-notes-grid">
             <div class="meth-text"><strong style="color:var(--amber)">Data sources:</strong> Denver intersection counts from Denver PD via Open Data Catalog. Metro-wide intersection counts (Aurora, Lakewood, Arvada, Westminster, Thornton, unincorporated counties) from the CDOT Statewide Crash Data Listing (2025, 101,320 records, Jan 1 – Dec 31), matched to intersections by coordinate proximity (150m for surface streets, 300m for interchanges). 2022–2024 counts derived from annualized 2025 baseline using statewide year-over-year crash trends. Geocoding via OSM Nominatim. Routing via OSRM.</div>
             <div class="meth-text"><strong style="color:var(--amber)">Traffic volume normalization:</strong> Crash rates (per million vehicles per year) use AADT from CDOT’s Highways in Colorado dataset (data.colorado.gov, 81,600 road segments) matched to intersections by coordinate proximity. At intersections, the higher-volume approaching road was used. Six city-street intersections without CDOT highway coverage use estimates. Use the “Per Vehicle” toggle on the map to rank by crash rate.</div>
@@ -624,12 +632,28 @@ let nearbyHighlights=L.layerGroup().addTo(map);
 
 // --- Corridors ---
 const corridors=[
-    {name:'Federal Blvd',color:'#dc2626',coords:[[39.82,-105.0253],[39.80058,-105.02533],[39.78428,-105.02522],[39.76203,-105.02525],[39.74050,-105.02517],[39.72556,-105.02506],[39.71117,-105.02511],[39.68,-105.0251],[39.66,-105.0251]]},
-    {name:'Colfax Ave',color:'#f97316',coords:[[39.7405,-105.06],[39.74050,-105.02517],[39.74042,-105.01400],[39.74014,-104.94067],[39.74017,-104.90],[39.74017,-104.86583],[39.74017,-104.84703]]},
-    {name:'I-25',color:'#dc2626',coords:[[39.82,-105.005],[39.80,-105.004],[39.78,-105.000],[39.76111,-105.00475],[39.74042,-105.01400],[39.72558,-105.01325],[39.71,-104.99],[39.68303,-104.94056],[39.66761,-104.92569],[39.65311,-104.91836],[39.63,-104.915]]},
+    // === DENVER CORE ===
+    {name:'Federal Blvd',color:'#dc2626',coords:[[39.84903,-105.02492],[39.82,-105.0253],[39.80058,-105.02533],[39.78428,-105.02522],[39.76203,-105.02525],[39.74050,-105.02517],[39.72556,-105.02506],[39.71117,-105.02511],[39.68,-105.0251],[39.66,-105.0251]]},
     {name:'Colorado Blvd',color:'#f97316',coords:[[39.82,-104.9407],[39.80,-104.9407],[39.78,-104.9407],[39.76,-104.9407],[39.74014,-104.94067],[39.71153,-104.94072],[39.69667,-104.9407],[39.68303,-104.94056],[39.65303,-104.94072]]},
-    {name:'I-70',color:'#dc2626',coords:[[39.779,-105.06],[39.78428,-105.02522],[39.779,-105.000],[39.779,-104.9407],[39.779,-104.900],[39.779,-104.866],[39.77411,-104.84706]]},
-    {name:'Alameda Ave',color:'#f97316',coords:[[39.7112,-105.06],[39.71117,-105.02511],[39.7112,-104.987],[39.71153,-104.94072],[39.7112,-104.900]]}
+    {name:'Alameda Ave',color:'#f97316',coords:[[39.7112,-105.06],[39.71117,-105.02511],[39.7112,-104.987],[39.71153,-104.94072],[39.71106,-104.866],[39.71103,-104.81]]},
+    // === COLFAX (full metro span: Lakewood Kipling → Aurora Tower Rd) ===
+    {name:'Colfax Ave',color:'#f97316',coords:[[39.74022,-105.10958],[39.74028,-105.08133],[39.74036,-105.05322],[39.74050,-105.02517],[39.74042,-105.01400],[39.74014,-104.94067],[39.74017,-104.86583],[39.74019,-104.84703],[39.74008,-104.81006],[39.74022,-104.77247]]},
+    // === I-25 (full metro span: south Denver → 120th Ave Thornton) ===
+    {name:'I-25',color:'#dc2626',coords:[[39.63,-104.915],[39.65311,-104.91836],[39.66761,-104.92569],[39.68303,-104.94056],[39.71,-104.99],[39.72558,-105.01325],[39.74042,-105.01400],[39.76111,-105.00475],[39.78,-105.000],[39.80,-105.004],[39.82775,-104.98314],[39.85,-104.988],[39.88531,-104.98758],[39.91406,-104.98978]]},
+    // === I-70 (Lakewood → Aurora Peoria) ===
+    {name:'I-70',color:'#dc2626',coords:[[39.779,-105.11],[39.78417,-105.10964],[39.78606,-105.08139],[39.78428,-105.02522],[39.779,-105.000],[39.779,-104.9407],[39.779,-104.900],[39.779,-104.866],[39.77411,-104.84706]]},
+    // === WADSWORTH BLVD (Lakewood → Arvada 80th Ave) ===
+    {name:'Wadsworth Blvd',color:'#4da6ff',coords:[[39.71847,-105.08156],[39.72392,-105.08153],[39.72556,-105.08153],[39.73847,-105.08136],[39.74028,-105.08133],[39.78606,-105.08139],[39.80194,-105.07653],[39.81289,-105.08044],[39.84181,-105.08183],[39.85644,-105.08172]]},
+    // === HAVANA ST (Aurora N-S) ===
+    {name:'Havana St',color:'#4da6ff',coords:[[39.74017,-104.86583],[39.71106,-104.866],[39.69656,-104.866],[39.67842,-104.86594]]},
+    // === I-225 (Aurora) ===
+    {name:'I-225',color:'#dc2626',coords:[[39.72556,-104.82464],[39.69669,-104.82933],[39.65842,-104.8435]]},
+    // === PARKER RD (Aurora south) ===
+    {name:'Parker Rd',color:'#4da6ff',coords:[[39.65842,-104.8435],[39.63856,-104.82892],[39.59492,-104.80225]]},
+    // === CHAMBERS RD (Aurora east) ===
+    {name:'Chambers Rd',color:'#f97316',coords:[[39.74008,-104.81006],[39.71103,-104.81],[39.69658,-104.80989]]},
+    // === SHERIDAN BLVD (Westminster south) ===
+    {name:'Sheridan Blvd',color:'#f97316',coords:[[39.86358,-105.05317],[39.82731,-105.05339],[39.74036,-105.05322]]}
 ];
 function drawCorridors(){
     corridorLayer.clearLayers();
@@ -956,7 +980,7 @@ renderIntersectionTable();
 })();
 
 // ===== TABLES (non-map) =====
-const cors=[{n:'I-25 (metro stretch)',r:'Rear-end, lane-change',d:'Highest crash volume corridor'},{n:'Federal Blvd',r:'Pedestrian, broadside',d:'Priority safety corridor — new CDOT signals (2025–26)'},{n:'Colfax Ave',r:'Ped/cyclist, distracted',d:'Longest commercial street in the US'},{n:'I-70 (east metro)',r:'Merge, high-speed',d:'Peoria interchange is #1 crash intersection'},{n:'Colorado Blvd',r:'Broadside, failure to yield',d:'High signal density; red-light violations'},{n:'I-76 / E-470',r:'Truck-related',d:'35% of crashes involve commercial vehicles'}];
+const cors=[{n:'I-25 (full metro)',r:'Rear-end, lane-change',d:'Highest crash volume corridor, south Denver to 120th Ave'},{n:'Colfax Ave (Kipling to Tower)',r:'Ped/cyclist, distracted',d:'Longest commercial street in the US, spans Lakewood through Aurora'},{n:'Federal Blvd',r:'Pedestrian, broadside',d:'Priority safety corridor — new CDOT signals (2025–26)'},{n:'Wadsworth Blvd',r:'Rear-end, broadside',d:'Lakewood through Arvada — 10 crash intersections mapped'},{n:'I-70 / I-225',r:'Merge, high-speed',d:'Aurora interchanges are the metro\'s biggest crash generators'},{n:'Havana St (Aurora)',r:'Ped, failure to yield',d:'North-south Aurora corridor with fatal pedestrian crashes'},{n:'Colorado Blvd',r:'Broadside, failure to yield',d:'High signal density; red-light violations'},{n:'Parker Rd',r:'High-speed, rear-end',d:'Growing south Aurora traffic — I-225 to Arapahoe Rd'}];
 document.getElementById('corridorTable').innerHTML='<thead><tr><th>Corridor</th><th>Risk Type</th><th>Context</th></tr></thead><tbody>'+cors.map(c=>'<tr><td style="font-weight:500">'+c.n+'</td><td><span class="tag tag-red" style="font-size:.62rem">'+c.r+'</span></td><td style="color:var(--text-dim);font-size:.82rem">'+c.d+'</td></tr>').join('')+'</tbody>';
 
 // ===== CHARTS =====
@@ -1093,6 +1117,134 @@ document.getElementById('metroMonthly').addEventListener('change',function(){bui
 // monthlyChart handled by buildMonthlyChart() above
 
 // === MULTI-YEAR CDOT DATA (2022-2024, from statewide crash listings: 95K + 103K + 101K records) ===
+
+// Impaired driving data (CDOT 2024)
+const impairedData = {
+'Denver':{total:15671,impaired:777,pct:5.0,
+  alcohol:709,marijuana:57,otherDrugs:83,
+  alcOnly:646,mjOnly:25,bothAlcMj:29,drugsOnly:40,
+  impairedFatal:13,fatal:62,fatPct:21,
+  impRate:[18.3,21.6,20.5,21.4,12.1,2.1,1.8,1.1,1.1,0.5,1.5,1.5,0.6,1.1,1.9,2.1,2.3,3.4,5.6,5.4,10.6,11.2,13.0,15.8]},
+'Aurora':{total:6137,impaired:368,pct:6.0,
+  alcohol:344,marijuana:39,otherDrugs:30,
+  alcOnly:304,mjOnly:13,bothAlcMj:25,drugsOnly:10,
+  impairedFatal:11,fatal:45,fatPct:24,
+  impRate:[17.4,27.6,24.3,13.5,10.6,6.8,2.3,1.0,1.4,1.3,0.9,1.5,3.3,2.4,3.6,6.4,2.0,4.0,4.6,8.9,9.7,15.4,13.3,12.4]},
+'Lakewood':{total:2755,impaired:209,pct:7.6,
+  alcohol:168,marijuana:35,otherDrugs:50,
+  alcOnly:130,mjOnly:17,bothAlcMj:15,drugsOnly:21,
+  impairedFatal:6,fatal:21,fatPct:29,
+  impRate:[25.6,22.6,35.6,33.3,25.0,14.3,6.9,2.5,1.2,4.1,2.1,3.3,2.5,2.7,3.7,4.8,6.4,4.5,8.6,12.8,13.3,15.6,26.9,20.8]},
+'Arvada':{total:1540,impaired:123,pct:8.0,
+  alcohol:96,marijuana:23,otherDrugs:31,
+  alcOnly:72,mjOnly:9,bothAlcMj:12,drugsOnly:16,
+  impairedFatal:1,fatal:6,fatPct:17,
+  impRate:[23.5,0,50.0,0,0,18.8,0.0,3.8,5.0,5.3,2.7,2.2,4.3,2.3,1.0,5.3,2.9,5.6,8.4,16.9,16.9,21.3,32.7,15.8]},
+'Westminster/Thornton':{total:4668,impaired:353,pct:7.6,
+  alcohol:310,marijuana:58,otherDrugs:66,
+  alcOnly:244,mjOnly:14,bothAlcMj:39,drugsOnly:24,
+  impairedFatal:10,fatal:26,fatPct:38,
+  impRate:[40.4,35.7,40.0,36.4,30.8,6.2,3.7,2.3,2.6,2.2,3.1,1.3,2.8,2.0,3.4,3.2,5.3,3.1,9.0,10.0,14.5,15.9,23.8,17.1]},
+};
+function getImpaired(city){
+    if(city!=='all') return impairedData[city];
+    const keys=Object.keys(impairedData).filter(k=>k!=='Unincorporated');
+    const agg={total:0,impaired:0,alcohol:0,marijuana:0,otherDrugs:0,alcOnly:0,mjOnly:0,bothAlcMj:0,drugsOnly:0,impairedFatal:0,fatal:0,impRate:Array(24).fill(0)};
+    keys.forEach(k=>{const d=impairedData[k];agg.total+=d.total;agg.impaired+=d.impaired;agg.alcohol+=d.alcohol;agg.marijuana+=d.marijuana;agg.otherDrugs+=d.otherDrugs;agg.alcOnly+=d.alcOnly;agg.mjOnly+=d.mjOnly;agg.bothAlcMj+=d.bothAlcMj;agg.drugsOnly+=d.drugsOnly;agg.impairedFatal+=d.impairedFatal;agg.fatal+=d.fatal});
+    agg.pct=Math.round(agg.impaired/agg.total*1000)/10;
+    agg.fatPct=Math.round(agg.impairedFatal/agg.fatal*100);
+    // Weighted avg impRate
+    keys.forEach(k=>{const d=impairedData[k];const w=d.total/agg.total;d.impRate.forEach((v,i)=>agg.impRate[i]+=v*w)});
+    agg.impRate=agg.impRate.map(v=>Math.round(v*10)/10);
+    return agg;
+}
+let chImpHour,chImpSub,chImpFatal;
+
+function buildImpHourChart(city){
+    const d=getImpaired(city);
+    if(chImpHour) chImpHour.destroy();
+    document.getElementById('impHourSub').textContent='% of crashes involving impairment \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    chImpHour=new Chart(document.getElementById('impHourChart'),{type:'line',data:{labels:hourLabels,datasets:[{label:'Impairment rate',data:d.impRate,borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.1)',borderWidth:2.5,pointRadius:0,pointHoverRadius:5,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+'% of crashes at this hour involve impairment'}}},scales:{y:{beginAtZero:true,title:{display:true,text:'% impaired',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false},ticks:{maxTicksLimit:isMobile?8:24}}}}});
+}
+function buildImpSubChart(city){
+    const d=getImpaired(city);
+    if(chImpSub) chImpSub.destroy();
+    document.getElementById('impSubSub').textContent='Substance breakdown \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    chImpSub=new Chart(document.getElementById('impSubChart'),{type:'doughnut',data:{labels:['Alcohol only','Marijuana only','Alcohol + marijuana','Other drugs only','Multi-substance'],datasets:[{data:[d.alcOnly,d.mjOnly,d.bothAlcMj,d.drugsOnly,d.impaired-d.alcOnly-d.mjOnly-d.bothAlcMj-d.drugsOnly],backgroundColor:['#ff4d4d','#4dff91','#ffb347','#4da6ff','#b07dff'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:function(c){return c.label+': '+c.raw+' crashes'}}}}}});
+}
+function buildImpFatalChart(){
+    if(chImpFatal) chImpFatal.destroy();
+    const labels=['Denver','Aurora','West./\nThornton','Lakewood','Arvada'];
+    const cities=['Denver','Aurora','Westminster/Thornton','Lakewood','Arvada'];
+    const impFat=cities.map(c=>impairedData[c].impairedFatal);
+    const nonImpFat=cities.map(c=>impairedData[c].fatal-impairedData[c].impairedFatal);
+    chImpFatal=new Chart(document.getElementById('impFatalChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Impaired',data:impFat,backgroundColor:'rgba(255,179,71,.75)',borderRadius:0},{label:'Sober / unknown',data:nonImpFat,backgroundColor:'rgba(85,88,115,.5)',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'rectRounded',padding:16}},tooltip:{...TT,callbacks:{label:function(c){const total=impairedData[cities[c.dataIndex]].fatal;return c.dataset.label+': '+c.raw+' of '+total+' fatalities'}}}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:isMobile?9:11}}},y:{stacked:true,beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'},title:{display:true,text:'Fatalities',color:'#555873'}}}}});
+}
+
+buildImpHourChart('all');
+buildImpSubChart('all');
+buildImpFatalChart();
+document.getElementById('metroImpHour').addEventListener('change',function(){buildImpHourChart(this.value)});
+document.getElementById('metroImpSub').addEventListener('change',function(){buildImpSubChart(this.value)});
+
+// === SPEED-RELATED CRASH DATA (CDOT 2024) ===
+const speedData = {
+'Denver':{total:15671,speed:684,pct:4.4,speedFatal:14,fatal:62,fatPct:23,
+  speedRate:[10.9,15.6,13.7,13.5,10.8,11.0,4.5,4.3,2.6,3.0,2.8,1.7,1.8,2.2,2.8,2.1,2.6,1.3,3.7,4.4,5.7,6.0,7.7,12.3],
+  zoneLabels:["25 or less","30","35","40","45","50-55","60+"],zoneVals:[245,119,142,35,34,79,28]},
+'Aurora':{total:6137,speed:439,pct:7.2,speedFatal:19,fatal:45,fatPct:42,
+  speedRate:[20.9,17.2,16.5,20.8,12.9,18.0,7.8,5.6,6.1,3.5,4.4,3.8,5.3,3.8,3.9,5.5,3.5,5.7,4.3,8.9,8.1,12.2,9.4,10.7],
+  zoneLabels:["25 or less","30","35","40","45","50-55","60+"],zoneVals:[164,40,39,98,49,6,41]},
+'Lakewood':{total:2755,speed:95,pct:3.4,speedFatal:6,fatal:21,fatPct:29,
+  speedRate:[10.3,25.8,13.3,8.3,8.3,7.1,3.4,6.7,1.2,2.5,0.0,3.3,1.9,4.0,1.1,1.4,2.0,2.0,3.2,4.3,2.9,3.1,6.0,10.4],
+  zoneLabels:["25 or less","30","35","40","45","50-55","60+"],zoneVals:[20,18,20,16,10,2,9]},
+'Arvada':{total:1540,speed:26,pct:1.7,speedFatal:0,fatal:6,fatPct:0,
+  speedRate:[0.0,0,10.0,0,0,0.0,5.0,0.0,0.0,0.0,2.7,3.2,1.1,1.1,0.0,1.3,0.0,2.1,2.1,1.5,3.4,3.3,0.0,5.3],
+  zoneLabels:["25 or less","30","35","40","45","50-55","60+"],zoneVals:[3,8,1,4,6,2,2]},
+'Westminster/Thornton':{total:4668,speed:273,pct:5.8,speedFatal:9,fatal:26,fatPct:35,
+  speedRate:[13.5,20.0,18.3,12.1,26.9,11.1,8.1,6.1,7.9,7.3,6.3,2.7,3.1,0.8,2.3,2.1,1.7,3.5,5.0,9.6,7.5,10.8,11.1,9.8],
+  zoneLabels:["25 or less","30","35","40","45","50-55","60+"],zoneVals:[57,17,33,64,35,32,35]},
+};
+function getSpeed(city){
+    if(city!=='all') return speedData[city];
+    const keys=Object.keys(speedData);
+    const agg={total:0,speed:0,speedFatal:0,fatal:0,speedRate:Array(24).fill(0),zoneLabels:speedData['Denver'].zoneLabels,zoneVals:Array(7).fill(0)};
+    keys.forEach(k=>{const d=speedData[k];agg.total+=d.total;agg.speed+=d.speed;agg.speedFatal+=d.speedFatal;agg.fatal+=d.fatal;d.zoneVals.forEach((v,i)=>agg.zoneVals[i]+=v)});
+    agg.pct=Math.round(agg.speed/agg.total*1000)/10;
+    agg.fatPct=Math.round(agg.speedFatal/agg.fatal*100);
+    keys.forEach(k=>{const d=speedData[k];const w=d.total/agg.total;d.speedRate.forEach((v,i)=>agg.speedRate[i]+=v*w)});
+    agg.speedRate=agg.speedRate.map(v=>Math.round(v*10)/10);
+    return agg;
+}
+let chSpeedHour,chSpeedZone,chSpeedFatal;
+
+function buildSpeedHourChart(city){
+    const d=getSpeed(city);
+    if(chSpeedHour) chSpeedHour.destroy();
+    document.getElementById('speedHourSub').textContent='% of crashes involving speed \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    chSpeedHour=new Chart(document.getElementById('speedHourChart'),{type:'line',data:{labels:hourLabels,datasets:[{label:'Speed-related rate',data:d.speedRate,borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.1)',borderWidth:2.5,pointRadius:0,pointHoverRadius:5,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+'% of crashes at this hour involve speeding'}}},scales:{y:{beginAtZero:true,title:{display:true,text:'% speed-related',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'},ticks:{callback:v=>v+'%'}},x:{grid:{display:false},ticks:{maxTicksLimit:isMobile?8:24}}}}});
+}
+function buildSpeedZoneChart(city){
+    const d=getSpeed(city);
+    if(chSpeedZone) chSpeedZone.destroy();
+    document.getElementById('speedZoneSub').textContent='Speed crashes by posted limit \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    chSpeedZone=new Chart(document.getElementById('speedZoneChart'),{type:'bar',data:{labels:d.zoneLabels.map(l=>l+' mph'),datasets:[{data:d.zoneVals,backgroundColor:d.zoneVals.map((v,i)=>i<=2?'rgba(77,166,255,.5)':i<=4?'rgba(255,179,71,.6)':'rgba(255,77,77,.7)'),borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+' speed-related crashes'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+}
+function buildSpeedFatalChart(){
+    if(chSpeedFatal) chSpeedFatal.destroy();
+    const labels=['Denver','Aurora','West./\nThornton','Lakewood','Arvada'];
+    const cityKeys=['Denver','Aurora','Westminster/Thornton','Lakewood','Arvada'];
+    const spFat=cityKeys.map(c=>speedData[c].speedFatal);
+    const nonSpFat=cityKeys.map(c=>speedData[c].fatal-speedData[c].speedFatal);
+    chSpeedFatal=new Chart(document.getElementById('speedFatalChart'),{type:'bar',data:{labels:labels,datasets:[{label:'Speed-related',data:spFat,backgroundColor:'rgba(255,77,77,.75)',borderRadius:0},{label:'Other causes',data:nonSpFat,backgroundColor:'rgba(85,88,115,.5)',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'rectRounded',padding:16}},tooltip:{...TT,callbacks:{label:function(c){const total=speedData[cityKeys[c.dataIndex]].fatal;return c.dataset.label+': '+c.raw+' of '+total+' fatalities'}}}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:isMobile?9:11}}},y:{stacked:true,beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'},title:{display:true,text:'Fatalities',color:'#555873'}}}}});
+}
+
+buildSpeedHourChart('all');
+buildSpeedZoneChart('all');
+buildSpeedFatalChart();
+document.getElementById('metroSpeedHour').addEventListener('change',function(){buildSpeedHourChart(this.value)});
+document.getElementById('metroSpeedZone').addEventListener('change',function(){buildSpeedZoneChart(this.value)});
+
 const metroYoY = {
 'Denver':{totals:[14836,15442,15671],fatals:[72,73,62],peds:[380,503,588],cyclists:[181,236,267],injuries:[3737,4039,4141]},
 'Aurora':{totals:[5649,6584,6137],fatals:[45,59,45],peds:[149,173,181],cyclists:[40,63,70],injuries:[2094,2575,2465]},
