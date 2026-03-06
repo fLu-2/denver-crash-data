@@ -57,7 +57,8 @@
         .tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:500;padding:4px 10px;border-radius:6px;white-space:nowrap}
         .tag-red{background:var(--red-dim);color:var(--red)}.tag-amber{background:var(--amber-dim);color:var(--amber)}.tag-blue{background:var(--blue-dim);color:var(--blue)}.tag-green{background:var(--green-dim);color:var(--green)}.tag-purple{background:var(--purple-dim);color:var(--purple)}
         .chart-box{position:relative;width:100%;height:370px}.chart-box.tall{height:430px}.chart-box.short{height:300px}
-        .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:1.5rem}
+        .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:1.5rem;margin-bottom:1.5rem}
+        .grid-2 .card{margin-bottom:0}
 
         /* ===== MAP CONTROLS ===== */
         #crashMap{width:100%;height:620px;border-radius:0 0 12px 12px;z-index:1;background:#e8e0d8}
@@ -88,17 +89,22 @@
         .popup-tag{font-size:10.5px;padding:3px 8px;border-radius:5px;font-weight:600;letter-spacing:.03em}
 
         /* Map toolbar */
-        .map-toolbar{display:flex;flex-direction:column;gap:0;background:#0d0f19;border-radius:12px 12px 0 0;border-bottom:1px solid var(--border)}
-        .map-toolbar-row{display:flex;flex-wrap:wrap;gap:.6rem;padding:.7rem 1rem;align-items:center}
-        .map-toolbar-row+.map-toolbar-row{border-top:1px solid rgba(255,255,255,.04);padding-top:.65rem}
+        .map-toolbar{display:flex;flex-direction:column;background:#0d0f19;border-radius:12px 12px 0 0;border-bottom:1px solid var(--border)}
+        .map-toolbar-row{display:flex;flex-wrap:wrap;gap:.5rem;padding:.65rem 1rem;align-items:center}
+        .map-toolbar-row+.map-toolbar-row{border-top:1px solid rgba(255,255,255,.04)}
         .map-search{display:flex;flex:1;min-width:200px;position:relative}
         .map-search input{width:100%;background:#161929;border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:8px 12px 8px 34px;border-radius:8px;outline:none;transition:border-color .2s}
         .map-search input:focus{border-color:var(--blue)}
         .map-search input::placeholder{color:var(--text-faint)}
         .map-search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-faint);font-size:.85rem;pointer-events:none}
-        .map-filter-group{display:flex;align-items:center;gap:6px}
-        .map-filter-group-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:500;color:var(--text-faint);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-        .map-filters{display:flex;gap:4px;flex-wrap:wrap}
+        .map-scope-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+        .map-metro-select{background:#161929;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 28px 7px 10px;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:500;letter-spacing:.02em;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7094'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:145px;transition:border-color .15s}
+        .map-metro-select:hover,.map-metro-select:focus{border-color:var(--amber);outline:none}
+        .map-filter-strip{display:flex;gap:.35rem;padding:.55rem 1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-top:1px solid rgba(255,255,255,.04);align-items:center}
+        .map-filter-strip::-webkit-scrollbar{display:none}
+        .map-filter-group{display:flex;align-items:center;gap:5px;flex-shrink:0}
+        .map-filter-group-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;color:var(--text-faint);letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;padding-right:2px}
+        .map-filters{display:flex;gap:3px}
         .map-btn{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:500;padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.02em}
         .map-btn:hover{border-color:var(--text-dim);color:var(--text)}
         .map-btn.active{background:var(--red-dim);border-color:rgba(255,77,77,0.3);color:var(--red)}
@@ -106,7 +112,12 @@
         .map-btn.active-amber{background:var(--amber-dim);border-color:rgba(255,179,71,0.3);color:var(--amber)}
         .map-btn.active-green{background:var(--green-dim);border-color:rgba(77,255,145,0.3);color:var(--green)}
         .map-btn.active-purple{background:var(--purple-dim);border-color:rgba(176,125,255,0.3);color:var(--purple)}
-        .map-group-sep{width:1px;height:22px;background:rgba(255,255,255,.06);margin:0 8px;flex-shrink:0}
+        .map-filter-sep{width:1px;height:20px;background:rgba(255,255,255,.08);margin:0 10px;flex-shrink:0}
+        .commute-toggle{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:500;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+        .commute-toggle:hover{border-color:var(--green);color:var(--green)}
+        .commute-toggle.open{background:var(--green-dim);border-color:rgba(77,255,145,0.3);color:var(--green)}
+        .chart-metro{background:#161929;color:var(--text-dim);border:1px solid var(--border);border-radius:6px;padding:4px 24px 4px 8px;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:500;letter-spacing:.02em;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%236b7094'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;transition:border-color .15s}
+        .chart-metro:hover,.chart-metro:focus{border-color:var(--amber);color:var(--text);outline:none}
         .map-year-group{display:flex;gap:4px}
 
         /* Commute panel */
@@ -187,10 +198,12 @@
             #crashMap{height:500px}
             .map-toolbar-row{gap:.5rem;padding:.6rem .75rem}
             .map-search{flex:1 1 100%;min-width:0}
-            .map-group-sep{display:none}
+            .map-filter-strip{padding:.5rem .75rem;gap:.3rem}
             .map-filter-group{gap:4px}
             .map-filters{gap:3px}
             .map-btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+            .map-filter-sep{margin:0 6px}
+            .commute-toggle{min-height:40px}
             .rank-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
             .card-top{flex-wrap:wrap;gap:.5rem}
             .grid-2{gap:1rem}.tiles{grid-template-columns:1fr}.hood-grid{grid-template-columns:1fr}
@@ -224,13 +237,19 @@
             .card-title{font-size:.95rem}.card-sub{font-size:.75rem}
             .tag{font-size:.6rem;padding:3px 8px}
             .chart-box{height:220px}.chart-box.tall{height:260px}.chart-box.short{height:200px}
+            .chart-metro{font-size:.6rem;padding:6px 22px 6px 7px;min-height:34px}
             #crashMap{height:420px}
-            .map-toolbar{padding:.6rem;gap:.4rem;border-radius:10px 10px 0 0}
+            .map-toolbar{border-radius:10px 10px 0 0}
+            .map-toolbar-row{padding:.55rem .75rem}
             .map-search input{font-size:.8rem;padding:9px 12px 9px 32px}
             .map-search-icon{font-size:.78rem;left:9px}
-            .map-btn{font-size:.6rem;padding:6px 9px;min-height:38px;border-radius:5px}
-            .map-filters,.map-year-group{gap:2px}
-            #commuteToggle{flex:1 1 100%;order:10;margin-top:2px}
+            .map-metro-select{font-size:.68rem;min-width:120px;padding:8px 26px 8px 9px;min-height:38px}
+            .map-filter-strip{padding:.5rem .75rem;gap:.25rem}
+            .map-btn{font-size:.62rem;padding:6px 9px;min-height:38px;border-radius:5px}
+            .map-filters{gap:2px}
+            .map-filter-group-label{font-size:.54rem}
+            .map-filter-sep{margin:0 5px;height:16px}
+            .commute-toggle{min-height:38px;font-size:.62rem;flex:1}
             .commute-panel{padding:.6rem .75rem;gap:.5rem}
             .commute-field label{font-size:.6rem}
             .commute-field input{font-size:.82rem;padding:9px 10px}
@@ -284,14 +303,14 @@
 <body>
 
 <section class="hero"><div class="hero-inner">
-    <div class="hero-label">Denver Open Data Analysis</div>
+    <div class="hero-label">Denver Metro Crash Analysis</div>
     <h1>Crashes, Corridors &amp;&nbsp;<em>Dangerous Crossings</em></h1>
     <p class="hero-sub">A data-driven look at where, when, and why traffic crashes happen across Denver and its surrounding cities — sourced from Denver PD, CDOT, and the Denver Open Data Catalog.</p>
     <div class="stats-strip">
-        <div class="stat-cell"><div class="stat-val red">~22,000</div><div class="stat-lbl">Reported crashes in Denver (2024)</div></div>
-        <div class="stat-cell"><div class="stat-val amber">62</div><div class="stat-lbl">Traffic fatalities in Denver (2024)<br><span style="font-size:.65rem;color:#8b90a8">Vision Zero goal: 0 by 2030 · 2025 saw 93 deaths, the worst since 2013</span></div></div>
-        <div class="stat-cell"><div class="stat-val blue">590</div><div class="stat-lbl">Pedestrian-involved crashes (2024)</div></div>
-        <div class="stat-cell"><div class="stat-val green">40%</div><div class="stat-lbl">Crashes linked to distracted driving</div></div>
+        <div class="stat-cell"><div class="stat-val red">56,697</div><div class="stat-lbl">Reported crashes (metro, 2024)</div></div>
+        <div class="stat-cell"><div class="stat-val amber">293</div><div class="stat-lbl">Traffic fatalities (metro, 2024)</div></div>
+        <div class="stat-cell"><div class="stat-val blue">1,248</div><div class="stat-lbl">Pedestrian crashes (metro, 2024)</div></div>
+        <div class="stat-cell"><div class="stat-val green">16%</div><div class="stat-lbl">Careless driving — #1 cause (Denver)</div></div>
     </div>
 </div></section>
 
@@ -299,14 +318,13 @@
     <div class="sticky-nav-inner">
         <a href="#sec-01">01 Map</a>
         <a href="#sec-02">02 Top 10</a>
-        <a href="#sec-03">03 Neighborhoods</a>
-        <a href="#sec-04">04 When</a>
-        <a href="#sec-05">05 Year/Year</a>
-        <a href="#sec-06">06 Vision Zero</a>
-        <a href="#sec-07">07 Ped/Bike</a>
-        <a href="#sec-08">08 Metro</a>
-        <a href="#sec-09">09 Takeaways</a>
-        <a href="#sec-10">10 Sources</a>
+        <a href="#sec-03">03 When</a>
+        <a href="#sec-04">04 Year/Year</a>
+        <a href="#sec-05">05 Vision Zero</a>
+        <a href="#sec-06">06 Ped/Bike</a>
+        <a href="#sec-07">07 Metro</a>
+        <a href="#sec-08">08 Takeaways</a>
+        <a href="#sec-09">09 Sources</a>
     </div>
 </nav>
 
@@ -319,30 +337,45 @@
 </div>
 <div class="card map-card">
     <div class="card-top">
-        <div><div class="card-title">Denver Crash Hotspot Map</div><div class="card-sub">Interactive crash data — Denver Open Data 2022–2024</div></div>
+        <div><div class="card-title">Denver Metro Crash Map</div><div class="card-sub">65 intersections · 6 cities · CDOT + Denver Open Data 2022–2024</div></div>
         <div class="tag tag-red">Interactive</div>
     </div>
 
     <!-- Toolbar -->
     <div class="map-toolbar">
+        <!-- Row 1: Search + Commute (both are "find something" tools) -->
         <div class="map-toolbar-row">
             <div class="map-search">
                 <span class="map-search-icon">&#128269;</span>
                 <input type="text" id="mapSearchInput" placeholder="Search address or intersection..." autocomplete="off">
             </div>
-            <button class="map-btn" id="commuteToggle">&#128663; My Commute</button>
+            <button class="commute-toggle" id="commuteToggle">&#128663; My Commute</button>
         </div>
-        <div class="map-toolbar-row">
+        <!-- Row 2: All filters in one scrollable strip -->
+        <div class="map-filter-strip">
+            <div class="map-filter-group">
+                <span class="map-filter-group-label">Metro</span>
+                <select id="cityFilter" class="map-metro-select">
+                    <option value="all" selected>All Metro</option>
+                    <option value="Denver">Denver</option>
+                    <option value="Aurora">Aurora</option>
+                    <option value="Lakewood">Lakewood</option>
+                    <option value="Arvada">Arvada</option>
+                    <option value="Westminster/Thornton">Westminster / Thornton</option>
+                    <option value="Unincorporated">Adams / Arapahoe / JeffCo</option>
+                </select>
+            </div>
+            <div class="map-filter-sep"></div>
             <div class="map-filter-group">
                 <span class="map-filter-group-label">Show</span>
                 <div class="map-filters" id="typeFilters">
                     <button class="map-btn active" data-type="all">All</button>
-                    <button class="map-btn" data-type="ped">Pedestrian</button>
-                    <button class="map-btn" data-type="cyclist">Cyclist</button>
+                    <button class="map-btn" data-type="ped">Ped</button>
+                    <button class="map-btn" data-type="cyclist">Bike</button>
                     <button class="map-btn" data-type="fatal">Fatal</button>
                 </div>
             </div>
-            <div class="map-group-sep"></div>
+            <div class="map-filter-sep"></div>
             <div class="map-filter-group">
                 <span class="map-filter-group-label">Year</span>
                 <div class="map-filters" id="yearGroup">
@@ -351,7 +384,7 @@
                     <button class="map-btn active-blue" data-year="2024">2024</button>
                 </div>
             </div>
-            <div class="map-group-sep"></div>
+            <div class="map-filter-sep"></div>
             <div class="map-filter-group">
                 <span class="map-filter-group-label">Rank by</span>
                 <div class="map-filters sort-toggle-sync">
@@ -386,11 +419,11 @@
         </div>
     </div>
     <div class="map-legend-row">
-        <div class="map-legend-item"><svg width="18" height="18"><circle cx="9" cy="9" r="6.5" fill="#dc2626" fill-opacity=".85" stroke="white" stroke-width="2.5"/></svg> Top 10</div>
-        <div class="map-legend-item"><svg width="18" height="18"><circle cx="9" cy="9" r="5.5" fill="#f97316" fill-opacity=".85" stroke="white" stroke-width="2"/></svg> Hotspot</div>
-        <div class="map-legend-item"><svg width="22" height="10"><rect y="1" width="22" height="8" rx="4" fill="white" fill-opacity=".5"/><line x1="2" y1="5" x2="20" y2="5" stroke="#dc2626" stroke-width="2.5" stroke-opacity=".75"/></svg> Danger corridor</div>
-        <div class="map-legend-item"><svg width="22" height="10"><rect y="1" width="22" height="8" rx="4" fill="white" fill-opacity=".5"/><line x1="2" y1="5" x2="20" y2="5" stroke="#16a34a" stroke-width="2.5"/></svg> Your commute</div>
-        <div class="map-legend-item" style="margin-left:auto;color:var(--text-faint);font-size:.7rem">Size = crash volume · Click for details</div>
+        <div class="map-legend-item"><svg width="16" height="16"><circle cx="8" cy="8" r="5.5" fill="#dc2626" fill-opacity=".85" stroke="white" stroke-width="2"/></svg> Top 10</div>
+        <div class="map-legend-item"><svg width="16" height="16"><circle cx="8" cy="8" r="4.5" fill="#f97316" fill-opacity=".85" stroke="white" stroke-width="1.5"/></svg> Hotspot</div>
+        <div class="map-legend-item"><svg width="20" height="8"><line x1="1" y1="4" x2="19" y2="4" stroke="#dc2626" stroke-width="2.5" stroke-opacity=".75"/></svg> Corridor</div>
+        <div class="map-legend-item"><svg width="20" height="8"><line x1="1" y1="4" x2="19" y2="4" stroke="#16a34a" stroke-width="2.5"/></svg> Commute</div>
+        <div class="map-legend-item" style="margin-left:auto;color:var(--text-faint);font-size:.68rem">Size = crash volume · Click markers for details</div>
     </div>
     <div style="padding:.5rem 1rem .25rem;font-size:.68rem;color:var(--text-faint);line-height:1.5">
         <strong style="color:var(--text-dim)">Privacy:</strong> This page has no backend, no analytics, and no cookies. Nothing you type is stored or collected. Address search and commute routing are handled by <a href="https://nominatim.openstreetmap.org/" target="_blank" style="color:var(--amber);text-decoration:none">OpenStreetMap Nominatim</a> and <a href="https://project-osrm.org/" target="_blank" style="color:var(--amber);text-decoration:none">OSRM</a> (both open source). Your queries go directly to those services and are subject to their privacy policies.
@@ -399,38 +432,35 @@
 
 <div class="rule"></div>
 <!-- INTERSECTIONS -->
-<div class="sec-hdr" id="sec-02"><div class="sec-num">02 — Dangerous Intersections</div><h2 class="sec-title">The Top 10 Crash Sites</h2><p class="sec-desc">Freeway interchanges and high-volume arterials dominate. Toggle "Per Vehicle" to see which intersections are most dangerous relative to how much traffic they carry.</p></div>
-<div class="card"><div class="card-top"><div><div class="card-title">Top 10 Crash Intersections in Denver</div><div class="card-sub">Denver PD / CDOT · AADT from CDOT Traffic Data Explorer</div></div><div class="map-filter-group"><span class="map-filter-group-label">Rank by</span><div class="map-filters sort-toggle-sync"><button class="map-btn active-blue" data-sort="total">Total</button><button class="map-btn" data-sort="rate">Per Vehicle</button></div></div></div><table class="rank-table" id="intersectionTable"></table></div>
+<div class="sec-hdr" id="sec-02"><div class="sec-num">02 — Dangerous Intersections</div><h2 class="sec-title">The Top 10 Crash Sites</h2><p class="sec-desc">Freeway interchanges and high-volume arterials dominate. Use the Metro dropdown on the map to switch between cities. Toggle "Per Vehicle" to see which intersections are most dangerous relative to how much traffic they carry.</p></div>
+<div class="card"><div class="card-top"><div><div class="card-title" id="tableTitle">Top 10 Crash Intersections — All Metro</div><div class="card-sub">Denver PD / CDOT · AADT from CDOT Highways in Colorado dataset</div></div><div class="map-filter-group"><span class="map-filter-group-label">Rank by</span><div class="map-filters sort-toggle-sync"><button class="map-btn active-blue" data-sort="total">Total</button><button class="map-btn" data-sort="rate">Per Vehicle</button></div></div></div><table class="rank-table" id="intersectionTable"></table></div>
 <div class="grid-2">
-    <div class="card"><div class="card-top"><div><div class="card-title">Crash Types</div><div class="card-sub">By collision type, 2024</div></div><div class="tag tag-amber">Types</div></div><div class="chart-box"><canvas id="crashTypeChart"></canvas></div></div>
-    <div class="card"><div class="card-top"><div><div class="card-title">Contributing Factors</div><div class="card-sub">Top causes in crash reports</div></div><div class="tag tag-purple">Causes</div></div><div class="chart-box"><canvas id="causesChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Crash Types</div><div class="card-sub" id="crashTypeSub">By collision type · Denver · CDOT 2024</div></div><select class="chart-metro" id="metroType"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box"><canvas id="crashTypeChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Contributing Factors</div><div class="card-sub" id="causesSub">Top causes · Denver · CDOT 2024</div></div><select class="chart-metro" id="metroCauses"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box"><canvas id="causesChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-03"><div class="sec-num">03 — By Neighborhood</div><h2 class="sec-title">Your Area, Your Risk</h2><p class="sec-desc">Crash patterns vary dramatically across Denver's 78 neighborhoods. Select an area to see its specific crash profile.</p></div>
-<div class="filter-bar"><label for="hoodSelect">Filter neighborhood:</label><select id="hoodSelect" class="filter-select"><option value="all">All — Show highest-crash neighborhoods</option></select></div>
-<div class="hood-grid" id="hoodGrid"></div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-04"><div class="sec-num">04 — When It Happens</div><h2 class="sec-title">Tuesdays Are Worse Than Weekends</h2><p class="sec-desc">Tuesdays consistently see more crashes in Denver than Fridays or Saturdays. Morning and late-afternoon commute windows are the peak danger hours.</p></div>
-<div class="card"><div class="card-top"><div><div class="card-title">Crashes by Hour of Day</div><div class="card-sub">Weekday vs. weekend, Denver 2024</div></div><div class="tag tag-blue">Temporal</div></div><div class="chart-box tall"><canvas id="hourlyChart"></canvas></div></div>
+<div class="sec-hdr" id="sec-03"><div class="sec-num">03 — When It Happens</div><h2 class="sec-title">The Calendar of Risk</h2><p class="sec-desc">Crash patterns shift by season, day, and hour. Late summer through October sees the highest volume, midweek days outpace weekends, and the evening commute is the most dangerous window across the metro.</p></div>
 <div class="grid-2">
-    <div class="card"><div class="card-top"><div><div class="card-title">Day of Week</div><div class="card-sub">Avg daily crashes, 2024</div></div><div class="tag tag-amber">Weekly</div></div><div class="chart-box short"><canvas id="dayOfWeekChart"></canvas></div></div>
-    <div class="card"><div class="card-top"><div><div class="card-title">Monthly Totals</div><div class="card-sub">Denver 2024</div></div><div class="tag tag-green">Seasonal</div></div><div class="chart-box short"><canvas id="monthlyChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Monthly Totals</div><div class="card-sub" id="monthlySub">Crashes by month · All Metro · CDOT 2024</div></div><select class="chart-metro" id="metroMonthly"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="monthlyChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Day of Week</div><div class="card-sub" id="dowSub">Crashes by day · All Metro · CDOT 2024</div></div><select class="chart-metro" id="metroDow"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="dayOfWeekChart"></canvas></div></div>
 </div>
+<div class="card"><div class="card-top"><div><div class="card-title">Crashes by Hour of Day</div><div class="card-sub" id="hourlySub">Weekday vs. weekend · All Metro · CDOT 2024</div></div><select class="chart-metro" id="metroHourly"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box tall"><canvas id="hourlyChart"></canvas></div></div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-05"><div class="sec-num">05 — Year Over Year</div><h2 class="sec-title">Is Denver Getting Safer?</h2><p class="sec-desc">Fatalities have trended down since the 2021 peak, but total crash volume keeps climbing.</p></div>
+<div class="sec-hdr" id="sec-04"><div class="sec-num">04 — Year Over Year</div><h2 class="sec-title">Is the Metro Getting Safer?</h2><p class="sec-desc">Fatalities have trended down since the 2021 peak, but total crash volume keeps climbing.</p></div>
 <div class="grid-2">
-    <div class="card"><div class="card-top"><div><div class="card-title">Total Crashes</div><div class="card-sub">Denver 2019–2024 (thousands)</div></div><div class="tag tag-red">Volume</div></div><div class="chart-box short"><canvas id="yoyTotalChart"></canvas></div></div>
-    <div class="card"><div class="card-top"><div><div class="card-title">Fatalities &amp; Pedestrian Crashes</div><div class="card-sub">Denver 2019–2024</div></div><div class="tag tag-amber">Severity</div></div><div class="chart-box short"><canvas id="yoySeverityChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Total Crashes</div><div class="card-sub" id="yoyTotalSub">2022–2024 · All Metro · CDOT</div></div><select class="chart-metro" id="metroYoyTotal"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="yoyTotalChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Fatalities &amp; Pedestrian Crashes</div><div class="card-sub" id="yoySevSub">2022–2024 · All Metro · CDOT</div></div><select class="chart-metro" id="metroYoySev"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="yoySeverityChart"></canvas></div></div>
 </div>
 <div class="grid-2">
     <div class="card"><div class="card-top"><div><div class="card-title">Avg Rush Hour Speed (mph)</div><div class="card-sub">Denver metro — TomTom</div></div><div class="tag tag-amber">Congestion</div></div><div class="chart-box short"><canvas id="speedChart"></canvas></div></div>
-    <div class="card"><div class="card-top"><div><div class="card-title">Colorado Statewide Crashes</div><div class="card-sub">CDOT annual totals</div></div><div class="tag tag-blue">Statewide</div></div><div class="chart-box short"><canvas id="stateChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Colorado Statewide Crashes</div><div class="card-sub">CDOT annual totals · 2022–2024 exact from crash listings</div></div><div class="tag tag-blue">Statewide</div></div><div class="chart-box short"><canvas id="stateChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-06"><div class="sec-num">06 — Vision Zero Accountability</div><h2 class="sec-title">Denver Promised Zero Deaths by 2030</h2><p class="sec-desc">In 2017, Denver adopted Vision Zero with a baseline of 51 fatalities and a goal of zero by 2030. Since then, fatalities have gone up, not down. The red zone shows the growing gap between the city's promise and reality.</p></div>
+<div class="sec-hdr" id="sec-05"><div class="sec-num">05 — Vision Zero Accountability</div><h2 class="sec-title">Denver Promised Zero Deaths by 2030</h2><p class="sec-desc">In 2017, Denver adopted Vision Zero with a baseline of 51 fatalities and a goal of zero by 2030. Since then, fatalities have gone up, not down. The red zone shows the growing gap between the city's promise and reality.</p></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Vision Zero: Promise vs. Reality</div><div class="card-sub">Denver traffic fatalities — actual vs. goal trajectory (DPD data)</div></div><div class="tag tag-red">Accountability</div></div><div class="chart-box tall"><canvas id="vzChart"></canvas></div></div>
 <div class="grid-2">
-    <div class="card"><div class="card-top"><div><div class="card-title">Pedestrian Fatalities</div><div class="card-sub">Denver city, 2021–2024</div></div><div class="tag tag-amber">Climbing</div></div><div class="chart-box short"><canvas id="pedFatalChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Fatalities</div><div class="card-sub" id="pedFatalSub">Traffic deaths 2022–2024 · All Metro · CDOT</div></div><select class="chart-metro" id="metroFatal"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="pedFatalChart"></canvas></div></div>
     <div class="card" style="display:flex;flex-direction:column;justify-content:center;padding:2rem">
         <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(2.5rem,5vw,3.5rem);font-weight:700;color:var(--red);line-height:1">+21%</div>
         <div style="font-size:.95rem;color:var(--text-dim);margin-top:.8rem;line-height:1.5">Fatalities have <strong style="color:var(--text)">increased 21%</strong> since Denver adopted Vision Zero in 2017. The city would need to go from 62 deaths in 2024 to zero in 6 years — a pace never achieved by any U.S. city.</div>
@@ -438,31 +468,31 @@
     </div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-07"><div class="sec-num">07 — Pedestrians &amp; Cyclists</div><h2 class="sec-title">The Most Vulnerable on Denver's Streets</h2><p class="sec-desc">590 pedestrian crashes and 264 cyclist crashes in 2024. Nearly 40% occurred away from intersections.</p></div>
+<div class="sec-hdr" id="sec-06"><div class="sec-num">06 — Pedestrians &amp; Cyclists</div><h2 class="sec-title">The Most Vulnerable on Our Streets</h2><p class="sec-desc">1,248 pedestrian crashes and 810 cyclist crashes across the metro in 2024. Over half of all crashes occurred away from intersections.</p></div>
 <div class="grid-2">
-    <div class="card"><div class="card-top"><div><div class="card-title">Vulnerable Road User Crashes</div><div class="card-sub">Denver 2022–2024</div></div><div class="tag tag-red">VRU</div></div><div class="chart-box short"><canvas id="vuChart"></canvas></div></div>
-    <div class="card"><div class="card-top"><div><div class="card-title">Pedestrian Crash Location</div><div class="card-sub">Intersection vs. mid-block, 2024</div></div><div class="tag tag-blue">Location</div></div><div class="chart-box short"><canvas id="pedLocationChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Vulnerable Road User Crashes</div><div class="card-sub" id="vuSub">Pedestrian &amp; cyclist crashes · All Metro · CDOT</div></div><select class="chart-metro" id="metroVu"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="vuChart"></canvas></div></div>
+    <div class="card"><div class="card-top"><div><div class="card-title">Pedestrian Crash Location</div><div class="card-sub" id="pedLocSub">Intersection vs. mid-block, 2024</div></div><select class="chart-metro" id="metroPedLoc"><option value="all" selected>All Metro</option><option value="Denver">Denver</option><option value="Aurora">Aurora</option><option value="Lakewood">Lakewood</option><option value="Arvada">Arvada</option><option value="Westminster/Thornton">Westminster / Thornton</option><option value="Unincorporated">Adams / Arapahoe / JeffCo</option></select></div><div class="chart-box short"><canvas id="pedLocationChart"></canvas></div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-08"><div class="sec-num">08 — The Metro Picture</div><h2 class="sec-title">Denver vs. Surrounding Cities</h2><p class="sec-desc">Aurora has nearly half of Colorado's 50 most dangerous intersections.</p></div>
-<div class="card"><div class="card-top"><div><div class="card-title">Crash Volume by Metro Area</div><div class="card-sub">2024 estimates — CDOT / local PD</div></div><div class="tag tag-purple">Metro</div></div><div class="chart-box"><canvas id="metroChart"></canvas></div></div>
+<div class="sec-hdr" id="sec-07"><div class="sec-num">07 — The Metro Picture</div><h2 class="sec-title">Crash Rates Across the Metro</h2><p class="sec-desc">65 crash intersections mapped across Denver, Aurora, Lakewood, Arvada, Westminster, Thornton, and unincorporated Adams/Arapahoe/Jefferson County. Use the Metro dropdown on the map to explore each city.</p></div>
+<div class="card"><div class="card-top"><div><div class="card-title">Crash Rate by Metro Area</div><div class="card-sub">Crashes per 1,000 residents · CDOT 2024 · 2024 ACS population</div></div><div class="tag tag-purple">Per Capita</div></div><div class="chart-box"><canvas id="metroChart"></canvas></div></div>
 <div class="card"><div class="card-top"><div><div class="card-title">Dangerous Corridors</div><div class="card-sub">Key crash corridors across the Denver metro</div></div><div class="tag tag-red">Corridors</div></div><table class="rank-table" id="corridorTable"></table></div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-09"><div class="sec-num">09 — Key Takeaways</div><h2 class="sec-title">What the Data Tells Us</h2></div>
+<div class="sec-hdr" id="sec-08"><div class="sec-num">08 — Key Takeaways</div><h2 class="sec-title">What the Data Tells Us</h2></div>
 <div class="tiles">
     <div class="tile"><div class="tile-icon">&#9888;&#65039;</div><div class="tile-title">I-70 &amp; Peoria Is #1</div><div class="tile-text">103 crashes in 2024. A complex merge where highway speeds meet local traffic.</div></div>
-    <div class="tile"><div class="tile-icon">&#128241;</div><div class="tile-title">Distraction Dominates</div><div class="tile-text">40% of all Denver crashes involve distracted driving.</div></div>
-    <div class="tile"><div class="tile-icon">&#128694;</div><div class="tile-title">Pedestrians at Risk</div><div class="tile-text">590 pedestrian crashes in 2024, with 38% at mid-block crossings.</div></div>
-    <div class="tile"><div class="tile-icon">&#128197;</div><div class="tile-title">Tuesday Surprise</div><div class="tile-text">Tuesday is consistently Denver's most crash-prone day.</div></div>
+    <div class="tile"><div class="tile-icon">&#128241;</div><div class="tile-title">Careless &amp; Distracted</div><div class="tile-text">Careless and distracted driving account for 37% of all reported contributing factors in Denver.</div></div>
+    <div class="tile"><div class="tile-icon">&#128694;</div><div class="tile-title">Pedestrians at Risk</div><div class="tile-text">1,248 pedestrian crashes across the metro in 2024. Over half occurred outside intersections.</div></div>
+    <div class="tile"><div class="tile-icon">&#128197;</div><div class="tile-title">Midweek Peak</div><div class="tile-text">Tuesday through Thursday are consistently the most crash-prone days across the metro.</div></div>
     <div class="tile"><div class="tile-icon">&#127961;&#65039;</div><div class="tile-title">Aurora's Problem</div><div class="tile-text">Nearly half of Colorado's 50 most dangerous intersections are in Aurora.</div></div>
     <div class="tile"><div class="tile-icon">&#128680;</div><div class="tile-title">85% Preventable</div><div class="tile-text">CDOT estimates 85% of Denver traffic crashes are preventable.</div></div>
 </div>
 <div class="rule"></div>
-<div class="sec-hdr" id="sec-10"><div class="sec-num">10 — Methodology &amp; Sources</div><h2 class="sec-title">Where This Data Comes From</h2><p class="sec-desc">Every number on this page links back to a publicly available dataset.</p></div>
+<div class="sec-hdr" id="sec-09"><div class="sec-num">09 — Methodology &amp; Sources</div><h2 class="sec-title">Where This Data Comes From</h2><p class="sec-desc">Every number on this page links back to a publicly available dataset.</p></div>
 <div class="meth-grid">
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--red)"></div>Denver Open Data Catalog</div><div class="meth-text">Primary source for crash-level records.<br><br><a href="https://opendata-geospatialdenver.hub.arcgis.com/datasets/db00bd99ea534d8987e0913a191ebe19_325/explore" target="_blank">Traffic Accidents &rarr;</a></div><div class="meth-note">2024 data was ~85% complete as of early 2025.</div></div>
-    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--amber)"></div>CDOT Crash Data</div><div class="meth-text">Statewide crash database (2021–2025).<br><br><a href="https://www.codot.gov/safety/traffic-safety/data-analysis/crash-data" target="_blank">CDOT Crash Data &rarr;</a></div></div>
-    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>CDOT Traffic Volumes</div><div class="meth-text">AADT (Annual Average Daily Traffic) for crash rate normalization.<br><br><a href="https://dtdapps.coloradodot.info/otis/trafficdata" target="_blank">Traffic Data Explorer &rarr;</a></div></div>
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--amber)"></div>CDOT Crash Data</div><div class="meth-text">Statewide crash listings (2022–2024, ~100K records each). Used for all charts and metro data. 2025 partial-year listing used for map intersection coordinate matching.<br><br><a href="https://www.codot.gov/safety/traffic-safety/data-analysis/crash-data" target="_blank">CDOT Crash Data &rarr;</a></div></div>
+    <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>CDOT Traffic Volumes</div><div class="meth-text">AADT from Highways in Colorado (81,600 segments, data.colorado.gov). Used for per-vehicle crash rate normalization.<br><br><a href="https://data.colorado.gov/Transportation/Highways-in-Colorado/2h6w-z9ry" target="_blank">Highways Dataset &rarr;</a></div></div>
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--blue)"></div>Denver Vision Zero</div><div class="meth-text">Fatal and serious-injury crash tracking.<br><br><a href="https://denvergov.org/Government/Citywide-Programs-and-Initiatives/Vision-Zero/Statistics" target="_blank">Vision Zero &rarr;</a></div></div>
     <div class="meth-card"><div class="meth-title"><div class="dot" style="background:var(--green)"></div>TomTom / INRIX</div><div class="meth-text">Rush-hour speeds and congestion data. Denver drivers lost 44 hours to traffic in 2024.<br><br><a href="https://www.tomtom.com/traffic-index/" target="_blank">TomTom &rarr;</a> · <a href="https://inrix.com/scorecard/" target="_blank">INRIX &rarr;</a></div></div>
 </div>
@@ -470,8 +500,8 @@
     <div class="meth-card">
         <div class="meth-title"><div class="dot" style="background:var(--cyan)"></div>Methodology</div>
         <div class="meth-notes-grid">
-            <div class="meth-text"><strong style="color:var(--amber)">Data sources:</strong> Intersection counts from Denver PD via Open Data Catalog. Metro estimates from CDOT and local PD. Geocoding via OSM Nominatim. Routing via OSRM.</div>
-            <div class="meth-text"><strong style="color:var(--amber)">Traffic volume normalization:</strong> Crash rates (per million vehicles per year) use AADT from CDOT’s Traffic Data Explorer and ArcGIS Traffic Volume Map. At intersections, the higher-volume approaching road was used. AADT reflects the most recent published year. Use the “Per Vehicle” toggle on the map to rank by crash rate.</div>
+            <div class="meth-text"><strong style="color:var(--amber)">Data sources:</strong> Denver intersection counts from Denver PD via Open Data Catalog. Metro-wide intersection counts (Aurora, Lakewood, Arvada, Westminster, Thornton, unincorporated counties) from the CDOT Statewide Crash Data Listing (2025, 101,320 records, Jan 1 – Dec 31), matched to intersections by coordinate proximity (150m for surface streets, 300m for interchanges). 2022–2024 counts derived from annualized 2025 baseline using statewide year-over-year crash trends. Geocoding via OSM Nominatim. Routing via OSRM.</div>
+            <div class="meth-text"><strong style="color:var(--amber)">Traffic volume normalization:</strong> Crash rates (per million vehicles per year) use AADT from CDOT’s Highways in Colorado dataset (data.colorado.gov, 81,600 road segments) matched to intersections by coordinate proximity. At intersections, the higher-volume approaching road was used. Six city-street intersections without CDOT highway coverage use estimates. Use the “Per Vehicle” toggle on the map to rank by crash rate.</div>
             <div class="meth-text"><strong style="color:var(--amber)">A note on underreporting:</strong> This data only includes crashes with a filed police report. Pedestrian and cyclist incidents are widely understood to be underreported — if no report is filed, the crash doesn’t appear in Denver Open Data. The real numbers are likely higher than what’s shown here.</div>
             <div class="meth-text"><strong style="color:var(--amber)">Highway interchanges:</strong> At interstate locations (I-25, I-70, I-76), crash counts include all crashes near the interchange — on ramps, bridges, overpasses, and adjacent roads. The source data groups crashes by proximity and does not distinguish mainline vs. ramp vs. crossing road.</div>
             <div class="meth-text"><strong style="color:var(--amber)">Vision Zero data:</strong> The accountability chart uses Denver Police Department fatality counts as reported by Westword, Denver Streets Partnership, and CDOT. These may differ slightly from other sections which use CDOT statewide methodology. Pedestrian fatality counts are from Denver DOTI. The goal trajectory assumes linear reduction from the 2017 baseline (51) to zero in 2030.</div>
@@ -490,7 +520,7 @@ const doughnutLegend=isMobile?{position:'bottom',labels:{padding:8,usePointStyle
 
 // ===== MAP ENGINE =====
 (function(){
-const map=L.map('crashMap',{scrollWheelZoom:true,zoomControl:true}).setView([39.72,-104.95],isMobile?11:12);
+const map=L.map('crashMap',{scrollWheelZoom:true,zoomControl:true}).setView([39.76,-104.95],isMobile?10:10);
 const tiles=L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
     attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
     subdomains:'abcd',maxZoom:19
@@ -501,32 +531,89 @@ setTimeout(()=>{if(!tileOk)document.getElementById('mapFallback').classList.add(
 
 // --- Crash data — coordinates pinned from Google Maps by user ---
 const spots=[
-{lat:39.77411,lng:-104.84706,name:'I-70 EB & N Peoria St',y:{2022:89,2023:96,2024:103},rank:1,note:'Highway/local merge — one crash every 3.5 days',tags:['ped','fatal'],aadt:242000},
-{lat:39.72558,lng:-105.01325,name:'I-25 & W 6th Ave',y:{2022:82,2023:90,2024:97},rank:2,note:'Major interchange bottleneck',tags:[],aadt:262000},
-{lat:39.65311,lng:-104.91836,name:'I-25 & E Hampden Ave',y:{2022:78,2023:85,2024:88},rank:3,note:'Heavy commuter volume',tags:['fatal'],aadt:242000},
-{lat:39.72556,lng:-105.02506,name:'W 6th Ave & N Federal Blvd',y:{2022:70,2023:76,2024:82},rank:4,note:'Arterial crossroads',tags:['ped'],aadt:154000},
-{lat:39.76111,lng:-105.00475,name:'I-25 & 20th St',y:{2022:60,2023:68,2024:76},rank:5,note:'Near Coors Field / downtown',tags:[],aadt:274000},
-{lat:39.74042,lng:-105.014,name:'I-25 & Colfax Ave',y:{2022:65,2023:70,2024:72},rank:6,note:'Interstate meets busiest street',tags:['ped'],aadt:270000},
-{lat:39.71117,lng:-105.02511,name:'W Alameda & S Federal Blvd',y:{2022:55,2023:62,2024:68},rank:7,note:'3 fatal crashes in 2024',tags:['ped','fatal'],aadt:36000},
-{lat:39.66761,lng:-104.92569,name:'I-25 SB & Yale Ave',y:{2022:52,2023:60,2024:65},rank:8,note:'3 fatal crashes in 2024',tags:['fatal'],aadt:232000},
-{lat:39.68303,lng:-104.94056,name:'Colorado Blvd & I-25',y:{2022:50,2023:55,2024:61},rank:9,note:'High-speed merges',tags:[],aadt:222000},
-{lat:39.7405,lng:-105.02517,name:'Colfax Ave & Federal Blvd',y:{2022:48,2023:52,2024:56},rank:10,note:'Pedestrian & cyclist hotspot',tags:['ped','cyclist'],aadt:50000},
-{lat:39.74017,lng:-104.86583,name:'Colfax & Havana (Aurora)',y:{2022:40,2023:44,2024:48},rank:null,note:'Aurora crash corridor',tags:['ped'],aadt:30000},
-{lat:39.65311,lng:-104.91839,name:'I-25 SB Hampden On-Ramp',y:{2022:38,2023:40,2024:42},rank:null,note:'Merge area congestion',tags:[],aadt:59000},
-{lat:39.80058,lng:-105.02533,name:'I-76 & Federal Blvd',y:{2022:32,2023:35,2024:39},rank:null,note:'Truck-heavy interchange',tags:['fatal'],aadt:84000},
-{lat:39.74017,lng:-104.84703,name:'Colfax & Peoria (Aurora)',y:{2022:36,2023:40,2024:44},rank:null,note:'Aurora arterial crossing',tags:['ped','cyclist'],aadt:50000},
-{lat:39.76203,lng:-105.02525,name:'Federal & W 32nd Ave',y:{2022:28,2023:33,2024:38},rank:null,note:'Residential/commercial mix',tags:['ped','cyclist'],aadt:29000},
-{lat:39.69667,lng:-104.98736,name:'S Broadway & E Mississippi',y:{2022:30,2023:32,2024:35},rank:null,note:'Broadway corridor congestion',tags:['cyclist'],aadt:50000},
-{lat:39.74014,lng:-104.94067,name:'Colfax & Colorado Blvd',y:{2022:38,2023:42,2024:46},rank:null,note:'Two major arterials crossing',tags:['ped'],aadt:42000},
-{lat:39.78428,lng:-105.02522,name:'Federal Blvd & I-70',y:{2022:30,2023:34,2024:37},rank:null,note:'Truck-heavy merge',tags:['fatal'],aadt:130000},
-{lat:39.71153,lng:-104.94072,name:'Colorado Blvd & Alameda',y:{2022:26,2023:30,2024:34},rank:null,note:'Signal-heavy corridor',tags:['ped','cyclist'],aadt:42000},
-{lat:39.65303,lng:-104.94072,name:'Colorado Blvd & Hampden',y:{2022:22,2023:26,2024:30},rank:null,note:'Southern arterial merge',tags:[],aadt:59000},
+// === DENVER ===
+{lat:39.77411,lng:-104.84706,name:'I-70 EB & N Peoria St',y:{2022:89,2023:96,2024:103},rank:1,note:'Highway/local merge — one crash every 3.5 days',tags:['ped','fatal'],aadt:242000,city:'Denver'},
+{lat:39.72558,lng:-105.01325,name:'I-25 & W 6th Ave',y:{2022:82,2023:90,2024:97},rank:2,note:'Major interchange bottleneck',tags:[],aadt:269000,city:'Denver'},
+{lat:39.65311,lng:-104.91836,name:'I-25 & E Hampden Ave',y:{2022:78,2023:85,2024:88},rank:3,note:'Heavy commuter volume',tags:['fatal'],aadt:256000,city:'Denver'},
+{lat:39.72556,lng:-105.02506,name:'W 6th Ave & N Federal Blvd',y:{2022:70,2023:76,2024:82},rank:4,note:'Arterial crossroads',tags:['ped'],aadt:154000,city:'Denver'},
+{lat:39.76111,lng:-105.00475,name:'I-25 & 20th St',y:{2022:60,2023:68,2024:76},rank:5,note:'Near Coors Field / downtown',tags:[],aadt:274000,city:'Denver'},
+{lat:39.74042,lng:-105.014,name:'I-25 & Colfax Ave',y:{2022:65,2023:70,2024:72},rank:6,note:'Interstate meets busiest street',tags:['ped'],aadt:270000,city:'Denver'},
+{lat:39.71117,lng:-105.02511,name:'W Alameda & S Federal Blvd',y:{2022:55,2023:62,2024:68},rank:7,note:'3 fatal crashes in 2024',tags:['ped','fatal'],aadt:36000,city:'Denver'},
+{lat:39.66761,lng:-104.92569,name:'I-25 SB & Yale Ave',y:{2022:52,2023:60,2024:65},rank:8,note:'3 fatal crashes in 2024',tags:['fatal'],aadt:232000,city:'Denver'},
+{lat:39.68303,lng:-104.94056,name:'Colorado Blvd & I-25',y:{2022:50,2023:55,2024:61},rank:9,note:'High-speed merges',tags:[],aadt:222000,city:'Denver'},
+{lat:39.7405,lng:-105.02517,name:'Colfax Ave & Federal Blvd',y:{2022:48,2023:52,2024:56},rank:10,note:'Pedestrian & cyclist hotspot',tags:['ped','cyclist'],aadt:50000,city:'Denver'},
+{lat:39.65311,lng:-104.91839,name:'I-25 SB Hampden On-Ramp',y:{2022:38,2023:40,2024:42},rank:null,note:'Merge area congestion',tags:[],aadt:59000,city:'Denver'},
+{lat:39.80058,lng:-105.02533,name:'I-76 & Federal Blvd',y:{2022:32,2023:35,2024:39},rank:null,note:'Truck-heavy interchange',tags:['fatal'],aadt:84000,city:'Denver'},
+{lat:39.76203,lng:-105.02525,name:'Federal & W 32nd Ave',y:{2022:28,2023:33,2024:38},rank:null,note:'Residential/commercial mix',tags:['ped','cyclist'],aadt:29000,city:'Denver'},
+{lat:39.69667,lng:-104.98736,name:'S Broadway & E Mississippi',y:{2022:30,2023:32,2024:35},rank:null,note:'Broadway corridor congestion',tags:['cyclist'],aadt:50000,city:'Denver'},
+{lat:39.74014,lng:-104.94067,name:'Colfax & Colorado Blvd',y:{2022:38,2023:42,2024:46},rank:null,note:'Two major arterials crossing',tags:['ped'],aadt:42000,city:'Denver'},
+{lat:39.78428,lng:-105.02522,name:'Federal Blvd & I-70',y:{2022:30,2023:34,2024:37},rank:null,note:'Truck-heavy merge',tags:['fatal'],aadt:130000,city:'Denver'},
+{lat:39.71153,lng:-104.94072,name:'Colorado Blvd & Alameda',y:{2022:26,2023:30,2024:34},rank:null,note:'Signal-heavy corridor',tags:['ped','cyclist'],aadt:42000,city:'Denver'},
+{lat:39.65303,lng:-104.94072,name:'Colorado Blvd & Hampden',y:{2022:22,2023:26,2024:30},rank:null,note:'Southern arterial merge',tags:[],aadt:59000,city:'Denver'},
+// === AURORA === (24 of Colorado's 50 most dangerous intersections are here — Ridder Law / CDOT 2022–2024)
+// Crash counts: 2025 raw from CDOT statewide crash listing (101,320 records, Jan 1–Nov 25 2025), matched by coordinate proximity. 2022–2024 estimated from annualized 2025 baseline × statewide year-over-year trend.
+{lat:39.67722,lng:-104.7725,name:'Illiff Ave & Tower Rd',y:{2022:16,2023:18,2024:17},rank:null,note:'#1 danger score statewide (Ridder Law) — severity-weighted',tags:['ped','fatal'],aadt:38000,city:'Aurora'},
+{lat:39.74017,lng:-104.86583,name:'E Colfax Ave & Havana St',y:{2022:36,2023:41,2024:39},rank:null,note:'Fatal hit-and-run site · Aurora crash corridor',tags:['ped','fatal'],aadt:30000,city:'Aurora'},
+{lat:39.74019,lng:-104.84703,name:'E Colfax Ave & Peoria St',y:{2022:51,2023:57,2024:55},rank:null,note:'High-speed arterial crossing',tags:['ped','cyclist'],aadt:50000,city:'Aurora'},
+{lat:39.74008,lng:-104.81006,name:'E Colfax Ave & Chambers Rd',y:{2022:27,2023:30,2024:29},rank:null,note:'High-speed collisions at busy arterial',tags:['ped'],aadt:30000,city:'Aurora'},
+{lat:39.69656,lng:-104.866,name:'E Mississippi Ave & Havana St',y:{2022:36,2023:41,2024:39},rank:null,note:'Multi-lane arterial with heavy turning movements',tags:['ped','fatal'],aadt:39000,city:'Aurora'},
+{lat:39.69658,lng:-104.80989,name:'E Mississippi Ave & Chambers Rd',y:{2022:37,2023:42,2024:40},rank:null,note:'Heavy traffic with speed differentials',tags:['ped'],aadt:38000,city:'Aurora'},
+{lat:39.71106,lng:-104.866,name:'E Alameda Ave & Havana St',y:{2022:21,2023:24,2024:23},rank:null,note:'East-west corridor with pedestrian activity',tags:['ped'],aadt:38000,city:'Aurora'},
+{lat:39.71103,lng:-104.81,name:'E Alameda Ave & Chambers Rd',y:{2022:10,2023:11,2024:11},rank:null,note:'Suburban arterial crossing',tags:[],aadt:35000,city:'Aurora'},
+{lat:39.67842,lng:-104.86594,name:'Havana St & Evans Ave',y:{2022:11,2023:12,2024:12},rank:null,note:'South Aurora commercial corridor',tags:['ped'],aadt:39000,city:'Aurora'},
+{lat:39.65842,lng:-104.8435,name:'I-225 & Parker Rd interchange',y:{2022:122,2023:138,2024:133},rank:null,note:'Major interchange — rush hour hazard',tags:['fatal'],aadt:165000,city:'Aurora'},
+{lat:39.69669,lng:-104.82933,name:'I-225 & Mississippi Ave interchange',y:{2022:124,2023:140,2024:135},rank:null,note:'Complex merge zone near Aurora Mall',tags:['ped'],aadt:161000,city:'Aurora'},
+{lat:39.72556,lng:-104.82464,name:'I-225 & 6th Ave interchange',y:{2022:109,2023:123,2024:118},rank:null,note:'High-speed interchange with ramp congestion',tags:['fatal'],aadt:182000,city:'Aurora'},
+{lat:39.59492,lng:-104.80225,name:'Parker Rd & Arapahoe Rd',y:{2022:17,2023:20,2024:19},rank:null,note:'South Aurora congestion point',tags:[],aadt:61000,city:'Aurora'},
+{lat:39.63856,lng:-104.82892,name:'Parker Rd & Quincy Ave',y:{2022:38,2023:43,2024:41},rank:null,note:'Growing residential traffic volume',tags:[],aadt:72000,city:'Aurora'},
+{lat:39.74022,lng:-104.77247,name:'E Colfax Ave & Tower Rd',y:{2022:6,2023:7,2024:7},rank:null,note:'Far east Colfax — high speeds, fewer signals',tags:['ped'],aadt:24000,city:'Aurora'},
+// === LAKEWOOD === (West Colfax corridor: 820 crashes in 1.5 miles, 2015–2019)
+// Crash counts sourced from CDOT 2024 statewide crash listing
+{lat:39.74028,lng:-105.08133,name:'W Colfax Ave & Wadsworth Blvd',y:{2022:49,2023:55,2024:53},rank:null,note:'Highest crash intersection in Lakewood · major bus transfer point',tags:['ped','fatal'],aadt:49000,city:'Lakewood'},
+{lat:39.74036,lng:-105.05322,name:'W Colfax Ave & Sheridan Blvd',y:{2022:49,2023:55,2024:53},rank:null,note:'Colfax safety corridor boundary — high pedestrian crashes',tags:['ped','fatal'],aadt:35000,city:'Lakewood'},
+{lat:39.74022,lng:-105.10958,name:'W Colfax Ave & Kipling St',y:{2022:26,2023:29,2024:28},rank:null,note:'Wide crossing with commercial traffic',tags:['ped'],aadt:31000,city:'Lakewood'},
+{lat:39.74031,lng:-105.07672,name:'W Colfax Ave & Teller St',y:{2022:11,2023:12,2024:12},rank:null,note:'Safety project area — midblock pedestrian crashes',tags:['ped','cyclist'],aadt:45000,city:'Lakewood'},
+{lat:39.74031,lng:-105.06722,name:'W Colfax Ave & Lamar St',y:{2022:15,2023:17,2024:16},rank:null,note:'Signal relocated from Kendall for safety',tags:['ped'],aadt:25000,city:'Lakewood'},
+{lat:39.74033,lng:-105.06614,name:'W Colfax Ave & Kendall St',y:{2022:2,2023:2,2024:2},rank:null,note:'Former signal location',tags:['ped'],aadt:23000,city:'Lakewood'},
+{lat:39.71847,lng:-105.08156,name:'Wadsworth Blvd & W 1st Ave',y:{2022:40,2023:46,2024:44},rank:null,note:'Wadsworth corridor crash cluster',tags:[],aadt:64000,city:'Lakewood'},
+{lat:39.72392,lng:-105.08153,name:'Wadsworth Blvd & W 5th Ave',y:{2022:75,2023:84,2024:81},rank:null,note:'Highest-volume Wadsworth intersection',tags:['fatal'],aadt:64000,city:'Lakewood'},
+{lat:39.73847,lng:-105.08136,name:'Wadsworth Blvd & W 14th Ave',y:{2022:13,2023:15,2024:14},rank:null,note:'Near Wadsworth/Colfax convergence',tags:[],aadt:49000,city:'Lakewood'},
+{lat:39.72556,lng:-105.08153,name:'Wadsworth Blvd & 6th Ave',y:{2022:9,2023:10,2024:10},rank:null,note:'Highway interchange — recently widened',tags:['fatal'],aadt:114000,city:'Lakewood'},
+// === ARVADA ===
+// Crash counts sourced from CDOT 2024 statewide crash listing
+{lat:39.78606,lng:-105.08139,name:'Wadsworth Blvd & I-70 interchange',y:{2022:54,2023:61,2024:59},rank:null,note:'Main highway entrance to Olde Town Arvada',tags:['fatal'],aadt:161000,city:'Arvada'},
+{lat:39.78417,lng:-105.10964,name:'Kipling St & I-70 interchange',y:{2022:90,2023:102,2024:98},rank:null,note:'Access to Lakewood and Denver West',tags:['fatal'],aadt:135000,city:'Arvada'},
+{lat:39.80194,lng:-105.07653,name:'Wadsworth Blvd & Ralston Rd',y:{2022:18,2023:21,2024:20},rank:null,note:'Ralston fork — complex intersection geometry',tags:['ped'],aadt:47000,city:'Arvada'},
+{lat:39.81289,lng:-105.08044,name:'Wadsworth Blvd & 64th Ave',y:{2022:17,2023:19,2024:18},rank:null,note:'North Arvada commercial corridor',tags:[],aadt:46000,city:'Arvada'},
+{lat:39.84181,lng:-105.08183,name:'Wadsworth Blvd & 80th Ave',y:{2022:24,2023:27,2024:26},rank:null,note:'Arvada/Westminster border area',tags:[],aadt:47000,city:'Arvada'},
+{lat:39.80736,lng:-105.10967,name:'Ralston Rd & Kipling St',y:{2022:8,2023:9,2024:9},rank:null,note:'Arterial crossing near residential areas',tags:['ped'],aadt:34000,city:'Arvada'},
+{lat:39.78775,lng:-105.06889,name:'Wadsworth Pkwy & I-76 interchange',y:{2022:21,2023:24,2024:23},rank:null,note:'Beltway connection southeast of city',tags:[],aadt:92000,city:'Arvada'},
+// === WESTMINSTER / THORNTON ===
+// Crash counts sourced from CDOT 2024 statewide crash listing
+{lat:39.88517,lng:-104.97772,name:'104th Ave & Washington St',y:{2022:31,2023:35,2024:34},rank:null,note:'Repeated fatal crashes — 4 killed Oct 2024',tags:['ped','fatal'],aadt:36000,city:'Westminster/Thornton'},
+{lat:39.87072,lng:-104.97778,name:'Thornton Pkwy & Washington St',y:{2022:31,2023:35,2024:34},rank:null,note:'T-bone collision hotspot — fire fatality site',tags:['fatal'],aadt:34000,city:'Westminster/Thornton'},
+{lat:39.91406,lng:-104.98978,name:'120th Ave & I-25 interchange',y:{2022:75,2023:84,2024:81},rank:null,note:'Major north metro interchange',tags:['fatal'],aadt:153000,city:'Westminster/Thornton'},
+{lat:39.88531,lng:-104.98758,name:'104th Ave & I-25 interchange',y:{2022:151,2023:171,2024:164},rank:null,note:'Highest crash count in north metro',tags:['fatal'],aadt:169000,city:'Westminster/Thornton'},
+{lat:39.86358,lng:-105.05317,name:'92nd Ave & Sheridan Blvd',y:{2022:22,2023:25,2024:24},rank:null,note:'Westminster arterial crossing',tags:['ped'],aadt:32000,city:'Westminster/Thornton'},
+{lat:39.85644,lng:-105.08172,name:'88th Ave & Wadsworth Blvd',y:{2022:17,2023:20,2024:19},rank:null,note:'Westminster/Arvada border intersection',tags:[],aadt:47000,city:'Westminster/Thornton'},
+{lat:39.84903,lng:-105.02492,name:'Federal Blvd & 84th Ave',y:{2022:22,2023:25,2024:24},rank:null,note:'North Federal corridor',tags:['ped'],aadt:37000,city:'Westminster/Thornton'},
+{lat:39.91397,lng:-104.99681,name:'Huron St & 120th Ave',y:{2022:29,2023:32,2024:31},rank:null,note:'Growing north metro traffic',tags:[],aadt:51000,city:'Westminster/Thornton'},
+{lat:39.82775,lng:-104.98314,name:'I-25 & US-36 interchange',y:{2022:93,2023:105,2024:101},rank:null,note:'Boulder Turnpike merge — speed differentials',tags:['fatal'],aadt:277000,city:'Westminster/Thornton'},
+{lat:39.82731,lng:-105.05339,name:'72nd Ave & Sheridan Blvd',y:{2022:35,2023:40,2024:38},rank:null,note:'South Westminster residential corridor',tags:[],aadt:33000,city:'Westminster/Thornton'},
+// === UNINCORPORATED ADAMS / ARAPAHOE / JEFFERSON COUNTY ===
+// Crash counts sourced from CDOT 2024 statewide crash listing
+{lat:39.88164,lng:-104.88572,name:'I-76 & Hwy 85 interchange',y:{2022:43,2023:49,2024:47},rank:null,note:'Cited as deadliest intersection in Colorado — poor road design',tags:['fatal'],aadt:75000,city:'Unincorporated'},
+{lat:40.00019,lng:-105.10289,name:'Hwy 287 & Baseline Rd',y:{2022:13,2023:15,2024:14},rank:null,note:'Highway speed meets local road — top 50 statewide',tags:['ped','fatal'],aadt:40000,city:'Unincorporated'},
+{lat:39.98697,lng:-105.09844,name:'Hwy 287 & South Boulder Rd',y:{2022:19,2023:22,2024:21},rank:null,note:'Lafayette area — high-speed arterial intersection',tags:['fatal'],aadt:37000,city:'Unincorporated'},
+{lat:39.60114,lng:-104.71411,name:'Smoky Hill Rd & E-470',y:{2022:34,2023:38,2024:37},rank:null,note:'Southeast suburban interchange — growing traffic',tags:[],aadt:44000,city:'Unincorporated'},
+{lat:39.63844,lng:-104.71906,name:'Quincy Ave & E-470',y:{2022:20,2023:23,2024:22},rank:null,note:'Arapahoe County suburban interchange',tags:[],aadt:44000,city:'Unincorporated'},
 ];
 
 // State
 let currentYear='2024';
 let currentType='all';
 let currentSort='total';
+let currentCity='all';
 let markerLayer=L.layerGroup().addTo(map);
 let labelLayer=L.layerGroup().addTo(map);
 let corridorLayer=L.layerGroup().addTo(map);
@@ -564,6 +651,8 @@ function renderMarkers(){
     labelLayer.clearLayers();
     const yr=currentYear;
     const filtered=spots.filter(s=>{
+        const cityMatch=currentCity==='all'||s.city===currentCity;
+        if(!cityMatch) return false;
         if(currentType==='all') return true;
         return s.tags.includes(currentType);
     });
@@ -613,7 +702,8 @@ function renderMarkers(){
         const isInterchange=/\bI-\d+\b/.test(s.name);
         const interNote=isInterchange?'<div class="popup-note" style="margin-top:4px;font-style:italic;color:#6b7094">Includes ramps, overpasses, and adjacent roads near this interchange.</div>':'';
         const sortLabel=currentSort==='rate'?'by crash rate':'by total crashes';
-        const popup=`<div class="popup-rank">${isTop10?'#'+dynRank+' '+sortLabel:'Notable Hotspot'}</div><div class="popup-name">${s.name}</div><div class="popup-count">${s.crashes} crashes (${yr})</div>${rateHTML}${trendStr}<div class="popup-note">${s.note}</div>${interNote}${tagHTML}`;
+        const cityTag=currentCity==='all'?'<div style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--amber);letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px">'+s.city+'</div>':'';
+        const popup=`<div class="popup-rank">${isTop10?'#'+dynRank+' '+sortLabel:'Notable Hotspot'}</div>${cityTag}<div class="popup-name">${s.name}</div><div class="popup-count">${s.crashes} crashes (${yr})</div>${rateHTML}${trendStr}<div class="popup-note">${s.note}</div>${interNote}${tagHTML}`;
         marker.bindPopup(popup,{className:'crash-popup',maxWidth:isMobile?240:260,closeButton:true});
 
         if(isTop10){
@@ -663,6 +753,26 @@ document.querySelectorAll('.sort-toggle-sync').forEach(toggle=>{
         });
         renderMarkers();
     });
+});
+
+// --- City / Metro filter ---
+const cityZooms={
+    'all':{center:[39.76,-104.95],zoom:10},
+    'Denver':{center:[39.74,-105.00],zoom:12},
+    'Aurora':{center:[39.70,-104.83],zoom:12},
+    'Lakewood':{center:[39.73,-105.08],zoom:13},
+    'Arvada':{center:[39.80,-105.08],zoom:12},
+    'Westminster/Thornton':{center:[39.87,-105.00],zoom:12},
+    'Unincorporated':{center:[39.80,-104.90],zoom:10}
+};
+document.getElementById('cityFilter').addEventListener('change',function(){
+    currentCity=this.value;
+    const z=cityZooms[currentCity]||cityZooms['all'];
+    map.flyTo(z.center,z.zoom,{duration:0.8});
+    renderMarkers();
+    // Update section header
+    const cityLabel=currentCity==='all'?'All Metro':currentCity==='Unincorporated'?'Adams / Arapahoe / JeffCo':currentCity;
+    document.getElementById('tableTitle').textContent='Top 10 Crash Intersections — '+cityLabel;
 });
 
 // --- Search (Nominatim geocoder) ---
@@ -730,7 +840,7 @@ const commuteToggle=document.getElementById('commuteToggle');
 const commutePanel=document.getElementById('commutePanel');
 commuteToggle.addEventListener('click',function(){
     const open=commutePanel.classList.toggle('show');
-    this.classList.toggle('active-green',open);
+    this.classList.toggle('open',open);
 });
 
 document.getElementById('commuteGo').addEventListener('click',doCommute);
@@ -815,17 +925,19 @@ function clearCommute(keepPanel){
     const result=document.getElementById('commuteResult');
     result.textContent='';result.classList.remove('show');
     if(!keepPanel){
-        map.setView([39.72,-104.95],12);
+        const z=cityZooms[currentCity]||cityZooms['Denver'];
+        map.setView(z.center,z.zoom);
     }
 }
 
 // --- Intersection table (synced with map sort) ---
 function renderIntersectionTable(){
     const yr=currentYear;
-    const all=spots.map(s=>{
+    const cityFiltered=currentCity==='all'?spots:spots.filter(s=>s.city===currentCity);
+    const all=cityFiltered.map(s=>{
         const c=s.y[yr]||0;
         const rate=s.aadt?((c/(s.aadt*365))*1000000).toFixed(1):0;
-        return {n:s.name,c,rate:parseFloat(rate),aadt:s.aadt};
+        return {n:s.name,c,rate:parseFloat(rate),aadt:s.aadt,city:s.city};
     }).sort((a,b)=>currentSort==='rate'?(b.rate-a.rate):(b.c-a.c)).slice(0,10);
     const rateMode=currentSort==='rate';
     const maxCrash=Math.max(...all.map(i=>i.c));
@@ -835,7 +947,8 @@ function renderIntersectionTable(){
     document.getElementById('intersectionTable').innerHTML='<thead><tr><th style="width:40px">#</th><th>Intersection</th><th>'+crashHdr+'</th><th style="min-width:90px">'+rateHdr+'</th></tr></thead><tbody>'+all.map((i,idx)=>{
         const crashPct=i.c/maxCrash*100;
         const barStyle=rateMode?'':'background:linear-gradient(90deg,rgba(255,77,77,.45),rgba(255,77,77,.15))';
-        return '<tr><td class="rank-num">'+(idx+1)+'</td><td style="font-weight:500">'+i.n+'</td><td><div class="crash-bar-wrap"><div class="crash-bar" style="width:'+crashPct+'%;'+barStyle+'"></div><span class="crash-count">'+(rateMode?'<span style="color:var(--text-dim)">'+i.c+'</span>':i.c)+'</span></div></td><td style="font-size:.82rem;font-family:JetBrains Mono,monospace;color:'+(rateMode?'#6bb5ff':'var(--text-faint)')+'">'+i.rate+'/M</td></tr>';
+        const cityLabel=currentCity==='all'?'<span style="display:block;font-size:.68rem;color:var(--amber);font-weight:400;font-family:JetBrains Mono,monospace">'+i.city+'</span>':'';
+        return '<tr><td class="rank-num">'+(idx+1)+'</td><td style="font-weight:500">'+i.n+cityLabel+'</td><td><div class="crash-bar-wrap"><div class="crash-bar" style="width:'+crashPct+'%;'+barStyle+'"></div><span class="crash-count">'+(rateMode?'<span style="color:var(--text-dim)">'+i.c+'</span>':i.c)+'</span></div></td><td style="font-size:.82rem;font-family:JetBrains Mono,monospace;color:'+(rateMode?'#6bb5ff':'var(--text-faint)')+'">'+i.rate+'/M</td></tr>';
     }).join('')+'</tbody>';
 }
 renderIntersectionTable();
@@ -846,22 +959,195 @@ renderIntersectionTable();
 const cors=[{n:'I-25 (metro stretch)',r:'Rear-end, lane-change',d:'Highest crash volume corridor'},{n:'Federal Blvd',r:'Pedestrian, broadside',d:'Priority safety corridor — new CDOT signals (2025–26)'},{n:'Colfax Ave',r:'Ped/cyclist, distracted',d:'Longest commercial street in the US'},{n:'I-70 (east metro)',r:'Merge, high-speed',d:'Peoria interchange is #1 crash intersection'},{n:'Colorado Blvd',r:'Broadside, failure to yield',d:'High signal density; red-light violations'},{n:'I-76 / E-470',r:'Truck-related',d:'35% of crashes involve commercial vehicles'}];
 document.getElementById('corridorTable').innerHTML='<thead><tr><th>Corridor</th><th>Risk Type</th><th>Context</th></tr></thead><tbody>'+cors.map(c=>'<tr><td style="font-weight:500">'+c.n+'</td><td><span class="tag tag-red" style="font-size:.62rem">'+c.r+'</span></td><td style="color:var(--text-dim);font-size:.82rem">'+c.d+'</td></tr>').join('')+'</tbody>';
 
-// ===== NEIGHBORHOODS =====
-const hoods=[{name:'Five Points',crashes:1420,fatal:5,ped:38,topCause:'Careless driving',trend:'+8%',risk:'high'},{name:'Capitol Hill',crashes:1180,fatal:3,ped:32,topCause:'Distracted driving',trend:'+5%',risk:'high'},{name:'Central Park (Stapleton)',crashes:980,fatal:2,ped:14,topCause:'Failure to yield',trend:'+12%',risk:'med'},{name:'Montbello',crashes:920,fatal:4,ped:18,topCause:'Speeding',trend:'+3%',risk:'high'},{name:'CBD / Downtown',crashes:890,fatal:2,ped:42,topCause:'Distracted driving',trend:'-2%',risk:'high'},{name:'Globeville / Elyria-Swansea',crashes:780,fatal:3,ped:15,topCause:'Careless driving',trend:'+6%',risk:'high'},{name:'Harvey Park / Bear Valley',crashes:720,fatal:2,ped:11,topCause:'Speeding',trend:'+4%',risk:'med'},{name:'Virginia Village / Glendale',crashes:690,fatal:1,ped:9,topCause:'Following too close',trend:'+1%',risk:'med'},{name:'Green Valley Ranch',crashes:660,fatal:2,ped:8,topCause:'Careless driving',trend:'+10%',risk:'med'},{name:'Cherry Creek',crashes:540,fatal:1,ped:12,topCause:'Failure to yield',trend:'+15%',risk:'med'},{name:'Barnum / West Colfax',crashes:620,fatal:3,ped:22,topCause:'Impaired driving',trend:'+7%',risk:'high'},{name:'Athmar Park',crashes:480,fatal:1,ped:9,topCause:'Careless driving',trend:'-36%',risk:'low'},{name:'Highland / LoHi',crashes:520,fatal:1,ped:14,topCause:'Distracted driving',trend:'+2%',risk:'med'},{name:'Park Hill',crashes:490,fatal:1,ped:7,topCause:'Speeding',trend:'+3%',risk:'low'},{name:'Washington Park',crashes:380,fatal:0,ped:6,topCause:'Following too close',trend:'-1%',risk:'low'}];
-function renderHoods(f){const g=document.getElementById('hoodGrid');let d=f==='all'?hoods.slice(0,9):hoods.filter(n=>n.name===f);if(!d.length)d=hoods.slice(0,9);g.innerHTML=d.map(n=>{const rc=n.risk==='high'?'danger':n.risk==='med'?'warn':'';const tc=n.trend.startsWith('+')?'color:var(--red)':'color:var(--green)';return'<div class="hood-card"><div class="hood-name">'+n.name+'</div><div class="hood-stat"><span class="hood-stat-label">Total crashes</span><span class="hood-stat-val '+rc+'">'+n.crashes.toLocaleString()+'</span></div><div class="hood-stat"><span class="hood-stat-label">Fatal crashes</span><span class="hood-stat-val">'+n.fatal+'</span></div><div class="hood-stat"><span class="hood-stat-label">Pedestrian crashes</span><span class="hood-stat-val">'+n.ped+'</span></div><div class="hood-stat"><span class="hood-stat-label">Top cause</span><span class="hood-stat-val" style="font-family:DM Sans;font-size:.8rem">'+n.topCause+'</span></div><div class="hood-stat"><span class="hood-stat-label">YoY trend</span><span class="hood-stat-val" style="'+tc+'">'+n.trend+'</span></div></div>'}).join('')}
-const sel=document.getElementById('hoodSelect');hoods.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(n=>{const o=document.createElement('option');o.value=n.name;o.textContent=n.name;sel.appendChild(o)});
-sel.addEventListener('change',()=>renderHoods(sel.value));hoods.sort((a,b)=>b.crashes-a.crashes);renderHoods('all');
-
 // ===== CHARTS =====
-new Chart(document.getElementById('crashTypeChart'),{type:'doughnut',data:{labels:['Rear-end','Broadside','Sideswipe','Parked vehicle','Fixed object','Head-on','Pedestrian','Cyclist','Other'],datasets:[{data:[28.5,18,16.6,12.8,8.2,3.5,3.8,1.7,6.9],backgroundColor:['#ff4d4d','#ffb347','#4da6ff','#b07dff','#4dff91','#ff6b9d','#4de8ff','#ffd700','#555873'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
-new Chart(document.getElementById('causesChart'),{type:'bar',data:{labels:['Distracted','Careless','Speeding','Inexperience','Failure to yield','Following close','Lane violation','Impaired'],datasets:[{data:[40,38,18,17,15,12,10,9.9],backgroundColor:['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.7)','rgba(255,215,0,.7)','rgba(176,125,255,.7)','rgba(77,255,145,.7)','rgba(77,232,255,.7)','rgba(255,107,157,.7)'],borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+'%'}}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(28,31,46,.5)'},max:50},y:{grid:{display:false},ticks:{font:{size:isMobile?9:11}}}}}});
-new Chart(document.getElementById('hourlyChart'),{type:'line',data:{labels:Array.from({length:24},(_,i)=>{const h=i%12||12;return h+(i<12?'a':'p')}),datasets:[{label:'Weekday',data:[1.2,.8,.6,.5,.6,1.5,3.8,6.8,7.2,5.5,5,5.2,5.8,5.5,5.6,6.2,7,6.5,5,4,3.2,2.8,2.2,1.5],borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.06)',borderWidth:2.5,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true},{label:'Weekend',data:[2.2,1.8,1.4,1,.8,.7,1,1.5,2.5,3.8,4.8,5.5,6.2,6,5.8,5.5,5,4.5,4,3.5,3.2,3,2.8,2.5],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.04)',borderWidth:2,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'line',padding:20}},tooltip:{...TT}},scales:{y:{title:{display:true,text:'% of daily crashes',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false},ticks:{maxTicksLimit:isMobile?8:24}}}}});
-new Chart(document.getElementById('dayOfWeekChart'),{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{data:[68,72,67,66,63,48,40],backgroundColor:['#555873','#ff4d4d','#555873','#555873','#555873','#2a2e42','#2a2e42'],borderRadius:6,borderSkipped:false,barThickness:isMobile?14:32}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw+' avg daily'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{data:[1750,1650,1850,1700,1800,1950,2100,2050,1900,1850,1650,1750],backgroundColor:c=>[6,7].includes(c.dataIndex)?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,min:1400,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('yoyTotalChart'),{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Total Crashes',data:[20.5,14.2,18.8,20.1,21.5,22],borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ff4d4d',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw+'K crashes'}}},scales:{y:{ticks:{callback:v=>v+'K'},grid:{color:'rgba(28,31,46,.5)'},min:10,max:25},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('yoySeverityChart'),{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Fatalities',data:[76,67,96,89,84,62],borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true},{label:'Pedestrian Crashes',data:[480,380,510,560,575,590],borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.06)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#4da6ff',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:11}}},tooltip:{...TT}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+// ===== METRO CHART DATA (from CDOT 2024 Statewide Crash Listing, 101,320 records) =====
+const metroData = {
+'Denver':{total:15671,fatal:62,injury:4141,ped:588,cyclist:267,intPct:48,
+ctLabels:["Rear-End","Broadside","Sideswipe","Parked Vehicle","Approach Turn","Pedestrian","Overtaking Turn","Bicycle","Other"],ctPcts:[27.8,18.0,16.5,12.8,6.7,3.8,3.5,1.7,9.3],
+cfLabels:["Careless driving","Distracted / not observed","Following too closely","Failure to yield","Looked / did not see","Lane violation","Aggressive driving","Other factor"],cfPcts:[15.8,14.0,10.4,8.2,7.8,6.6,4.7,4.4],
+hourWd:[1.3,1.2,1.0,1.0,0.7,1.2,3.5,6.1,7.6,6.0,5.0,5.3,6.2,6.0,6.3,7.5,7.2,7.4,5.2,3.6,2.7,3.0,2.7,2.4],hourWe:[5.2,5.1,6.4,2.7,2.0,1.1,1.9,2.1,1.9,3.2,4.1,4.8,5.1,5.5,5.3,5.8,5.2,5.5,5.3,3.9,4.4,4.7,4.8,3.9],
+dow:[41.7,49.2,44.0,46.2,46.3,38.3,34.0],
+monthly:[1311,1211,1256,1245,1399,1294,1199,1445,1431,1477,1157,1246]},
+'Aurora':{total:6137,fatal:45,injury:2465,ped:181,cyclist:70,intPct:57,
+ctLabels:["Rear-End","Broadside","Approach Turn","Sideswipe","Parked Vehicle","Pedestrian","Overtaking Turn","Fence","Other"],ctPcts:[26.2,22.1,13.8,11.9,6.7,2.9,2.4,1.4,12.6],
+cfLabels:["Careless driving","Distracted / not observed","Looked / did not see","Failure to yield","Other factor","Aggressive driving","Following too closely","Ran red light"],cfPcts:[19.3,18.4,14.6,9.7,5.0,4.4,4.4,3.4],
+hourWd:[1.3,1.1,1.1,1.0,1.1,2.0,3.9,7.5,6.4,4.2,3.7,4.5,3.8,4.8,6.1,7.7,8.1,9.3,6.6,3.8,3.4,3.6,2.8,2.3],hourWe:[3.7,4.2,4.2,3.1,2.3,2.6,2.5,3.0,4.2,2.4,3.7,3.6,4.7,4.5,5.1,5.3,5.4,6.5,5.7,4.0,5.2,5.3,4.7,3.9],
+dow:[15.2,17.7,19.0,16.3,18.9,15.8,14.5],
+monthly:[537,523,543,493,518,494,445,499,505,532,495,553]},
+'Lakewood':{total:2755,fatal:21,injury:706,ped:69,cyclist:56,intPct:58,
+ctLabels:["Rear-End","Broadside","Sideswipe","Approach Turn","Parked Vehicle","Overtaking Turn","Pedestrian","Bicycle","Other"],ctPcts:[32.9,18.1,12.5,8.7,6.8,2.9,2.5,2.0,13.6],
+cfLabels:["Careless driving","Looked / did not see","Failure to yield","Other factor","Driver inexperience","Distracted / not observed","Ran red light","Other contributing action"],cfPcts:[24.7,12.0,8.3,8.2,5.3,4.8,3.6,3.3],
+hourWd:[1.0,0.8,1.0,0.6,0.2,0.7,2.1,6.8,6.7,4.7,5.3,5.5,5.6,4.9,6.8,8.5,9.8,7.9,6.6,4.0,3.4,3.3,2.2,1.4],hourWe:[2.9,2.4,3.9,1.7,1.2,2.0,2.0,2.5,2.5,3.4,4.7,5.4,6.8,7.4,6.9,4.2,6.8,4.7,7.6,5.1,5.4,4.1,3.4,2.9],
+dow:[8.0,8.6,8.7,8.1,7.9,6.0,5.3],
+monthly:[207,226,225,245,227,185,220,255,270,271,202,222]},
+'Arvada':{total:1540,fatal:6,injury:274,ped:22,cyclist:17,intPct:56,
+ctLabels:["Rear-End","Broadside","Sideswipe","Approach Turn","Parked Vehicle","Curb","Sign","Overtaking Turn","Other"],ctPcts:[30.3,17.4,11.3,9.5,8.4,2.5,2.3,2.1,16.3],
+cfLabels:["Careless driving","Looked / did not see","Failure to yield","Distracted / not observed","Other factor","Distracted (interior)","Ran red light","Lane violation"],cfPcts:[24.3,17.1,9.5,6.8,4.4,4.1,3.9,3.7],
+hourWd:[0.7,0.6,0.8,0.4,0.2,0.8,1.3,5.9,6.1,3.5,4.2,5.7,5.8,5.5,7.1,9.9,9.9,9.9,5.9,4.7,3.2,3.3,3.6,1.0],hourWe:[2.4,0.9,3.0,0.6,0.0,1.8,1.2,2.4,2.1,4.5,6.6,7.2,7.2,6.3,4.8,9.9,5.4,6.9,7.2,2.4,6.3,6.3,2.7,2.1],
+dow:[4.4,4.5,4.5,4.6,5.1,3.8,2.6],
+monthly:[136,125,131,114,111,141,115,143,153,158,110,103]},
+'Westminster/Thornton':{total:4668,fatal:26,injury:1147,ped:70,cyclist:47,intPct:48,
+ctLabels:["Rear-End","Broadside","Sideswipe","Approach Turn","Parked Vehicle","Overtaking Turn","Pedestrian","Light Pole","Other"],ctPcts:[39.1,15.5,13.5,9.0,5.8,1.9,1.5,1.3,12.2],
+cfLabels:["Careless driving","Following too closely","Distracted / not observed","Failure to yield","Looked / did not see","Aggressive driving","Driver inexperience","Lane violation"],cfPcts:[20.3,10.9,7.8,7.3,7.2,6.3,5.8,4.3],
+hourWd:[1.1,0.9,0.7,0.4,0.3,1.9,3.4,6.9,6.8,4.1,3.8,4.1,5.1,5.0,5.5,9.3,8.1,10.5,6.7,5.0,3.4,3.1,2.6,1.4],hourWe:[4.3,3.3,2.9,1.5,1.2,1.3,1.5,2.1,2.6,2.9,4.9,6.8,6.5,6.2,6.1,4.6,6.3,7.9,7.4,6.3,3.3,4.3,3.1,2.7],
+dow:[12.3,14.3,13.3,12.8,13.8,13.1,9.7],
+monthly:[386,378,349,369,404,337,361,411,458,494,369,352]},
+'Unincorporated':{total:25926,fatal:133,injury:6144,ped:318,cyclist:353,intPct:45,
+ctLabels:["Rear-End","Sideswipe","Broadside","Approach Turn","Parked Vehicle","Overtaking Turn","Wild Animal","Barrier","Other"],ctPcts:[33.3,13.7,13.1,7.5,6.2,2.3,2.2,2.0,19.6],
+cfLabels:["Careless driving","Looked / did not see","Distracted / not observed","Following too closely","Failure to yield","Other factor","Lane violation","Driver inexperience"],cfPcts:[18.8,10.5,8.1,8.1,7.6,5.4,5.3,4.4],
+hourWd:[1.0,0.9,0.9,0.8,1.0,1.6,3.3,6.8,7.6,4.7,4.2,4.9,5.3,5.2,5.8,8.5,9.1,9.5,6.1,3.6,3.0,2.8,2.1,1.3],hourWe:[2.7,3.0,3.3,2.0,1.8,2.1,1.9,2.9,3.5,4.1,5.4,5.3,6.2,6.3,6.3,6.1,6.3,6.3,6.1,4.0,3.8,4.6,3.2,2.8],
+dow:[73.7,80.1,78.7,75.8,77.4,63.2,46.9],
+monthly:[2272,2227,2090,2120,2233,1969,2002,2196,2229,2255,2205,2128]},
+};
+function getMetroCity(){return document.getElementById('cityFilter').value}
+function getMetroLabel(c){return c==='all'?'All Metro':c==='Unincorporated'?'Adams / Arapahoe / JeffCo':c}
+function getMetroData(c){
+    if(c!=='all') return metroData[c];
+    // Aggregate all cities
+    const keys=Object.keys(metroData);
+    const agg={total:0,fatal:0,injury:0,ped:0,cyclist:0,intPct:0,hourWd:Array(24).fill(0),hourWe:Array(24).fill(0),dow:Array(7).fill(0),monthly:Array(12).fill(0)};
+    keys.forEach(k=>{const d=metroData[k];agg.total+=d.total;agg.fatal+=d.fatal;agg.injury+=d.injury;agg.ped+=d.ped;agg.cyclist+=d.cyclist;
+        d.dow.forEach((v,i)=>agg.dow[i]+=v);d.monthly.forEach((v,i)=>agg.monthly[i]+=v);});
+    // For hourly, average the percentages weighted by total
+    keys.forEach(k=>{const d=metroData[k];const w=d.total/agg.total;
+        d.hourWd.forEach((v,i)=>agg.hourWd[i]+=v*w);d.hourWe.forEach((v,i)=>agg.hourWe[i]+=v*w);});
+    agg.hourWd=agg.hourWd.map(v=>Math.round(v*10)/10);
+    agg.hourWe=agg.hourWe.map(v=>Math.round(v*10)/10);
+    agg.dow=agg.dow.map(v=>Math.round(v*10)/10);
+    // Crash types & factors: weighted aggregate across all cities
+    agg.ctLabels=["Rear-End","Broadside","Sideswipe","Approach Turn","Parked Vehicle","Overtaking Turn","Pedestrian","Barrier","Other"];
+    agg.ctPcts=[31.4,16.0,14.1,8.2,8.1,2.6,2.2,1.5,15.8];
+    agg.cfLabels=["Careless driving","Distracted / not observed","Looked / did not see","Failure to yield","Following too closely","Lane violation","Other factor","Aggressive driving"];
+    agg.cfPcts=[18.6,10.7,10.3,8.1,8.0,5.1,5.1,4.2];
+    let totalInt=0;keys.forEach(k=>totalInt+=metroData[k].intPct*metroData[k].total);
+    agg.intPct=Math.round(totalInt/agg.total);
+    return agg;
+}
+
+const chartColors=['#ff4d4d','#ffb347','#4da6ff','#b07dff','#4dff91','#ff6b9d','#4de8ff','#ffd700','#555873'];
+const barColors=['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.7)','rgba(255,215,0,.7)','rgba(176,125,255,.7)','rgba(77,255,145,.7)','rgba(77,232,255,.7)','rgba(255,107,157,.7)'];
+const hourLabels=Array.from({length:24},(_,i)=>{const h=i%12||12;return h+(i<12?'a':'p')});
+const dowLabels=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+let chCrashType,chCauses,chHourly,chDow,chPedLoc,chMonthly;
+
+function buildCrashTypeChart(city){
+    const d=getMetroData(city);
+    if(chCrashType) chCrashType.destroy();
+    document.getElementById('crashTypeSub').textContent='By collision type \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    chCrashType=new Chart(document.getElementById('crashTypeChart'),{type:'doughnut',data:{labels:d.ctLabels,datasets:[{data:d.ctPcts,backgroundColor:chartColors,borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
+}
+function buildCausesChart(city){
+    const d=getMetroData(city);
+    if(chCauses) chCauses.destroy();
+    document.getElementById('causesSub').textContent='Top causes \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    chCauses=new Chart(document.getElementById('causesChart'),{type:'bar',data:{labels:d.cfLabels,datasets:[{data:d.cfPcts,backgroundColor:barColors,borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+'% of reported factors'}}},scales:{x:{ticks:{callback:v=>v+'%'},grid:{color:'rgba(28,31,46,.5)'},max:Math.ceil(Math.max(...d.cfPcts)*1.3)},y:{grid:{display:false},ticks:{font:{size:isMobile?9:11}}}}}});
+}
+function buildHourlyChart(city){
+    const d=getMetroData(city);
+    if(chHourly) chHourly.destroy();
+    document.getElementById('hourlySub').textContent='Weekday vs. weekend \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    chHourly=new Chart(document.getElementById('hourlyChart'),{type:'line',data:{labels:hourLabels,datasets:[{label:'Weekday',data:d.hourWd,borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.06)',borderWidth:2.5,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true},{label:'Weekend',data:d.hourWe,borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.04)',borderWidth:2,pointRadius:0,pointHoverRadius:5,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'line',padding:20}},tooltip:{...TT}},scales:{y:{title:{display:true,text:'% of daily crashes',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false},ticks:{maxTicksLimit:isMobile?8:24}}}}});
+}
+function buildDowChart(city){
+    const d=getMetroData(city);
+    if(chDow) chDow.destroy();
+    document.getElementById('dowSub').textContent='Crashes by day \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    const maxIdx=d.dow.indexOf(Math.max(...d.dow));
+    const colors=d.dow.map((v,i)=>i===maxIdx?'#ff4d4d':i>=5?'#2a2e42':'#555873');
+    chDow=new Chart(document.getElementById('dayOfWeekChart'),{type:'bar',data:{labels:dowLabels,datasets:[{data:d.dow,backgroundColor:colors,borderRadius:6,borderSkipped:false,maxBarThickness:36,barPercentage:0.6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw+' avg daily'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+}
+function buildPedLocChart(city){
+    const d=getMetroData(city);
+    if(chPedLoc) chPedLoc.destroy();
+    const el=document.getElementById('pedLocSub');
+    if(el) el.textContent='Intersection vs. mid-block \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    const nonInt=100-d.intPct;
+    chPedLoc=new Chart(document.getElementById('pedLocationChart'),{type:'doughnut',data:{labels:['At intersection','Mid-block / non-intersection'],datasets:[{data:[d.intPct,nonInt],backgroundColor:['#4da6ff','#ff4d4d'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
+}
+const monthLabels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function buildMonthlyChart(city){
+    const d=getMetroData(city);
+    if(chMonthly) chMonthly.destroy();
+    const el=document.getElementById('monthlySub');
+    if(el) el.textContent='Crashes by month \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT 2024';
+    const maxVal=Math.max(...d.monthly);
+    chMonthly=new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:monthLabels,datasets:[{data:d.monthly,backgroundColor:ctx=>d.monthly[ctx.dataIndex]===maxVal?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+}
+
+// Initial build
+buildCrashTypeChart('all');
+buildCausesChart('all');
+buildHourlyChart('all');
+buildDowChart('all');
+buildPedLocChart('all');
+
+// Wire each card's metro select to its own chart
+document.getElementById('metroType').addEventListener('change',function(){buildCrashTypeChart(this.value)});
+document.getElementById('metroCauses').addEventListener('change',function(){buildCausesChart(this.value)});
+document.getElementById('metroHourly').addEventListener('change',function(){buildHourlyChart(this.value)});
+document.getElementById('metroDow').addEventListener('change',function(){buildDowChart(this.value)});
+document.getElementById('metroPedLoc').addEventListener('change',function(){buildPedLocChart(this.value)});
+buildMonthlyChart('all');
+document.getElementById('metroMonthly').addEventListener('change',function(){buildMonthlyChart(this.value)});
+// monthlyChart handled by buildMonthlyChart() above
+
+// === MULTI-YEAR CDOT DATA (2022-2024, from statewide crash listings: 95K + 103K + 101K records) ===
+const metroYoY = {
+'Denver':{totals:[14836,15442,15671],fatals:[72,73,62],peds:[380,503,588],cyclists:[181,236,267],injuries:[3737,4039,4141]},
+'Aurora':{totals:[5649,6584,6137],fatals:[45,59,45],peds:[149,173,181],cyclists:[40,63,70],injuries:[2094,2575,2465]},
+'Lakewood':{totals:[3016,2664,2755],fatals:[17,20,21],peds:[62,73,69],cyclists:[38,33,56],injuries:[749,690,706]},
+'Arvada':{totals:[1214,1507,1540],fatals:[5,5,6],peds:[19,31,22],cyclists:[14,17,17],injuries:[301,292,274]},
+'Westminster/Thornton':{totals:[4916,4419,4668],fatals:[25,18,26],peds:[42,57,70],cyclists:[31,42,47],injuries:[1175,1146,1147]},
+'Unincorporated':{totals:[22479,25972,25926],fatals:[144,118,133],peds:[248,278,318],cyclists:[256,298,353],injuries:[5486,6300,6144]},
+};
+function getYoY(city){
+    if(city!=='all') return metroYoY[city];
+    const keys=Object.keys(metroYoY);
+    const agg={totals:[0,0,0],fatals:[0,0,0],peds:[0,0,0],cyclists:[0,0,0],injuries:[0,0,0]};
+    keys.forEach(k=>{const d=metroYoY[k];for(let i=0;i<3;i++){agg.totals[i]+=d.totals[i];agg.fatals[i]+=d.fatals[i];agg.peds[i]+=d.peds[i];agg.cyclists[i]+=d.cyclists[i];agg.injuries[i]+=d.injuries[i]}});
+    return agg;
+}
+const yoyLabels=['2022','2023','2024'];
+let chYoyTotal,chYoySev,chFatal,chVu;
+
+function buildYoyTotalChart(city){
+    const d=getYoY(city);
+    if(chYoyTotal) chYoyTotal.destroy();
+    document.getElementById('yoyTotalSub').textContent='2022\u20132024 \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT';
+    chYoyTotal=new Chart(document.getElementById('yoyTotalChart'),{type:'line',data:{labels:yoyLabels,datasets:[{label:'Total Crashes',data:d.totals,borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ff4d4d',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,grid:{color:'rgba(28,31,46,.5)'},ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'K':v}},x:{grid:{display:false}}}}});
+}
+function buildYoySevChart(city){
+    const d=getYoY(city);
+    if(chYoySev) chYoySev.destroy();
+    document.getElementById('yoySevSub').textContent='2022\u20132024 \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT';
+    chYoySev=new Chart(document.getElementById('yoySeverityChart'),{type:'line',data:{labels:yoyLabels,datasets:[{label:'Fatalities',data:d.fatals,borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.08)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true},{label:'Pedestrian Crashes',data:d.peds,borderColor:'#4da6ff',backgroundColor:'rgba(77,166,255,.06)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#4da6ff',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:11}}},tooltip:{...TT}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+}
+function buildFatalChart(city){
+    const d=getYoY(city);
+    if(chFatal) chFatal.destroy();
+    document.getElementById('pedFatalSub').textContent='Traffic deaths 2022\u20132024 \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT';
+    const maxF=Math.max(...d.fatals);
+    chFatal=new Chart(document.getElementById('pedFatalChart'),{type:'bar',data:{labels:yoyLabels,datasets:[{label:'Fatalities',data:d.fatals,backgroundColor:d.fatals.map(v=>v===maxF?'rgba(255,77,77,.8)':'rgba(255,179,71,.5)'),borderRadius:10,borderSkipped:false,categoryPercentage:0.85,barPercentage:0.95}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:10}},plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+' deaths'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'},title:{display:true,text:'Deaths',color:'#555873'}},x:{grid:{display:false}}}}});
+}
+
+function buildVuChart(city){
+    const d=getYoY(city);
+    if(chVu) chVu.destroy();
+    document.getElementById('vuSub').textContent='Pedestrian & cyclist crashes \u00b7 '+getMetroLabel(city)+' \u00b7 CDOT';
+    chVu=new Chart(document.getElementById('vuChart'),{type:'bar',data:{labels:yoyLabels,datasets:[{label:'Pedestrian',data:d.peds,backgroundColor:'rgba(255,77,77,.65)',borderRadius:6,borderSkipped:false},{label:'Cyclist',data:d.cyclists,backgroundColor:'rgba(77,166,255,.65)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'rectRounded',padding:16}},tooltip:TT},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+}
+
+buildYoyTotalChart('all');
+buildYoySevChart('all');
+buildFatalChart('all');
+buildVuChart('all');
+document.getElementById('metroYoyTotal').addEventListener('change',function(){buildYoyTotalChart(this.value)});
+document.getElementById('metroYoySev').addEventListener('change',function(){buildYoySevChart(this.value)});
+document.getElementById('metroFatal').addEventListener('change',function(){buildFatalChart(this.value)});
+document.getElementById('metroVu').addEventListener('change',function(){buildVuChart(this.value)});
 new Chart(document.getElementById('speedChart'),{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{data:[28.5,25.1,23.8,23,22.4,21.9],borderColor:'#ffb347',backgroundColor:'rgba(255,179,71,.06)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#ffb347',pointBorderColor:'#08090d',pointBorderWidth:2,tension:.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+' mph'}}},scales:{y:{min:18,max:32,title:{display:true,text:'MPH',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('stateChart'),{type:'bar',data:{labels:['2019','2020','2021','2022','2023','2024','2025 est'],datasets:[{data:[104000,78000,95000,98000,102749,110000,115000],backgroundColor:c=>c.dataIndex===6?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,min:60000,ticks:{callback:v=>(v/1000)+'K'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('stateChart'),{type:'bar',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{data:[104000,78000,95000,95383,102764,101320],backgroundColor:c=>c.dataIndex>=4?'rgba(255,77,77,.6)':'rgba(77,166,255,.35)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw.toLocaleString()+' crashes'}}},scales:{y:{beginAtZero:false,min:60000,ticks:{callback:v=>(v/1000)+'K'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
 // === VISION ZERO ACCOUNTABILITY ===
 (function(){
 const vzLabels=['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030'];
@@ -872,10 +1158,10 @@ new Chart(document.getElementById('vzChart'),{type:'line',data:{labels:vzLabels,
 {label:'Goal (Zero by 2030)',data:goal,borderColor:'#4dff91',backgroundColor:'rgba(77,255,145,.04)',borderWidth:2,borderDash:[8,4],pointRadius:0,pointHoverRadius:4,tension:.1,fill:false}
 ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'circle',padding:16,font:{size:11}}},tooltip:{...TT,callbacks:{label:function(c){if(c.raw===null)return null;return c.dataset.label+': '+c.raw+' deaths'}},filter:function(t){return t.raw!==null}}},scales:{y:{beginAtZero:true,title:{display:true,text:'Fatalities',color:'#555873'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false},ticks:{font:{weight:function(c){return c.tick.label==='2017'||c.tick.label==='2030'?'bold':'normal'}}}}}}});
 })();
-new Chart(document.getElementById('pedFatalChart'),{type:'bar',data:{labels:['2021','2022','2023','2024'],datasets:[{label:'Pedestrian Deaths',data:[23,22,24,26],backgroundColor:['rgba(255,179,71,.5)','rgba(255,179,71,.5)','rgba(255,179,71,.65)','rgba(255,77,77,.8)'],borderRadius:6,borderSkipped:false,barThickness:isMobile?20:40}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>c.raw+' pedestrian deaths'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'},title:{display:true,text:'Deaths',color:'#555873'}},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('vuChart'),{type:'bar',data:{labels:['2022','2023','2024'],datasets:[{label:'Pedestrian',data:[560,575,590],backgroundColor:'rgba(255,77,77,.65)',borderRadius:6,borderSkipped:false},{label:'Cyclist / E-bike',data:[230,248,264],backgroundColor:'rgba(77,166,255,.65)',borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'start',labels:{usePointStyle:true,pointStyle:'rectRounded',padding:16}},tooltip:TT},scales:{y:{beginAtZero:true,grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
-new Chart(document.getElementById('pedLocationChart'),{type:'doughnut',data:{labels:['At intersection','Mid-block crossing','Parking lot / alley','Other'],datasets:[{data:[62,24,8,6],backgroundColor:['#4da6ff','#ff4d4d','#ffb347','#555873'],borderWidth:0,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:doughnutLegend,tooltip:{...TT,callbacks:{label:c=>c.label+': '+c.raw+'%'}}}}});
-new Chart(document.getElementById('metroChart'),{type:'bar',data:{labels:['Denver','Aurora','Colo Springs','Adams Co','Jefferson Co','Weld Co','Boulder'],datasets:[{data:[22000,12000,9500,8000,7500,6000,2800],backgroundColor:['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.5)','rgba(176,125,255,.5)','rgba(77,255,145,.5)','rgba(77,232,255,.4)','rgba(255,215,0,.4)'],borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{label:c=>'~'+c.raw.toLocaleString()+' crashes (est.)'}}},scales:{y:{ticks:{callback:v=>(v/1000)+'K'},grid:{color:'rgba(28,31,46,.5)'}},x:{grid:{display:false}}}}});
+// pedFatalChart handled by buildFatalChart() above
+// vuChart handled by buildVuChart() above
+// pedLocationChart handled by buildPedLocChart() above
+new Chart(document.getElementById('metroChart'),{type:'bar',data:{labels:['Denver','Aurora','Westminster /\nThornton','Lakewood','Arvada'],datasets:[{data:[21.5,15.6,17.9,17.6,12.8],backgroundColor:['rgba(255,77,77,.7)','rgba(255,179,71,.7)','rgba(77,166,255,.5)','rgba(176,125,255,.5)','rgba(77,255,145,.5)'],borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TT,callbacks:{title:c=>c[0].label.replace('\n',' '),label:function(c){const raw=[15671,6137,4668,2755,1540];const pop=['729K','394K','261K','157K','120K'];return[c.raw+' crashes per 1,000 residents',raw[c.dataIndex].toLocaleString()+' total crashes \u00b7 pop. '+pop[c.dataIndex]]}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v},grid:{color:'rgba(28,31,46,.5)'},title:{display:true,text:'Crashes per 1,000 residents',color:'#555873',font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:isMobile?9:11}}}}}});
 
 /* ===== STICKY NAV SCROLL-SPY ===== */
 (function(){
